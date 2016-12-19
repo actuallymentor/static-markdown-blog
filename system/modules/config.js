@@ -7,6 +7,7 @@ let config = {
 	desc: "Website description",
 	twitter: "@ctuallymentor",
 	baseUrl: "https://www.skillcollector.com",
+	blogslug: "/post/",
 	ga: "UA-XXXXXXXX-XX",
 	content: __dirname + '/../../content/',
 	public: __dirname + '/../../public/',

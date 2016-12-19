@@ -21,23 +21,23 @@ let publish = ( targetFolder, template, sourceFile ) => {
 	return new Promise( ( resolve, reject ) => {
 		// Generate html from markdown
 		md( sourceFile ).then( html => {
-			// Make a file in all of the category folders
-			for (var i = meta.categories.length - 1; i >= 0; i--) {
-				// Create the category folder if it does not yet exist
-				if( !fs.existsSync( targetFolder + meta.categories[i] ) ) fs.mkdirSync( targetFolder + meta.categories[i] )
-				// Compile pug to final html and write it to file
-				pug( templatePath, {
-					title: site.title + ' - ' + meta.title,
-					sitetitle: site.title,
-					sitedesc: site.desc,
-					pagedesc: meta.desc,
-					twitter: site.twitter,
-					url: site.baseUrl + fileName,
-					content: html
-				}, targetFolder + meta.categories[i] + targetFile ).then( published => {
-					console.log( 'Post published to category' )
-				} )
-			}
+			// // Make a file in all of the category folders
+			// for (var i = meta.categories.length - 1; i >= 0; i--) {
+			// 	// Create the category folder if it does not yet exist
+			// 	if( !fs.existsSync( targetFolder + meta.categories[i] ) ) fs.mkdirSync( targetFolder + meta.categories[i] )
+			// 	// Compile pug to final html and write it to file
+			// 	pug( templatePath, {
+			// 		title: site.title + ' - ' + meta.title,
+			// 		sitetitle: site.title,
+			// 		sitedesc: site.desc,
+			// 		pagedesc: meta.desc,
+			// 		twitter: site.twitter,
+			// 		url: site.baseUrl + fileName,
+			// 		content: html
+			// 	}, targetFolder + meta.categories[i] + targetFile ).then( published => {
+			// 		console.log( 'Post published to category' )
+			// 	} )
+			// }
 			// Check if default folder exists
 			if( !fs.existsSync( targetFolder + '/posts' ) ) fs.mkdirSync( targetFolder + '/posts' )
 			// Publish the post to the default posts folder
