@@ -1,8 +1,14 @@
-const marky = require( 'marky-markdown' )
+// Grab marky & fs
+const markdown = require( 'marked' )
+const fs = require( 'fs' )
 
-let md = input => {
+// Promise structure for returning markdown
+let md = file => {
 	return new Promise( ( resolve, reject ) => {
-		resolve( marky( input ) )
+		fs.readFile( file, ( err, data ) => {
+			if ( err ) reject( err )
+			resolve( markdown( String( data ) ) )
+		} )
 	} )
 }
 

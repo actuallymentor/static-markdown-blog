@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/actuallymentor/static-markdown-blog#readme",
   "dependencies": {
-    "marky-markdown": "^9.0.1"
+    "marked": "^0.3.6",
+    "ncp": "^2.0.0"
   }
 }
