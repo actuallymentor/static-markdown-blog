@@ -1,0 +1,19 @@
+{
+  "name": "static-markdown-blog",
+  "version": "1.0.0",
+  "description": "A simple system for generating a static blog based on markdown",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/actuallymentor/static-markdown-blog.git"
+  },
+  "author": "Mentor Palokaj <mentor@palokaj.co> (https://github.com/actuallymentor)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/actuallymentor/static-markdown-blog/issues"
+  },
+  "homepage": "https://github.com/actuallymentor/static-markdown-blog#readme"
+}
