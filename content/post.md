@@ -1,6 +1,6 @@
 # I am an article woo!
 
-![Alt text for image]( ./assets/image.svg )
+![Alt text for image]( /assets/image.svg )
 
 ## A secondary headnig is fun
 
