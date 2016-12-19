@@ -1,5 +1,8 @@
+doctype html
 html
-	head
-		title Demo page
-	body
-		div#container !{content}
+	include _header.pug
+
+	main
+		section !{content}
+
+	include _footer.pug
