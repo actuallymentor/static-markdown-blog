@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/actuallymentor/static-markdown-blog/issues"
   },
-  "homepage": "https://github.com/actuallymentor/static-markdown-blog#readme"
+  "homepage": "https://github.com/actuallymentor/static-markdown-blog#readme",
+  "dependencies": {
+    "marky-markdown": "^9.0.1"
+  }
 }
