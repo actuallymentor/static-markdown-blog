@@ -8,3 +8,38 @@ script.
 		ga('create', "#{ga}", 'auto');
 		ga('require', 'displayfeatures');
 		ga('send', 'pageview');
+script( type="application/ld+json" ).
+	{
+		"@context": "http://schema.org",
+		"@type": "Article",
+		"mainEntityOfPage": {
+			"@type": "WebPage",
+			"@id": "#{currentURL}"
+		},
+		"headline": "#{title}",
+		"image": {
+			"@type": "ImageObject",
+			"url": "#{featuredimg}",
+			"height": "696px",
+			"width": "696px"
+		},
+		"datePublished": "#{published}",
+		"dateModified": "#{updated}",
+		"author": {
+			"@type": "Person",
+			"name": "#{firstname} #{lastname}",
+			"url": "#{authorURL}"
+		},
+		"publisher": {
+			"@type": "Organization",
+			"name": "#{sitetitle}",
+			"url": "#{baseURL}",
+			"logo": {
+				"@type": "ImageObject",
+				"url": "#{logo}",
+				"width": "60px",
+				"height": "600px"
+			}
+		},
+		"description": "#{pagedesc}"
+	}

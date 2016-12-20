@@ -1,5 +1,8 @@
 {
 	"title": "One Blog Post to Rule Them All",
 	"desc": "One description to find them",
-	"categories": [ "categoricallyawesome" ]
+	"categories": [ "categoricallyawesome" ],
+	"published": "2016-12-20",
+	"updated": "",
+	"featuredimg": ""
 }

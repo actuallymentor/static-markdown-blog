@@ -8,7 +8,7 @@ const site = require( __dirname + '/config' )
 app.use( forcehtml )
 
 // Static the public folder
-app.use( express.static( site.public ) )
+app.use( express.static( site.system.public ) )
 
 // Listen on localhost
 app.listen( 8000, live => {

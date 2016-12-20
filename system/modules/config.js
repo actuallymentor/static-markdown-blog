@@ -3,15 +3,28 @@ const fs = require( 'fs' )
 
 // Configs
 let config = {
-	title: "Global title",
-	desc: "Website description",
-	twitter: "@ctuallymentor",
-	baseUrl: "https://www.skillcollector.com",
-	blogslug: "/post/",
-	ga: "UA-XXXXXXXX-XX",
-	content: __dirname + '/../../content/',
-	public: __dirname + '/../../public/',
-	templates: __dirname + '/../templates/'
+	identity: {
+		title: "Global title",
+		desc: "Website description",
+		logo: "" // Add dimensions in the ld+json schema
+	},
+	system: {
+		blogslug: "post",
+		content: __dirname + '/../../content/',
+		public: __dirname + '/../../public/',
+		templates: __dirname + '/../templates/',
+		baseURL: "https://www.skillcollector.com"
+	},
+	author: {
+		firstname: "Mentor",
+		lastname: "Palokaj",
+		email: "mentor@palokaj.co",
+		twitter: "@actuallymentor",
+		url: "https://www.skillcollector.com"
+	},
+	track: {
+		ga: "UA-XXXXXXXX-XX"
+	}
 }
 
 // grab, parse and export the config file

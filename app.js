@@ -10,7 +10,7 @@ const ncp = require( 'ncp' )
 const server = require( __dirname + '/system/modules/server' )
 
 // Publish the demo post
-publish( site.public, 'blog', site.content + '/post.md' ).then( meta => {
+publish( site.system.public, 'blog', site.system.content + '/post.md' ).then( meta => {
 	console.log( 'Post published in all categories' )
 } )
 
