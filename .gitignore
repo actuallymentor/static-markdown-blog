@@ -38,3 +38,4 @@ jspm_packages
 
 # Project specific
 public/
+.DS_Store
