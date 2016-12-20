@@ -2,20 +2,24 @@
 const site = require( __dirname + '/system/modules/config' )
 
 // Get md and fs managers
+const readposts = require( __dirname + '/system/modules/readposts' )
 const publish = require( __dirname + '/system/modules/publish' )
-const fs = require( 'fs' )
-const ncp = require( 'ncp' )
+const assets = require( __dirname + '/system/modules/copyassets' )
 
 // Activate webserver
 const server = require( __dirname + '/system/modules/server' )
 
-// Publish the demo post
-publish( site.system.public, 'blog', site.system.content + '/post.md' ).then( meta => {
-	console.log( 'Post published in all categories' )
+
+readposts( site.system.content ).then( posts => {
+	for (var i = posts.length - 1; i >= 0; i--) {
+		publish( site.system.public, 'blog', site.system.content + '/' + posts[i] ).then( meta => {
+			console.log( 'Post published in all categories' )
+		} )
+	}
 } )
+
 
 // Copy all assets from source
-ncp( __dirname + '/content/assets', __dirname + '/public/assets', err => {
-	if ( err ) throw err
+assets(  ).then( f => {
+	console.log( 'Assets copied' )
 } )
-

@@ -37,11 +37,16 @@ let publish = ( targetFolder, template, sourceFile ) => {
 					// Page info
 					featuredimg: meta.featuredimg,
 					content: html,
+					
+					// Page metadata
 					currentURL: site.system.baseURL + '/' + meta.categories[i] + '/' + fileName,
 					published: meta.published,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
 					pagedesc: meta.desc,
 					baseURL: site.system.baseURL,
+
+					// Canonicalisation
+					canonical: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
 
 					// Author info
 					twitter: site.author.twitter,
@@ -67,11 +72,16 @@ let publish = ( targetFolder, template, sourceFile ) => {
 					// Page info
 					featuredimg: meta.featuredimg,
 					content: html,
+
+					// Page metadata
 					currentURL: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
 					published: meta.published,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
 					pagedesc: meta.desc,
 					baseURL: site.system.baseURL,
+
+					// Canonicalisation
+					canonical: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
 
 					// Author info
 					twitter: site.author.twitter,
