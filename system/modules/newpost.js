@@ -10,8 +10,8 @@ let metatemplate = {
 }
 
 let create = target => {
-	fs.writeFile( target + '/newpost.md', metatemplate, err => { if ( err ) throw err } )
-	fs.writeFile( target + '/.newpost.md.json', '# New Post', err => { if ( err ) throw err } )
+	fs.writeFile( target + '/NEWPOST.md', metatemplate, err => { if ( err ) throw err } )
+	fs.writeFile( target + '/.NEWPOST.md.json', '# New Post', err => { if ( err ) throw err } )
 }
 
 module.exports = create

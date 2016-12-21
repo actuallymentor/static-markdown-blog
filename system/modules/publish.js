@@ -5,11 +5,7 @@ const site = require( __dirname + '/config' )
 const path = require( 'path' )
 
 const fs = require( 'fs' )
-const del = require( 'del' )
 
-// Delete old files
-console.log( 'Deleting all previous build files synchronously' )
-del.sync( [ site.system.public + '/*' ] )
 
 let publish = ( targetFolder, template, sourceFile ) => {
 	// Configs
