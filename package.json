@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A simple system for generating a static blog based on markdown",
   "main": "app.js",
+  "bin": {
+    "blog": "commandline.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

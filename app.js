@@ -23,3 +23,5 @@ readposts( site.system.content ).then( posts => {
 assets(  ).then( f => {
 	console.log( 'Assets copied' )
 } )
+
+module.exports = server
