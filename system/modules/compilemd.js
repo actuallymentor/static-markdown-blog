@@ -7,7 +7,7 @@ let md = file => {
 	return new Promise( ( resolve, reject ) => {
 		fs.readFile( file, ( err, data ) => {
 			if ( err ) reject( err )
-			resolve( markdown( String( data ) ) )
+			resolve( markdown( String( data ).replace( './assets', '/assets' ) ) )
 		} )
 	} )
 }
