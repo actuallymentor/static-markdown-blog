@@ -2,31 +2,31 @@ head
 	meta( charset='utf8' )
 	meta( name="viewport" content="width=device-width, initial-scale=1" )
 
-	title !{sitetitle} - !{title}
-	meta( name="twitter:title" content=sitetitle + ' - ' + title )
-	meta( property="og:title" content=sitetitle + ' - ' + title )
-	meta( property="og:site_name" content=sitetitle )
+	title !{site.identity.title} - !{meta.title}
+	meta( name="twitter:title" content=site.identity.title + ' - ' + meta.title )
+	meta( property="og:title" content=site.identity.title + ' - ' + meta.title )
+	meta( property="og:site_name" content=site.identity.title )
 
-	meta( name="description" content=sitedesc )
-	meta( name="description" content=sitedesc )
+	meta( name="description" content=site.identity.desc )
+	meta( name="description" content=site.identity.desc )
 
-	meta( name="twitter:card" content=pagedesc )
-	meta( property="og:description" content=pagedesc )
+	meta( name="twitter:card" content=meta.desc )
+	meta( property="og:description" content=meta.desc )
 
-	meta( name="twitter:site" content=twitter )
+	meta( name="twitter:site" content=site.author.twitter )
 	meta( property="og:type" content="article" )
 
-	meta( property="article:published_time" content=published)
+	meta( property="article:published_time" content=meta.published)
 
-	meta( property="og:url" content=url )
+	meta( property="og:url" content=site.system.baseURL + '/' + meta.categories[i] + '/' + fileName )
 	meta( property="fb:admins" content="1299359953416544" )
-	meta( property="profile:first_name" content=firstname)
-	meta( property="profile:last_name" content=lastname)
+	meta( property="profile:first_name" content=site.author.firstname)
+	meta( property="profile:last_name" content=site.author.lastname)
 
 	link( rel="dns-prefetch" href="//www.google-analytics.com" )
 	link( rel="dns-prefetch" href="//fonts.googleapis.com.com" )
 
-	link( rel="canonical" href=canonical )
+	link( rel="canonical" href=site.system.baseURL + '/' + site.system.blogslug + '/' + fileName )
 body
 	nav#navbar
 		ul

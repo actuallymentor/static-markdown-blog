@@ -23,33 +23,18 @@ let publish = ( targetFolder, template, sourceFile ) => {
 				if( !fs.existsSync( targetFolder + meta.categories[i] ) ) fs.mkdirSync( targetFolder + meta.categories[i] )
 				// Compile pug to final html and write it to file
 				pug( templatePath, {
-					
-					// Site info
-					title: meta.title,
-					sitetitle: site.identity.title,
-					sitedesc: site.identity.desc,
-					logo: site.identity.logo,
-					year: site.system.year,
 
-					// Page info
-					featuredimg: meta.featuredimg,
+					// Site data
+					site: site,
+					meta: meta,
+
+					// Page content
 					content: html,
+					fileName: fileName,
 					
 					// Page metadata
 					currentURL: site.system.baseURL + '/' + meta.categories[i] + '/' + fileName,
-					published: meta.published,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
-					pagedesc: meta.desc,
-					baseURL: site.system.baseURL,
-
-					// Canonicalisation
-					canonical: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
-
-					// Author info
-					twitter: site.author.twitter,
-					firstname: site.author.firstname,
-					lastname: site.author.lastname,
-					authorURL: site.author.url
 
 				}, targetFolder + meta.categories[i] + targetFile ).then( published => {
 					console.log( 'Post published to category' )
@@ -60,34 +45,17 @@ let publish = ( targetFolder, template, sourceFile ) => {
 			// Publish the post to the default posts folder
 			pug( templatePath, {
 
-					// Site info
-					title: meta.title,
-					sitetitle: site.identity.title,
-					sitedesc: site.identity.desc,
-					logo: site.identity.logo,
-					year: site.system.year,
+					// Site data
+					site: site,
+					meta: meta,
 
-					// Page info
-					featuredimg: meta.featuredimg,
+					// Page content
 					content: html,
+					fileName: fileName,
 
 					// Page metadata
-					currentURL: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
-					published: meta.published,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
-					pagedesc: meta.desc,
-					baseURL: site.system.baseURL,
-
-					// Canonicalisation
-					canonical: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
-
-					// Author info
-					twitter: site.author.twitter,
-					firstname: site.author.firstname,
-					lastname: site.author.lastname,
-					authorURL: site.author.url
-					
-					
+						
 				}, targetFolder + site.system.blogslug + targetFile ).then( published => {
 					console.log( 'Published to default directory' )
 				} )

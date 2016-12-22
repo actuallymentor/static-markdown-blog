@@ -4,9 +4,9 @@ html
 
 	main
 		div#header
-			h1 #{title}
+			h1 #{meta.title}
 		div#featuredimg
-			img( src=featuredimg )
+			img( src=meta.featuredimg )
 		section#post.container !{content}
 
 	include _footer.pug
