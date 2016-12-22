@@ -11,7 +11,7 @@ switch( action ) {
 		blog.makepost( )
 	break
 	case "publish": 
-		blog.publish( )
+		blog.publish.posts( )
 	break
 	default:
 		console.log( 'Unknown command' )

@@ -7,7 +7,7 @@ const del = require( 'del' )
 
 // Read and publish all posts
 blog.clean( ).then( f => {
-	blog.publish( )
+	blog.publish.posts( )
 	// Copy all assets from source
 	blog.assets( ).then( f => {
 		console.log( 'Assets copied' )
