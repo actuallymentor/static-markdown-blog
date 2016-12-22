@@ -54,6 +54,7 @@ let publish = ( targetFolder, template, sourceFile ) => {
 					fileName: fileName,
 
 					// Page metadata
+					currentURL: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
 						
 				}, targetFolder + site.system.blogslug + targetFile ).then( published => {
