@@ -7,14 +7,19 @@ const assets = require( __dirname + '/copyassets' )
 const del = require( 'del' )
 
 let controller = {
+	clean: function( ) {
+		return new Promise( ( resolve, reject ) => {
+			// Delete old files
+			console.log( 'Deleting all previous build files synchronously' )
+			del.sync( [ site.system.public + '/*' ] )
+			resolve( )
+		} )
+	},
 	makepost: function( ) {
 		newpost( site.system.content )
 	},
 	publish: function( ) {
 		return new Promise( ( resolve, reject ) => {
-			// Delete old files
-			console.log( 'Deleting all previous build files synchronously' )
-			del.sync( [ site.system.public + '/*' ] )
 			console.log( 'Publishing posts' )
 			readposts( site.system.content ).then( posts => {
 				for (var i = posts.length - 1; i >= 0; i--) {

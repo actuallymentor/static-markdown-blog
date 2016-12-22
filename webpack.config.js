@@ -62,7 +62,9 @@ const pluginarray = env => {
     // Run beforee build
     new WebpackPreBuildPlugin( stats => {
       console.log( 'Before build: ' )
-      blog.publish( )
+      blog.clean( ).then( f => {
+        blog.publish( )
+      } )
     } ),
     // Run after build
     new WebpackOnBuildPlugin( stats => {
