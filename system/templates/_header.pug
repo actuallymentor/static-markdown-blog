@@ -2,9 +2,9 @@ head
 	meta( charset='utf8' )
 	meta( name="viewport" content="width=device-width, initial-scale=1" )
 
-	title !{title}
-	meta( name="twitter:title" content=title )
-	meta( property="og:title" content=title )
+	title !{sitetitle} - !{title}
+	meta( name="twitter:title" content=sitetitle + ' - ' + title )
+	meta( property="og:title" content=sitetitle + ' - ' + title )
 	meta( property="og:site_name" content=sitetitle )
 
 	meta( name="description" content=sitedesc )
@@ -28,8 +28,7 @@ head
 
 	link( rel="canonical" href=canonical )
 body
-	nav
+	nav#navbar
 		ul
 			li Home
 			li Contact
-			li I am #{title}

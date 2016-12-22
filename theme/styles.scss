@@ -1,0 +1,153 @@
+// ////////////////////
+// Global definitions
+// ////////////////////
+
+// Color Palette
+$smooth-color: #f4f5f6;
+$accent-color: #2196F3;
+// Specific color declarations
+$header-background: $smooth-color;
+$menu-background: $accent-color;
+// Animations
+$menu-transition-speed: 0.5s;
+$hover-speed: 0.3s;
+@mixin hover-txt ( $speed) {
+	transition: $speed;
+	text-shadow: 0 8px 5px rgba(0, 0, 0, 0.3);
+}
+@mixin hover-box ( $speed) {
+	transition: $speed;
+	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+}
+@mixin hover-element ( $speed) {
+	transition: $speed;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+// Helpers
+.depth-txt {
+	transition: $hover-speed;
+	&:hover {
+		@include hover-txt ( $hover-speed ) opacity: 0.8;
+	}
+}
+.depth-box {
+	transition: $hover-speed;
+	&:hover {
+		@include hover-box ( $hover-speed ) opacity: 0.8;
+	}
+}
+.shadow {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+// Mobile definitions
+$mobile: 320px;
+$tablet: 768px;
+$laptop: 1024px;
+$hd: 1080px;
+@mixin min-size ( $size) {
+	@media screen and (min-width: $size) {
+		@content;
+	}
+}
+
+.container {
+	@include min-size( $mobile ) {
+		padding: 15px 5%;
+	}
+	@include min-size( $tablet ) {
+		padding: 15px 15%;
+	}
+	@include min-size( $laptop ) {
+		padding: 15px 20%;
+	}
+	@include min-size( $hd ) {
+		padding: 20px 30%;	
+	}
+}
+
+
+// ////////////
+// Header
+// ////////////
+
+// Navigation bar
+#navbar {
+	background-color: $smooth-color;
+	padding-top: 20px;
+	margin-bottom: -20px;
+	height: 0;
+	ul {
+		margin: 0;
+		li {
+			@extend .depth-txt;
+			display: inline-block;
+			padding: 0 10px;
+			opacity: 0.8;
+			color: $accent-color;
+		}
+	}
+}
+
+// header block
+#header {
+	height: 500px;
+	text-align: center;
+	background-color: $smooth-color;
+	color: $accent-color;
+
+	// Vertical align
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	h1 {
+		margin: 0;
+		padding: 20px 0;
+	}
+}
+
+// Featured image
+#featuredimg {
+	width: 96%;
+	padding: 0 2%;
+	text-align: center;
+	img {
+		width: 500px;
+		max-width: 100%;
+		margin-top: -50px;
+		background-color: white;
+		@extend .shadow;
+		@extend .depth-box;
+	}
+}
+
+// ////////////
+// Footer
+// ////////////
+
+#footer {
+	padding: 15px;
+	text-align: center;
+	font-style: italic;
+	background-color: $smooth-color;
+	font-size: 12px;
+	opacity: 0.8;
+}

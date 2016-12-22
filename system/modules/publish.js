@@ -25,10 +25,11 @@ let publish = ( targetFolder, template, sourceFile ) => {
 				pug( templatePath, {
 					
 					// Site info
-					title: site.identity.title + ' - ' + meta.title,
+					title: meta.title,
 					sitetitle: site.identity.title,
 					sitedesc: site.identity.desc,
 					logo: site.identity.logo,
+					year: site.system.year,
 
 					// Page info
 					featuredimg: meta.featuredimg,
@@ -60,10 +61,11 @@ let publish = ( targetFolder, template, sourceFile ) => {
 			pug( templatePath, {
 
 					// Site info
-					title: site.identity.title + ' - ' + meta.title,
+					title: meta.title,
 					sitetitle: site.identity.title,
 					sitedesc: site.identity.desc,
 					logo: site.identity.logo,
+					year: site.system.year,
 
 					// Page info
 					featuredimg: meta.featuredimg,

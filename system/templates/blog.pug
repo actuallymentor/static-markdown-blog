@@ -3,8 +3,10 @@ html
 	include _header.pug
 
 	main
-		div
+		div#header
+			h1 #{title}
+		div#featuredimg
 			img( src=featuredimg )
-		section !{content}
+		section#post.container !{content}
 
 	include _footer.pug

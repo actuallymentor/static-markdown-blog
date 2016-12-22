@@ -1,6 +1,20 @@
-let BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+// Browser sync stuff
+let BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' )
+let WebpackOnBuildPlugin = require( 'on-build-webpack' )
+let WebpackPreBuildPlugin = require( 'pre-build-webpack' )
+
+// Webpack and css
 let autoprefixer = require ( 'autoprefixer' )
 let webpack = require( 'webpack' )
+
+// Blog actions
+const blog = require( __dirname + '/system/modules/controller.js' )
+
+// Configs
+const site = require( __dirname + '/system/modules/config' )
+const assets = require( __dirname + '/system/modules/copyassets' )
+const del = require( 'del' )
+
 
 const pluginarray = env => {
   if ( env == 'production' ) {
@@ -21,7 +35,12 @@ const pluginarray = env => {
     new BrowserSyncPlugin( {
       host: 'localhost',
       port: 3000,
-      server: { baseDir: ['public'] },
+      server: { 
+        baseDir: ['public'],
+        serveStaticOptions: {
+          extensions: ['html']
+        }
+      },
       notify: {
         styles:  [
         "display: none",
@@ -39,6 +58,18 @@ const pluginarray = env => {
         "text-align: center"
         ]
       }
+    } ),
+    // Run beforee build
+    new WebpackPreBuildPlugin( stats => {
+      console.log( 'Before build: ' )
+      blog.publish( )
+    } ),
+    // Run after build
+    new WebpackOnBuildPlugin( stats => {
+      console.log( 'After build:' )
+      assets( ).then( f => {
+        console.log( 'Assets copied' )
+      } )
     } )
     ]
   } else {
