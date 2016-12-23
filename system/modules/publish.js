@@ -7,7 +7,7 @@ const path = require( 'path' )
 const fs = require( 'fs' )
 
 
-let publish = ( targetFolder, template, sourceFile ) => {
+let publishpost = ( targetFolder, template, sourceFile ) => {
 	// Configs
 	let templatePath = site.system.templates + template + '.pug'
 	let fileName = sourceFile.replace(/^.*[\\\/]/, '').split( '.' )[0]
@@ -65,4 +65,6 @@ let publish = ( targetFolder, template, sourceFile ) => {
 	} )
 }
 
-module.exports = publish
+module.exports = {
+	post: publishpost
+}
