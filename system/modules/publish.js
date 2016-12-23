@@ -7,12 +7,20 @@ const path = require( 'path' )
 const fs = require( 'fs' )
 
 
+// ///////////////////////////////
+// Publishing of individual posts
+// ///////////////////////////////
+
 let publishpost = ( targetFolder, template, sourceFile ) => {
-	// Configs
+
+	// Path of the template file
 	let templatePath = site.system.templates + template + '.pug'
+	// Filename
 	let fileName = sourceFile.replace(/^.*[\\\/]/, '').split( '.' )[0]
+	// Target html file
 	let targetFile = '/' + fileName + '.html'
-	let meta = JSON.parse( fs.readFileSync( path.dirname( sourceFile ) + '.' + fileName + '.md.json' ) )
+	// Meta file of this post
+	let meta = JSON.parse( fs.readFileSync( path.dirname( sourceFile ) + fileName + '.md.json' ) )
 
 	return new Promise( ( resolve, reject ) => {
 		// Generate html from markdown
@@ -65,17 +73,28 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 	} )
 }
 
+// ///////////////////////////////////
+// Control the publishing of the index
+// ///////////////////////////////////
+
 let publishindex = allPosts => {
 	return new Promise( ( resolve, reject ) => {
+		// Render index.pug with all of the articles in there
 		pug( site.system.templates + 'index.pug', {
+			// Send the array of posts 
 			allPosts: allPosts,
+			// Send the site info
 			site: site,
+			// Current url ( is base url )
 			currentURL: site.system.baseURL,
+			// Update the last updated time
 			updated: new Date().getFullYear(),
+			// Metadate needed for the header
 			meta: {
 				title: site.identity.title
 			}
 		}, site.system.public + 'index.html' ).then( posthtml => {
+			// Resolve with post html
 			resolve( posthtml )
 		} )
 	} )

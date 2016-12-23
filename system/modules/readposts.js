@@ -32,7 +32,7 @@ let parseMeta = ( path, file ) => {
 		fs.readFile( path + file, ( err, data ) => {
 			let metafile = JSON.parse( data )
 			metafile.configfile = file
-			metafile.slug = file.slice( 1, ( file.length - 8 ) )
+			metafile.slug = file.slice( 0, ( file.length - 8 ) )
 			resolve( metafile )
 		} )
 	} )
