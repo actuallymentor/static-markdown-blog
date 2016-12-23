@@ -6,10 +6,11 @@ html
 		div#header
 			h1 #{meta.title}
 		section#index.container
+			h2 All posts
 			each post in allPosts
 				a.postlist( href=site.system.baseURL + site.system.blogslug + "/" + post.slug )
 					article
-						h2 #{post.title}
-						p #{post.desc}
+						h3 #{post.title}
+						span #{post.desc}
 
 	include _footer.pug

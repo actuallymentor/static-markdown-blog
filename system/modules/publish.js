@@ -67,7 +67,6 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 
 let publishindex = allPosts => {
 	return new Promise( ( resolve, reject ) => {
-		console.log( site )
 		pug( site.system.templates + 'index.pug', {
 			allPosts: allPosts,
 			site: site,
@@ -77,8 +76,8 @@ let publishindex = allPosts => {
 				title: site.identity.title
 			}
 		}, site.system.public + 'index.html' ).then( posthtml => {
-				resolve( posthtml )
-			} )
+			resolve( posthtml )
+		} )
 	} )
 }
 

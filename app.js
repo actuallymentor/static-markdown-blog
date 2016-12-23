@@ -14,7 +14,5 @@ blog.clean( ).then( f => {
 		console.log( 'Assets copied' )
 	} )
 	// Publish index page
-	blog.publish.index( ).then( meta => {
-		console.log( 'Controller says index is published' )
-	} )
+	blog.publish.index( )
 } )
