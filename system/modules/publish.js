@@ -33,8 +33,8 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 					fileName: fileName,
 					
 					// Page metadata
-					currentURL: site.system.baseURL + '/' + meta.categories[i] + '/' + fileName,
-					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
+					currentURL: site.system.baseURL + meta.categories[i] + '/' + fileName,
+					updated: (meta.updated.length > 0) ? meta.updated : meta.published
 
 				}, targetFolder + meta.categories[i] + targetFile ).then( published => {
 					console.log( 'Post published to category' )
@@ -54,8 +54,8 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 					fileName: fileName,
 
 					// Page metadata
-					currentURL: site.system.baseURL + '/' + site.system.blogslug + '/' + fileName,
-					updated: (meta.updated.length > 0) ? meta.updated : meta.published,
+					currentURL: site.system.baseURL + site.system.blogslug + '/' + fileName,
+					updated: (meta.updated.length > 0) ? meta.updated : meta.published
 						
 				}, targetFolder + site.system.blogslug + targetFile ).then( published => {
 					console.log( 'Published to default directory' )
@@ -65,6 +65,24 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 	} )
 }
 
+let publishindex = allPosts => {
+	return new Promise( ( resolve, reject ) => {
+		console.log( site )
+		pug( site.system.templates + 'index.pug', {
+			allPosts: allPosts,
+			site: site,
+			currentURL: site.system.baseURL,
+			updated: new Date().getFullYear(),
+			meta: {
+				title: site.identity.title
+			}
+		}, site.system.public + 'index.html' ).then( posthtml => {
+				resolve( posthtml )
+			} )
+	} )
+}
+
 module.exports = {
-	post: publishpost
+	post: publishpost,
+	index: publishindex
 }

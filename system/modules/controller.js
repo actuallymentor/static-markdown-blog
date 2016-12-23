@@ -35,8 +35,9 @@ let controller = {
 		},
 		index: function( ) {
 			return new Promise( ( resolve, reject ) => {
-				read.meta( ).then( meta => {
-					resolve( meta )
+				read.meta( ).then( allmeta => {
+					publish.index( allmeta )
+					resolve( )
 				} )
 			} )
 		}

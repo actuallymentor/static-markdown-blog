@@ -64,6 +64,7 @@ const pluginarray = env => {
       console.log( 'Before build: ' )
       blog.clean( ).then( f => {
         blog.publish.posts( )
+        blog.publish.index( )
       } )
     } ),
     // Run after build

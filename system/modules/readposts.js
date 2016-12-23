@@ -31,7 +31,8 @@ let parseMeta = ( path, file ) => {
 	return new Promise( ( resolve, reject ) => {
 		fs.readFile( path + file, ( err, data ) => {
 			let metafile = JSON.parse( data )
-			metafile.filename = file
+			metafile.configfile = file
+			metafile.slug = file.slice( 1, ( file.length - 8 ) )
 			resolve( metafile )
 		} )
 	} )

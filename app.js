@@ -15,6 +15,6 @@ blog.clean( ).then( f => {
 	} )
 	// Publish index page
 	blog.publish.index( ).then( meta => {
-		console.log( meta )
+		console.log( 'Controller says index is published' )
 	} )
 } )

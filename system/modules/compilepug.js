@@ -6,7 +6,7 @@ let render = ( pugfile, locals, target ) => {
 		let pugresult = pug.renderFile( pugfile, locals )
 		fs.writeFile( target, pugresult, err => {
 			if ( err ) reject( err )
-			resolve( )
+			resolve( pugresult )
 		} )
 	} )
 }

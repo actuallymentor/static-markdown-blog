@@ -1,0 +1,15 @@
+doctype html
+html
+	include _header.pug
+
+	main
+		div#header
+			h1 #{meta.title}
+		section#index.container
+			each post in allPosts
+				a.postlist( href=site.system.baseURL + site.system.blogslug + "/" + post.slug )
+					article
+						h2 #{post.title}
+						p #{post.desc}
+
+	include _footer.pug

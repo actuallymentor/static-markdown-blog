@@ -13,7 +13,7 @@ let config = {
 		content: __dirname + '/../../content/',
 		public: __dirname + '/../../public/',
 		templates: __dirname + '/../templates/',
-		baseURL: "https://www.skillcollector.com",
+		baseURL: "http://localhost:3000/",
 		year: new Date().getFullYear()
 	},
 	author: {

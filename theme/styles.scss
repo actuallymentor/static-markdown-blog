@@ -121,6 +121,7 @@ $hd: 1080px;
 	h1 {
 		margin: 0;
 		padding: 20px 0;
+		@extend .depth-txt;
 	}
 }
 
@@ -136,6 +137,26 @@ $hd: 1080px;
 		background-color: white;
 		@extend .shadow;
 		@extend .depth-box;
+	}
+}
+
+// ////////
+// Index
+// ////////
+
+#index {
+	a.postlist {
+		@extend .depth-txt;
+		color: $accent-color;
+		text-decoration: none;
+		article {
+			margin: 0 0 40px 0;
+			h2 { margin-bottom: 0; }
+			p { 
+				margin-top: 0;
+				font-style: italic;
+			}
+		}
 	}
 }
 
