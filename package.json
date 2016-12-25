@@ -7,8 +7,8 @@
     "blog": "commandline.js"
   },
   "scripts": {
-    "start": "node commandline.js publish; NODE_ENV=development webpack -d --progress --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=development webpack -d --progress --watch",
+    "test": "mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -33,11 +33,18 @@
     "marked": "^0.3.6",
     "ncp": "^2.0.0",
     "node-sass": "^4.1.1",
+    "on-build-webpack": "^0.1.0",
     "postcss-loader": "^1.2.1",
     "pre-build-webpack": "^0.1.0",
     "pug": "^2.0.0-beta6",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-polyfill": "^6.20.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
   }
 }

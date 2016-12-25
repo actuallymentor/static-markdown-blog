@@ -5,7 +5,9 @@ const blog = require( __dirname + '/system/modules/controller.js' )
 
 let action = process.argv[ 2 ]
 
-
+// ///////////////////////////////
+// Command line control of the blog
+// ///////////////////////////////
 switch( action ) {
 	case "new":
 		blog.makepost( )

@@ -1,5 +1,5 @@
 const fs = require( 'fs' )
-const site = require( __dirname + '/config' )
+const slug = require( __dirname + '/toslug' )
 
 let readposts = folder => {
 	return new Promise( ( resolve, reject ) => {
@@ -32,13 +32,13 @@ let parseMeta = ( path, file ) => {
 		fs.readFile( path + file, ( err, data ) => {
 			let metafile = JSON.parse( data )
 			metafile.configfile = file
-			metafile.slug = file.slice( 0, ( file.length - 8 ) )
+			metafile.slug = slug( metafile.title )
 			resolve( metafile )
 		} )
 	} )
 }
 
-let readmeta = function( ) {
+let readmeta = function( site ) {
 	return new Promise( ( resolve, reject ) => {
 		let allmeta = []
 		let parsed = 0

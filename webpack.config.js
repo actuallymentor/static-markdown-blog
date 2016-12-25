@@ -62,15 +62,15 @@ const pluginarray = env => {
     // Run beforee build
     new WebpackPreBuildPlugin( stats => {
       console.log( 'Before build: ' )
-      blog.clean( ).then( f => {
-        blog.publish.posts( )
-        blog.publish.index( )
+      blog.clean( site ).then( f => {
+        blog.publish.posts( site )
+        blog.publish.index( site )
       } )
     } ),
     // Run after build
     new WebpackOnBuildPlugin( stats => {
       console.log( 'After build:' )
-      assets( ).then( f => {
+      assets( site ).then( f => {
         console.log( 'Assets copied' )
       } )
     } )

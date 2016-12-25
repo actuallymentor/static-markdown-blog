@@ -6,13 +6,13 @@ const blog = require( __dirname + '/system/modules/controller.js' )
 const del = require( 'del' )
 
 // Read and publish all posts
-blog.clean( ).then( f => {
+blog.clean( site ).then( f => {
 	// Publish posts
-	blog.publish.posts( )
+	blog.publish.posts( site )
 	// Copy all assets from source
-	blog.assets( ).then( f => {
+	blog.assets( site ).then( f => {
 		console.log( 'Assets copied' )
 	} )
 	// Publish index page
-	blog.publish.index( )
+	blog.publish.index( site )
 } )

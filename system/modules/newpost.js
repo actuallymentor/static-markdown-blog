@@ -12,10 +12,21 @@ let metatemplate = {
 
 // Write default data to disk
 let create = target => {
-	// Make visible file
-	fs.writeFile( target + '/NEWPOST.md', '# New Post', err => { if ( err ) throw err } )
-	// Meta file
-	fs.writeFile( target + '/NEWPOST.md.json', JSON.stringify( metatemplate, null, '\t' ), err => { if ( err ) throw err } )
+	return new Promise( ( resolve, reject ) => {
+		let actions = 0
+		// Make visible file
+		fs.writeFile( target + '/NEWPOST.md', '# New Post', err => {
+			if ( err ) throw err
+			actions ++
+			if( actions == 2 ) resolve( )
+		} )
+		// Meta file
+		fs.writeFile( target + '/NEWPOST.md.json', JSON.stringify( metatemplate, null, '\t' ), err => {
+			if ( err ) throw err
+			actions ++
+			if( actions == 2 ) resolve( )
+		} )
+	} )
 }
 
 module.exports = create

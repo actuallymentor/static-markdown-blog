@@ -1,8 +1,8 @@
 // Get md and fs managers
 const md = require( __dirname + '/compilemd' )
 const pug = require( __dirname + '/compilepug' )
-const site = require( __dirname + '/config' )
 const path = require( 'path' )
+const slug = require( __dirname + '/toslug' )
 
 const fs = require( 'fs' )
 
@@ -11,18 +11,22 @@ const fs = require( 'fs' )
 // Publishing of individual posts
 // ///////////////////////////////
 
-let publishpost = ( targetFolder, template, sourceFile ) => {
+let publishpost = ( targetFolder, template, sourceFile, site ) => {
 
 	// Path of the template file
 	let templatePath = site.system.templates + template + '.pug'
 	// Filename
 	let fileName = sourceFile.replace(/^.*[\\\/]/, '').split( '.' )[0]
-	// Target html file
-	let targetFile = '/' + fileName + '.html'
 	// Meta file of this post
 	let meta = JSON.parse( fs.readFileSync( path.dirname( sourceFile ) + fileName + '.md.json' ) )
+	// Generate the post slug
+	meta.slug = slug( meta.title )
 
 	return new Promise( ( resolve, reject ) => {
+		let processed = {
+			cat: 0,
+			main: 0
+		}
 		// Generate html from markdown
 		md( sourceFile ).then( html => {
 			// Make a file in all of the category folders
@@ -38,14 +42,18 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 
 					// Page content
 					content: html,
-					fileName: fileName,
 					
 					// Page metadata
-					currentURL: site.system.baseURL + meta.categories[i] + '/' + fileName,
+					currentURL: site.system.baseURL + meta.categories[i] + '/' + meta.slug,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published
 
-				}, targetFolder + meta.categories[i] + targetFile ).then( published => {
-					console.log( 'Post published to category' )
+				}, targetFolder + meta.categories[i] + '/' + meta.slug + '.html' ).then( published => {
+					if (process.env.debug) console.log( 'Post published to category' )
+					processed.cat ++
+					if ( processed.cat == meta.categories.length && processed.main == 1 ) {
+						if (process.env.debug) console.log( 'Promise for publishing completed for category' )
+						resolve( meta )
+					}
 				} )
 			}
 			// Check if default folder exists
@@ -59,17 +67,20 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 
 					// Page content
 					content: html,
-					fileName: fileName,
 
 					// Page metadata
-					currentURL: site.system.baseURL + site.system.blogslug + '/' + fileName,
+					currentURL: site.system.baseURL + site.system.blogslug + '/' + meta.slug,
 					updated: (meta.updated.length > 0) ? meta.updated : meta.published
 						
-				}, targetFolder + site.system.blogslug + targetFile ).then( published => {
-					console.log( 'Published to default directory' )
+				}, targetFolder + site.system.blogslug + '/' + meta.slug + '.html' ).then( published => {
+					if (process.env.debug) console.log( 'Published to default directory' )
+					processed.main ++
+					if ( processed.cat == meta.categories.length && processed.main == 1 ) {
+						if (process.env.debug) console.log( 'Promise for publishing completed for main' )
+						resolve( meta )
+					}
 				} )
 		} )
-		resolve( )
 	} )
 }
 
@@ -77,7 +88,7 @@ let publishpost = ( targetFolder, template, sourceFile ) => {
 // Control the publishing of the index
 // ///////////////////////////////////
 
-let publishindex = allPosts => {
+let publishindex = ( allPosts, site ) => {
 	return new Promise( ( resolve, reject ) => {
 		// Render index.pug with all of the articles in there
 		pug( site.system.templates + 'index.pug', {
