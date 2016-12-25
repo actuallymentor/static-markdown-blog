@@ -15,50 +15,64 @@ const site = require( __dirname + '/system/modules/config' )
 const assets = require( __dirname + '/system/modules/copyassets' )
 const del = require( 'del' )
 
-
-const pluginarray = env => {
-  if ( env == 'production' ) {
-    return [
-    new webpack.DefinePlugin( {
-      'process.env': {
-        NODE_ENV: JSON.stringify( 'production' )
-      }
-    } ),
-    new webpack.optimize.UglifyJsPlugin( {
-      compress: {
-        warnings: false
-      }
-    })
+// ///////////////////////////////
+// Plugins
+// ///////////////////////////////
+let bsync = new BrowserSyncPlugin( {
+  host: 'localhost',
+  port: 3000,
+  server: { 
+    baseDir: ['public'],
+    serveStaticOptions: {
+      extensions: ['html']
+    }
+  },
+  notify: {
+    styles:  [
+    "display: none",
+    "padding: 15px",
+    "font-family: sans-serif",
+    "position: fixed",
+    "font-size: 0.9em",
+    "z-index: 9999",
+    "bottom: 0px",
+    "right: 0px",
+    "border-bottom-left-radius: 5px",
+    "background-color: #1B2032",
+    "margin: 0",
+    "color: white",
+    "text-align: center"
     ]
+  }
+} )
+let setenv = new webpack.DefinePlugin( {
+  'process.env': {
+    NODE_ENV: JSON.stringify( 'production' )
+  }
+} )
+let makeugly = new webpack.optimize.UglifyJsPlugin( {
+  compress: {
+    warnings: false
+  }
+})
+
+const pluginarray = ( env, server ) => {
+  if ( env == 'production' ) {
+    if ( server ) {
+      return [
+      setenv,
+      makeugly,
+      bsync
+      ]
+    } else {
+      return [
+      setenv,
+      makeugly
+      ]
+    }
   } else if ( env == 'development' ) {
     return [
-    new BrowserSyncPlugin( {
-      host: 'localhost',
-      port: 3000,
-      server: { 
-        baseDir: ['public'],
-        serveStaticOptions: {
-          extensions: ['html']
-        }
-      },
-      notify: {
-        styles:  [
-        "display: none",
-        "padding: 15px",
-        "font-family: sans-serif",
-        "position: fixed",
-        "font-size: 0.9em",
-        "z-index: 9999",
-        "bottom: 0px",
-        "right: 0px",
-        "border-bottom-left-radius: 5px",
-        "background-color: #1B2032",
-        "margin: 0",
-        "color: white",
-        "text-align: center"
-        ]
-      }
-    } ),
+    bsync,
     // Run beforee build
     new WebpackPreBuildPlugin( stats => {
       console.log( 'Before build: ' )
@@ -116,5 +130,5 @@ module.exports = {
   postcss: [
   autoprefixer( { browsers: ['last 2 versions'] } )
   ],
-  plugins: pluginarray( process.env.NODE_ENV )
+  plugins: pluginarray( process.env.NODE_ENV, process.env.server )
 }
