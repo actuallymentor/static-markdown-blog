@@ -61,6 +61,18 @@ let controller = {
 					} )
 				} )
 			} )
+		},
+		categories: function( site ) {
+			return new Promise( ( resolve, reject ) => {
+				// Read all meta files
+				read.meta( site ).then( allmeta => {
+					// Publish the index with an array filled with meta file objects
+					publish.categories( allmeta, site ).then( f => {
+						// Resolve with all meta files
+						resolve( )
+					} )
+				} )
+			} )
 		}
 	},
 	assets: assets

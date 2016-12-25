@@ -157,6 +157,17 @@ $hd: 1080px;
 			}
 		}
 	}
+	#categories {
+		list-style: none;
+		padding: 0;
+		a {
+			@extend .depth-txt;
+			font-size: 20px;
+			color: $accent-color;
+			text-decoration: none;
+			width: 100%;
+		}
+	}
 }
 
 // ////////////

@@ -12,5 +12,15 @@ html
 					article
 						h3 #{post.title}
 						span #{post.desc}
+			h2 Categories
+			ul#categories
+				- let processed = []
+				each post in allPosts
+					each postcat in post.categories
+						- if ( processed.indexOf( postcat ) == -1 )
+								li
+									a(href=site.system.baseURL + '/category/' + postcat) #{postcat}
+						- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
+
 
 	include _footer.pug

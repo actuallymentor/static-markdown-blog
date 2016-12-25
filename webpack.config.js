@@ -65,6 +65,7 @@ const pluginarray = env => {
       blog.clean( site ).then( f => {
         blog.publish.posts( site )
         blog.publish.index( site )
+        blog.publish.categories( site )
       } )
     } ),
     // Run after build

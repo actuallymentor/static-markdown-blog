@@ -3,7 +3,7 @@ const md = require( __dirname + '/compilemd' )
 const pug = require( __dirname + '/compilepug' )
 const path = require( 'path' )
 const slug = require( __dirname + '/toslug' )
-
+const today = require( __dirname + '/today' )
 const fs = require( 'fs' )
 
 
@@ -99,10 +99,10 @@ let publishindex = ( allPosts, site ) => {
 			// Current url ( is base url )
 			currentURL: site.system.baseURL,
 			// Update the last updated time
-			updated: new Date().getFullYear(),
+			updated: today,
 			// Metadate needed for the header
 			meta: {
-				title: site.identity.title
+				published: today
 			}
 		}, site.system.public + 'index.html' ).then( posthtml => {
 			// Resolve with post html
@@ -111,7 +111,56 @@ let publishindex = ( allPosts, site ) => {
 	} )
 }
 
+// ///////////////////////////////
+// Control the publishing of categories
+// ///////////////////////////////
+
+let publishcat = ( allPosts, site ) => {
+	return new Promise( ( resolve, reject ) => {
+		let catsdone = []
+		// publish category overviews
+		for (let i = allPosts.length - 1; i >= 0; i--) {
+			for (let j = allPosts[i].categories.length - 1; i >= 0; i--) {
+				// Check if this cat has been parsed yet
+				if ( catsdone.indexOf( allPosts[i].categories[j] ) == -1 ) {
+					// Add cat to array of processed
+					catsdone.push( allPosts[i].categories[j] )
+					// Create an array of posts that match cat
+					let postswithcat = allPosts.filter( post => {
+						// Check for existence of cat in this post
+						return ( post.categories.indexOf( allPosts[i].categories[j] ) != -1 )
+					} )
+					if( !fs.existsSync( site.system.public + 'category/' ) ) fs.mkdirSync( site.system.public + 'category/' )
+					if (process.env.debug) console.log( postswithcat )
+					// Render index.pug with all of the articles in there
+					pug( site.system.templates + 'category.pug', {
+						// Send the array of posts 
+						posts: postswithcat,
+						// Send the site info
+						site: site,
+						// Current url ( is base url )
+						currentURL: site.system.baseURL + '/' + allPosts[i].categories[j],
+						// Update the last updated time
+						updated: today,
+						// Metadate needed for the header
+						meta: {
+							published: today
+						},
+						// Current category
+						category: allPosts[i].categories[j]
+					}, site.system.public + 'category/' + allPosts[i].categories[j] + '.html' ).then( cathtml => {
+						// Resolve with post html
+						if (process.env.debug) console.log( 'Category ' + allPosts[i].categories[j] + ' published' )
+					} )
+				}
+			}
+		}
+		resolve( )
+	} )
+}
+
 module.exports = {
 	post: publishpost,
-	index: publishindex
+	index: publishindex,
+	categories: publishcat
 }

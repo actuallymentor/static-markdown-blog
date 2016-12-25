@@ -2,9 +2,15 @@ head
 	meta( charset='utf8' )
 	meta( name="viewport" content="width=device-width, initial-scale=1" )
 
-	title !{site.identity.title} - !{meta.title}
-	meta( name="twitter:title" content=site.identity.title + ' - ' + meta.title )
-	meta( property="og:title" content=site.identity.title + ' - ' + meta.title )
+	if meta.title
+		title !{site.identity.title} - !{meta.title}
+		meta( name="twitter:title" content=site.identity.title + ' - ' + meta.title )
+		meta( property="og:title" content=site.identity.title + ' - ' + meta.title )
+	else
+		title !{site.identity.title}
+		meta( name="twitter:title" content=site.identity.title )
+		meta( property="og:title" content=site.identity.title )
+
 	meta( property="og:site_name" content=site.identity.title )
 
 	meta( name="description" content=site.identity.desc )
