@@ -1,4 +1,8 @@
-# Static Markdown Blog
+# Static Markdown Blog [![Build Status](https://travis-ci.org/actuallymentor/static-markdown-blog.svg?branch=master)](https://travis-ci.org/actuallymentor/static-markdown-blog)
+
+<img height="50px" alt="webpack" src="http://i.imgur.com/ZtANAeL.png" />
+<img height="50px" alt="browsersync" src="http://i.imgur.com/L5peje9.png" />
+<img height="50px" alt="mocha" src="http://i.imgur.com/yo9d9Qe.png" />
 
 To replace my old WordPress blog I'm making a system to compile markdown files to static blog files.
 
@@ -9,16 +13,15 @@ I considered systems like hexa.io but find them too complex for my needs.
 Clone this repository:
 
 ```shell
-git clone URL
+git clone https://github.com/actuallymentor/static-markdown-blog.git
 ```
 
 Terminal commands:
 
 ```shell
-blog new # creates new .md and .md.json file in the content folder
-blog publish # compiles the markdown to the full blog
-blog server # server the blog statically on localhost:8000
-blog dev # publishes the posts and runs server, use with nodemon
+npm preview # Preview production build using browsersync
+npm build # Build the blog files
+npm start # Start dev server which watches the css and js files
 ```
 
 ## About the system
