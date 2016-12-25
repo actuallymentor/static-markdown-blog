@@ -19,9 +19,10 @@ git clone https://github.com/actuallymentor/static-markdown-blog.git
 Terminal commands:
 
 ```shell
-npm preview # Preview production build using browsersync
-npm build # Build the blog files
-npm start # Start dev server which watches the css and js files
+npm run new # Create a new .md and .md.json for a new post
+npm run preview # Preview production build using browsersync
+npm run build # Build the blog files
+npm run start # Start dev server which watches the css and js files
 ```
 
 ## About the system

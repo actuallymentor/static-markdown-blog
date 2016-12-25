@@ -13,7 +13,6 @@ let metatemplate = {
 
 // Write default data to disk
 let create = target => {
-	target ? target : site
 	return new Promise( ( resolve, reject ) => {
 		let actions = 0
 		// Make visible file
@@ -29,6 +28,10 @@ let create = target => {
 			if( actions == 2 ) resolve( )
 		} )
 	} )
+}
+
+if ( process.argv[ 2 ] == 'new' ) {
+	create( site.system.content )
 }
 
 module.exports = create
