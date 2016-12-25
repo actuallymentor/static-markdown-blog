@@ -1,0 +1,50 @@
+{
+  "name": "static-markdown-blog",
+  "version": "1.0.0",
+  "description": "A simple system for generating a static blog based on markdown",
+  "main": "app.js",
+  "scripts": {
+    "start": "NODE_ENV=development webpack -d --progress --watch",
+    "build": "NODE_ENV=production webpack -p --progress",
+    "preview": "NODE_ENV=production server=true webpack -p --progress --watch",
+    "new": "node ./system/modules/newpost.js new",
+    "test": "mocha --compilers js:babel-core/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/actuallymentor/static-markdown-blog.git"
+  },
+  "author": "Mentor Palokaj <mentor@palokaj.co> (https://github.com/actuallymentor)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/actuallymentor/static-markdown-blog/issues"
+  },
+  "homepage": "https://github.com/actuallymentor/static-markdown-blog#readme",
+  "dependencies": {
+    "autoprefixer": "^6.5.4",
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "browser-sync": "^2.18.5",
+    "browser-sync-webpack-plugin": "^1.1.3",
+    "css-loader": "^0.26.1",
+    "del": "^2.2.2",
+    "express": "^4.14.0",
+    "marked": "^0.3.6",
+    "ncp": "^2.0.0",
+    "node-sass": "^4.1.1",
+    "on-build-webpack": "^0.1.0",
+    "postcss-loader": "^1.2.1",
+    "pre-build-webpack": "^0.1.0",
+    "pug": "^2.0.0-beta6",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.14.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-polyfill": "^6.20.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}

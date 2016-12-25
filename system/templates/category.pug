@@ -1,0 +1,17 @@
+doctype html
+html
+	include _header.pug
+
+	main
+		div#header
+			h1 Category: #{category}
+		section#index.container
+			h2 Posts:
+			each post in posts
+				- if ( post.categories.indexOf( category ) != -1 )
+					a.postlist( href=site.system.baseURL + category + "/" + post.slug )
+						article
+							h3 #{post.title}
+							span #{post.desc}
+
+	include _footer.pug

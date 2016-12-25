@@ -1,0 +1,26 @@
+doctype html
+html
+	include _header.pug
+
+	main
+		div#header
+			h1 #{site.identity.title}
+		section#index.container
+			h2 All posts
+			each post in allPosts
+				a.postlist( href=site.system.baseURL + site.system.blogslug + "/" + post.slug )
+					article
+						h3 #{post.title}
+						span #{post.desc}
+			h2 Categories
+			ul#categories
+				- let processed = []
+				each post in allPosts
+					each postcat in post.categories
+						- if ( processed.indexOf( postcat ) == -1 )
+								li
+									a(href=site.system.baseURL + '/category/' + postcat) #{postcat}
+						- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
+
+
+	include _footer.pug

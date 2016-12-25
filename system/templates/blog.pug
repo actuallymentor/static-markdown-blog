@@ -1,0 +1,13 @@
+doctype html
+html
+	include _header.pug
+
+	main
+		div#header
+			h1 #{site.identity.title}
+		div#featuredimg
+			img( src=meta.featuredimg )
+		section#post.container
+			article !{content}
+
+	include _footer.pug
