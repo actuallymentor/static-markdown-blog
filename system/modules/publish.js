@@ -12,6 +12,8 @@ const fs = require( 'fs' )
 // ///////////////////////////////
 
 let publishpost = ( targetFolder, template, sourceFile, site ) => {
+	// Make public folder if it does not exist
+	if( !fs.existsSync( site.system.public ) ) fs.mkdirSync( site.system.public )
 
 	// Path of the template file
 	let templatePath = site.system.templates + template + '.pug'
@@ -89,6 +91,9 @@ let publishpost = ( targetFolder, template, sourceFile, site ) => {
 // ///////////////////////////////////
 
 let publishindex = ( allPosts, site ) => {
+	// Make public folder if it does not exist
+	if( !fs.existsSync( site.system.public ) ) fs.mkdirSync( site.system.public )
+
 	return new Promise( ( resolve, reject ) => {
 		// Render index.pug with all of the articles in there
 		pug( site.system.templates + 'index.pug', {
@@ -116,6 +121,9 @@ let publishindex = ( allPosts, site ) => {
 // ///////////////////////////////
 
 let publishcat = ( allPosts, site ) => {
+	// Make public folder if it does not exist
+	if( !fs.existsSync( site.system.public ) ) fs.mkdirSync( site.system.public )
+		
 	return new Promise( ( resolve, reject ) => {
 		let catsdone = []
 		// publish category overviews

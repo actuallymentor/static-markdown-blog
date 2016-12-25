@@ -22,7 +22,7 @@ describe( 'Cleaner', f => {
 		blog.publish.posts( site ).then( f => {
 			blog.clean( site ).then( f => {
 				fs.readdir( site.system.public, ( err, files ) => {
-					expect( files.length ).to.equal( 0 )
+					expect( files ).to.equal( undefined )
 					done( )
 				} )
 			} )

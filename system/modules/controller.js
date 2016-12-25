@@ -15,7 +15,7 @@ let controller = {
 			// Delete old files
 			if (process.env.debug) console.log( 'Deleting all previous build files synchronously' )
 			// Synchronously delete the old files
-			del.sync( [ site.system.public + '/*' ] )
+			if( fs.existsSync( site.system.public ) ) del.sync( [ site.system.public ] )
 			resolve( )
 		} )
 	},
