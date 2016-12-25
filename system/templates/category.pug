@@ -9,7 +9,7 @@ html
 			h2 Posts:
 			each post in posts
 				- if ( post.categories.indexOf( category ) != -1 )
-					a.postlist( href=site.system.baseURL + site.system.blogslug + "/" + post.slug )
+					a.postlist( href=site.system.baseURL + category + "/" + post.slug )
 						article
 							h3 #{post.title}
 							span #{post.desc}

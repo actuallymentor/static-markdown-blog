@@ -103,13 +103,17 @@ $hd: 1080px;
 			padding: 0 10px;
 			opacity: 0.8;
 			color: $accent-color;
+			a {
+				color: $accent-color;
+				text-decoration: none;
+			}
 		}
 	}
 }
 
 // header block
 #header {
-	height: 500px;
+	height: 350px;
 	text-align: center;
 	background-color: $smooth-color;
 	color: $accent-color;
