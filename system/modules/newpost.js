@@ -1,4 +1,5 @@
 const fs = require( 'fs' )
+const site = require( __dirname + '/config' )
 
 // Post metadata template
 let metatemplate = {
@@ -12,6 +13,7 @@ let metatemplate = {
 
 // Write default data to disk
 let create = target => {
+	target ? target : site
 	return new Promise( ( resolve, reject ) => {
 		let actions = 0
 		// Make visible file

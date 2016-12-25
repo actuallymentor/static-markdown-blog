@@ -44,3 +44,7 @@ Important things to know:
     - The md file holds the post
     - The .md.json file the meta data like categories and featured image
 2. In the .md files you can reference the assets folder locally as ./assets, this will be changed to /assets in the compiled blog version
+
+### Editing themes
+
+The pug files in the system/templates folder supply the markup structure. The styling and js comes from the theme/ folder.
