@@ -79,16 +79,6 @@ describe( 'Post publish controller', f => {
 			} )
 		} )
 	} )
-	// // Category publis
-	// it( 'Publishes to categories', done => {
-	// 	// Publish posts after cleaning
-	// 	blog.clean( site ).then( f => {
-	// 		blog.publish.posts( site ).then( data => {
-	// 			// TODO
-	// 			done( )
-	// 		} )
-	// 	} )
-	// } )
 } )
 
 // ///////////////////////////////
