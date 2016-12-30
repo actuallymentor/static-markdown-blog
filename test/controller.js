@@ -61,10 +61,10 @@ describe( 'Publishing module', f => {
 
 	it( 'Publishes single posts correctly', done => {
 		blog.clean( site ).then(  f => {
-			blog.publish( site ).then( posts => {
+			blog.publish( site ).then( blog => {
 				// Check if number of public files equals parsed files
 				fs.readdir( site.system.public + site.system.blogslug, ( err, files ) => {
-					expect( files.length ).to.equal( posts.length )
+					expect( files.length ).to.equal( blog.posts.length )
 					done( )
 				} )
 			} )
@@ -102,6 +102,85 @@ describe( 'Publishing module', f => {
 					expect( data.indexOf( '<loc>' ) ).not.to.equal( -1 )
 					done( )
 				} )
+			} )
+		} )
+	} )
+
+} )
+
+// ///////////////////////////////
+// Broken link check
+// ///////////////////////////////
+
+
+const bs = require( 'browser-sync' ).create( )
+const blc = require( 'broken-link-checker' )
+
+describe( 'Links in the blog', f => {
+
+	// Clickable links
+	it( 'Clickable are working', done => {
+		// Set up the link checker
+		let broken = []
+		let checker = new blc.HtmlUrlChecker( { filterLevel: 0 }, {
+			link: (result, customData) => {
+				if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+			},
+			end: function(){
+				if ( broken.length > 0 ) console.log( broken )
+				expect( broken.length ).to.equal( 0 )
+				done( )
+			}
+		} )
+		// init the browsersync server
+		bs.init( {
+			open: false,
+			server: {
+				baseDir: './public',
+				serveStaticOptions: {
+					extensions: ['html']
+				}
+			},
+			logLevel: "silent"
+		}, f => {
+			blog.publish( site ).then( blog => {
+				for (var i = blog.links.length - 1; i >= 0; i--) {
+					checker.enqueue( blog.links[i] )
+				}
+			} )
+		} )
+	} )
+
+
+	// Clickable links
+	it( 'All resources & meta are working', done => {
+		// Set up the link checker
+		let broken = []
+		let checker = new blc.HtmlUrlChecker( { filterLevel: 3 }, {
+			link: (result, customData) => {
+				if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+			},
+			end: function(){
+				if ( broken.length > 0 ) console.log( broken )
+				expect( broken.length ).to.equal( 0 )
+				done( )
+			}
+		} )
+		// init the browsersync server
+		bs.init( {
+			open: false,
+			server: {
+				baseDir: './public',
+				serveStaticOptions: {
+					extensions: ['html']
+				}
+			},
+			logLevel: "silent"
+		}, f => {
+			blog.publish( site ).then( blog => {
+				for (var i = blog.links.length - 1; i >= 0; i--) {
+					checker.enqueue( blog.links[i] )
+				}
 			} )
 		} )
 	} )

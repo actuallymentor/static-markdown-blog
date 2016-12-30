@@ -5,6 +5,7 @@ const pug = require( 'pug' )
 const del = require( 'del' )
 const ncp = require( 'ncp' )
 const sm = require( 'sitemap' )
+const unique = require( __dirname + '/unique' )
 
 // ///////////////////////////////
 // Sitemap config
@@ -27,10 +28,10 @@ let Sitemap = function( ) {
 			} )
 			themap.toXML( ( err, xml ) => {
 				if ( err ) reject( err )
-				fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
-					if ( err ) reject( err )
-					resolve( )
-				} )
+					fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
+						if ( err ) reject( err )
+						resolve( unique( this.links ) )
+					} )
 			} )
 		} )
 	}
@@ -77,7 +78,7 @@ let parse = ( site, files ) => {
 					path: site.system.content + files[i],
 					meta: metadata,
 					raw: content,
-					html: markdown( String( content ).replace( './assets', '/assets' ) )
+					html: markdown( String( content ).replace( './assets', site.system.url + 'assets' ) )
 				} )
 				// Resolve if parsed files are equal to existing files
 				if ( parsedfiles.length == files.length ) resolve( parsedfiles )
@@ -262,8 +263,8 @@ let publishall = site => {
 					// Publish the posts separately
 					publishposts( site, parsedfiles )
 					] ).then( f => {
-						sitemap.make( site ).then( f => {
-							resolve( files )
+						sitemap.make( site ).then( links => {
+							resolve( { posts: parsedfiles, links: links } )
 						} )
 					} )
 				} )
