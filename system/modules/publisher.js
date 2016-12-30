@@ -174,8 +174,10 @@ let publishcats = ( site, posts ) => {
 							}
 						}
 					} )
+					// Write the category page to file
 					fs.writeFile( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', page, err => {
 						if ( err ) reject( err )
+						// track how many files were processed
 						processed++
 						if( processed == posts.length ) resolve( )
 					} )
@@ -192,10 +194,15 @@ let publishcats = ( site, posts ) => {
 let publishall = site => {
 	let parsed = 0
 	return new Promise( ( resolve, reject ) => {
+		// Read all post files
 		read( site ).then( files => {
+			// Parse the files to objects
 			parse( site, files ).then( parsedfiles => {
+				// Publish the index page
 				publishindex( site, parsedfiles )
+				// Publish the categories
 				publishcats( site, parsedfiles )
+				// Publish the posts separately
 				for (let i = parsedfiles.length - 1; i >= 0; i--) {
 					publishposts( site, parsedfiles[i]).then( post => {
 						parsed ++
