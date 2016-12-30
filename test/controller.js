@@ -115,6 +115,10 @@ describe( 'Publishing module', f => {
 
 const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
+const webpack = require( 'webpack' )
+
+// Set the environment to production
+process.env.NODE_ENV = 'production'
 
 describe( 'Links in the blog', f => {
 
@@ -126,12 +130,12 @@ describe( 'Links in the blog', f => {
 			link: (result, customData) => {
 				if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
 			},
-			end: function(){
-				if ( broken.length > 0 ) console.log( broken )
-				expect( broken.length ).to.equal( 0 )
-				done( )
-			}
-		} )
+		end: function(){
+			if ( broken.length > 0 ) console.log( broken )
+			expect( broken.length ).to.equal( 0 )
+			done( )
+		}
+	} )
 		// init the browsersync server
 		bs.init( {
 			open: false,
@@ -143,10 +147,15 @@ describe( 'Links in the blog', f => {
 			},
 			logLevel: "silent"
 		}, f => {
-			blog.publish( site ).then( blog => {
-				for (var i = blog.links.length - 1; i >= 0; i--) {
-					checker.enqueue( blog.links[i] )
-				}
+			// Build frontend app file
+			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
+				// Copy assets and publish blog
+				blog.assets( site )
+				blog.publish( site ).then( blog => {
+					for (var i = blog.links.length - 1; i >= 0; i--) {
+						checker.enqueue( blog.links[i] )
+					}
+				} )
 			} )
 		} )
 	} )
@@ -177,10 +186,15 @@ describe( 'Links in the blog', f => {
 			},
 			logLevel: "silent"
 		}, f => {
-			blog.publish( site ).then( blog => {
-				for (var i = blog.links.length - 1; i >= 0; i--) {
-					checker.enqueue( blog.links[i] )
-				}
+			// Build frontend app file
+			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
+				// Copy assets and publish blog
+				blog.assets( site )
+				blog.publish( site ).then( blog => {
+					for (var i = blog.links.length - 1; i >= 0; i--) {
+						checker.enqueue( blog.links[i] )
+					}
+				} )
 			} )
 		} )
 	} )
