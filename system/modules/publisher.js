@@ -91,7 +91,7 @@ let parse = ( site, files ) => {
 // ///////////////////////////////
 
 // Publishing posts
-let publishposts = ( site, single ) => {
+let publishpost = ( site, single ) => {
 	// Make public folder if it does not exist
 	if( !fs.existsSync( site.system.public ) ) fs.mkdirSync( site.system.public )
 	return new Promise( ( resolve, reject ) => {
@@ -145,6 +145,19 @@ let publishposts = ( site, single ) => {
 				resolve( single )
 			}
 		} )
+	} )
+}
+
+// Publish all posts
+let publishposts = ( site, posts ) => {
+	return new Promise( ( resolve, reject ) => {
+		let parsed = 0
+		for (let i = posts.length - 1; i >= 0; i--) {
+			publishpost( site, posts[i]).then( post => {
+				parsed ++
+				if ( parsed == posts.length ) resolve( posts )
+			} )
+		}
 	} )
 }
 
@@ -236,7 +249,6 @@ let publishcats = ( site, posts ) => {
 // ///////////////////////////////
 
 let publishall = site => {
-	let parsed = 0
 	return new Promise( ( resolve, reject ) => {
 		// Read all post files
 		read( site ).then( files => {
@@ -246,18 +258,15 @@ let publishall = site => {
 					// Publish the index page
 					publishindex( site, parsedfiles ),
 					// Publish the categories
-					publishcats( site, parsedfiles ) ] ).then( f => {
-						sitemap.make( site )
+					publishcats( site, parsedfiles ),
+					// Publish the posts separately
+					publishposts( site, parsedfiles )
+					] ).then( f => {
+						sitemap.make( site ).then( f => {
+							resolve( files )
+						} )
 					} )
-				
-				// Publish the posts separately
-				for (let i = parsedfiles.length - 1; i >= 0; i--) {
-					publishposts( site, parsedfiles[i]).then( post => {
-						parsed ++
-						if ( parsed.length == parsedfiles.length ) resolve( parsedfiles )
-					} )
-				}
-			} )
+				} )
 		} )
 	} )
 }
