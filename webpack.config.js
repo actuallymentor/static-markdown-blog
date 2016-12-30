@@ -8,12 +8,10 @@ let autoprefixer = require ( 'autoprefixer' )
 let webpack = require( 'webpack' )
 
 // Blog actions
-const blog = require( __dirname + '/system/modules/controller.js' )
+const blog = require( __dirname + '/system/modules/publisher.js' )
 
 // Configs
 const site = require( __dirname + '/system/modules/config' )
-const assets = require( __dirname + '/system/modules/copyassets' )
-const del = require( 'del' )
 
 // ///////////////////////////////
 // Plugins
@@ -77,15 +75,15 @@ const pluginarray = ( env, server ) => {
     new WebpackPreBuildPlugin( stats => {
       console.log( 'Before build: ' )
       blog.clean( site ).then( f => {
-        blog.publish.posts( site )
-        blog.publish.index( site )
-        blog.publish.categories( site )
+        blog.publish( site ).then( posts => {
+          console.log( 'Posts published' )
+        } )
       } )
     } ),
     // Run after build
     new WebpackOnBuildPlugin( stats => {
       console.log( 'After build:' )
-      assets( site ).then( f => {
+      blog.assets( site ).then( f => {
         console.log( 'Assets copied' )
       } )
     } )

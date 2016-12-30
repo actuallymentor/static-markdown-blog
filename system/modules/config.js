@@ -1,5 +1,7 @@
 // import modules
 const fs = require( 'fs' )
+const today = require( __dirname + '/today' )
+const path = require( 'path' )
 
 // Configs
 let config = {
@@ -7,16 +9,18 @@ let config = {
 	identity: {
 		title: "Global title",
 		desc: "Website description",
-		logo: "" // Add dimensions in the ld+json schema
+		logo: "assets/logo.svg", // Add dimensions in the ld+json schema
+		image: "assets/image.svg"// For sharing. Add dimensions in the ld+json schema
 	},
 	// System settings
 	system: {
 		blogslug: "post",
-		content: __dirname + '/../../content/',
-		public: __dirname + '/../../public/',
-		templates: __dirname + '/../templates/',
-		baseURL: "http://localhost:3000/",
-		year: new Date().getFullYear()
+		content: path.normalize( __dirname + '/../../content/' ),
+		public:path.normalize( __dirname + '/../../public/' ),
+		templates: path.normalize( __dirname + '/../templates/' ),
+		url: "http://localhost:3000/",
+		year: new Date().getFullYear(),
+		today: today
 	},
 	// The blog author
 	author: {
@@ -24,7 +28,7 @@ let config = {
 		lastname: "Palokaj",
 		email: "mentor@palokaj.co",
 		twitter: "@actuallymentor",
-		url: "https://www.skillcollector.com"
+		url: "https://www.skillcollector.com/"
 	},
 	// Tracking codes
 	track: {

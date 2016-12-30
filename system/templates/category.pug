@@ -8,10 +8,10 @@ html
 		section#index.container
 			h2 Posts:
 			each post in posts
-				- if ( post.categories.indexOf( category ) != -1 )
-					a.postlist( href=site.system.baseURL + category + "/" + post.slug )
+				- if ( post.meta.categories.indexOf( category ) != -1 )
+					a.postlist( href=site.system.url + category + "/" + post.slug )
 						article
-							h3 #{post.title}
-							span #{post.desc}
+							h3 #{post.meta.title}
+							span #{post.meta.desc}
 
 	include _footer.pug

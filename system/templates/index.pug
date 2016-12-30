@@ -7,19 +7,19 @@ html
 			h1 #{site.identity.title}
 		section#index.container
 			h2 All posts
-			each post in allPosts
-				a.postlist( href=site.system.baseURL + site.system.blogslug + "/" + post.slug )
+			each post in posts
+				a.postlist( href=site.system.url + site.system.blogslug + "/" + post.slug )
 					article
-						h3 #{post.title}
-						span #{post.desc}
+						h3 #{post.meta.title}
+						span #{post.meta.desc}
 			h2 Categories
 			ul#categories
 				- let processed = []
-				each post in allPosts
-					each postcat in post.categories
+				each post in posts
+					each postcat in post.meta.categories
 						- if ( processed.indexOf( postcat ) == -1 )
 								li
-									a(href=site.system.baseURL + '/category/' + postcat) #{postcat}
+									a(href=site.system.url + 'category/' + postcat) #{postcat}
 						- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
 
 

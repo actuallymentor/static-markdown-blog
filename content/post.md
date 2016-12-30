@@ -1,3 +1,13 @@
+```json
+{
+    "title": "One Blog Post to Rule Them All",
+    "desc": "One description to find them",
+    "categories": [ "cat" ],
+    "published": "2016-12-20",
+    "updated": "",
+    "featuredimg": "/assets/image.svg"
+}
+```
 # I am an article woo!
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -7,7 +17,7 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-## A secondary headnig is fun
+## A secondary heading is fun
 
 And so is a piece of text. And maybe even a list:
 
