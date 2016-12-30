@@ -1,40 +1,54 @@
 head
 	meta( charset='utf8' )
+	meta( http-equiv="x-ua-compatible" content="ie=edge" )
 	meta( name="viewport" content="width=device-width, initial-scale=1" )
+	base( href=site.system.url )
+	meta( name="robots" content="index,follow,noodp" )
+	meta( name="googlebot" content="index,follow" )
+	if site.system.gverification
+		meta( name="google-site-verification" content=site.system.gverification )
 
+	//- Regular meta tags
 	if file.meta.file
 		title !{site.identity.title} - !{file.meta.title}
 	else
 		title !{site.identity.title}
+	meta( name="description" content=site.identity.desc )
 
-	meta( name="twitter:title" content=site.identity.title + ' - ' + file.meta.title )
+	//- Facebook tags
+	meta( property="og:site_name" content=site.identity.title )
 	meta( property="og:title" content=site.identity.title + ' - ' + file.meta.title )
-	meta( name="twitter:card" content=file.meta.desc )
 	meta( property="og:description" content=file.meta.desc )
 	meta( property="article:published_time" content=file.meta.published)
-
-	meta( property="og:site_name" content=site.identity.title )
-	meta( name="description" content=site.identity.desc )
-	meta( name="description" content=site.identity.desc )
-
-	
-	meta( name="twitter:site" content=site.author.twitter )
 	meta( property="og:type" content="article" )
-
-	meta( property="og:url" content=url )
-	meta( property="fb:admins" content="1299359953416544" )
+	if file.html
+		meta( property="og:url" content=site.system.url + site.system.blogslug + '/' + file.slug )
+	else
+		meta( property="og:url" content=url )
+	meta( property="og:image" content=file.meta.featuredimg)
+	meta( property="fb:admins" content=site.author.facebook )
 	meta( property="profile:first_name" content=site.author.firstname)
 	meta( property="profile:last_name" content=site.author.lastname)
 
-	meta( property="og:image" content=file.meta.featuredimg)
 
+	//- Twitter tags
+	meta( name="twitter:site" content=site.author.twitter )
+	meta( name="twitter:title" content=site.identity.title + ' - ' + file.meta.title )
+	meta( name="twitter:description" content=file.meta.desc)
+	meta( name="twitter:image" content=file.meta.featuredimg)
+	meta( name="name=twitter:image:alt" content=file.meta.title )
+	meta( name="twitter:card" content=file.meta.desc )
+
+	//- DNS Prefetching
 	link( rel="dns-prefetch" href="//www.google-analytics.com" )
 	link( rel="dns-prefetch" href="//fonts.googleapis.com.com" )
 
-	if file.content
-		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.meta.slug )
+	//- if this is a blog page, add the canonical link
+	if file.html
+		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
 
 body
+	script( src='/assets/js/app.js' )
 	nav#navbar
 		ul
 			li 

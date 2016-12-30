@@ -20,7 +20,8 @@ let config = {
 		templates: path.normalize( __dirname + '/../templates/' ),
 		url: "http://localhost:3000/",
 		year: new Date().getFullYear(),
-		today: today
+		today: today,
+		gverification: undefined
 	},
 	// The blog author
 	author: {
@@ -28,6 +29,7 @@ let config = {
 		lastname: "Palokaj",
 		email: "mentor@palokaj.co",
 		twitter: "@actuallymentor",
+		facebook: "1299359953416544",
 		url: "https://www.skillcollector.com/"
 	},
 	// Tracking codes

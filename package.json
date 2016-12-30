@@ -38,6 +38,7 @@
     "pre-build-webpack": "^0.1.0",
     "pug": "^2.0.0-beta6",
     "sass-loader": "^4.1.1",
+    "sitemap": "^1.8.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0"
   },

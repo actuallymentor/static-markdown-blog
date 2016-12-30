@@ -4,6 +4,40 @@ const markdown = require( 'marked' )
 const pug = require( 'pug' )
 const del = require( 'del' )
 const ncp = require( 'ncp' )
+const sm = require( 'sitemap' )
+
+// ///////////////////////////////
+// Sitemap config
+// ///////////////////////////////
+
+// Sitemap prototype
+let Sitemap = function( ) {
+	this.links = []
+	this.add = newlink => {
+		this.links.push( newlink )
+	}
+	this.log = f => {
+		console.log( this.links )
+	}
+	this.make = ( site ) => {
+		return new Promise( ( resolve, reject ) => {
+			let themap = sm.createSitemap( {
+				hostname: site.system.url,
+				urls: this.links
+			} )
+			themap.toXML( ( err, xml ) => {
+				if ( err ) reject( err )
+				fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
+					if ( err ) reject( err )
+					resolve( )
+				} )
+			} )
+		} )
+	}
+}
+
+// Sitemap instance
+let sitemap = new Sitemap( )
 
 // ///////////////////////////////
 // Reading and parsing
@@ -76,9 +110,12 @@ let publishposts = ( site, single ) => {
 				category: single.meta.categories[ 0 ],
 				url: site.system.url + single.meta.categories[ 0 ] + '/' + single.slug + '.html'
 			} )
+			// Add link to sitemap
+			sitemap.add( site.system.url + single.meta.categories[ 0 ] + '/' + single.slug )
 			// Write result to file
 			fs.writeFile( site.system.public + single.meta.categories[ 0 ] + '/' + single.slug + '.html', page, err => {
 				if ( err ) reject( err )
+				// Count amount of categories processed
 				processed.cat ++
 				// Resolve if all have been processed
 				if ( processed.cat == single.meta.categories.length && processed.main == 1 ) {
@@ -95,9 +132,12 @@ let publishposts = ( site, single ) => {
 		} )
 		// Make posts folder if it does not exist
 		if( !fs.existsSync( site.system.public + site.system.blogslug ) ) fs.mkdirSync( site.system.public + site.system.blogslug )
+		// Add link to sitemap
+		sitemap.add( site.system.url + site.system.blogslug + '/' + single.slug )
 		// Write result to file
 		fs.writeFile( site.system.public + site.system.blogslug + '/' + single.slug + '.html', page, err => {
 			if ( err ) reject( err )
+			// Count amount of processed articles for main folder, and I just realised that is not very elegant...
 			processed.main ++
 			// Resolve if all have been processed
 			if ( processed.cat == single.meta.categories.length && processed.main == 1 ) {
@@ -130,6 +170,8 @@ let publishindex = ( site, allposts ) => {
 		// Write index to disk
 		fs.writeFile( site.system.public + 'index.html', page, err => {
 			if ( err ) reject( err )
+			// Add index to sitemap
+			sitemap.add( site.system.url )
 			// Resolve
 			resolve( page )
 		} )
@@ -174,6 +216,8 @@ let publishcats = ( site, posts ) => {
 							}
 						}
 					} )
+					// Write category to sitemap
+					sitemap.add( site.system.url + 'category/' + posts[i].meta.categories[j] )
 					// Write the category page to file
 					fs.writeFile( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', page, err => {
 						if ( err ) reject( err )
@@ -198,10 +242,14 @@ let publishall = site => {
 		read( site ).then( files => {
 			// Parse the files to objects
 			parse( site, files ).then( parsedfiles => {
-				// Publish the index page
-				publishindex( site, parsedfiles )
-				// Publish the categories
-				publishcats( site, parsedfiles )
+				Promise.all( [
+					// Publish the index page
+					publishindex( site, parsedfiles ),
+					// Publish the categories
+					publishcats( site, parsedfiles ) ] ).then( f => {
+						sitemap.make( site )
+					} )
+				
 				// Publish the posts separately
 				for (let i = parsedfiles.length - 1; i >= 0; i--) {
 					publishposts( site, parsedfiles[i]).then( post => {
