@@ -174,7 +174,6 @@ let publishcats = ( site, posts ) => {
 							}
 						}
 					} )
-					console.log( '\nPublishing cat\n' + site.system.public + 'category/' + posts[i].meta.categories[j] + '.html' )
 					fs.writeFile( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', page, err => {
 						if ( err ) reject( err )
 						processed++
