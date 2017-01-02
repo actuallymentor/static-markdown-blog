@@ -163,10 +163,11 @@ describe( 'Links in the blog', f => {
 
 	// Clickable links
 	it( 'All resources & meta are working', done => {
-		beforeEach(function(done) {
+		// Increase the max timeout for this test to buffer for network speed differences
+		beforeEach( done => {
     		this.timeout( 10000 )
     		setTimeout( done, 2500 )
-  		})
+  		} )
 		// Set up the link checker
 		let broken = []
 		let checker = new blc.HtmlUrlChecker( { filterLevel: 3 }, {

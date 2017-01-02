@@ -6,6 +6,7 @@ const del = require( 'del' )
 const ncp = require( 'ncp' )
 const sm = require( 'sitemap' )
 const unique = require( __dirname + '/unique' )
+const RSS = require( 'rss' )
 
 // ///////////////////////////////
 // Sitemap config
@@ -16,9 +17,6 @@ let Sitemap = function( ) {
 	this.links = []
 	this.add = newlink => {
 		this.links.push( newlink )
-	}
-	this.log = f => {
-		console.log( this.links )
 	}
 	this.make = ( site ) => {
 		return new Promise( ( resolve, reject ) => {
@@ -37,8 +35,37 @@ let Sitemap = function( ) {
 	}
 }
 
-// Sitemap instance
-let sitemap = new Sitemap( )
+// Sitemap generator
+
+let publishsitemap = ( site, parsedfiles, sitemap ) => {
+	return new Promise( ( resolve, reject ) => {
+		// Add links to sitemap
+		// Add the index
+		sitemap.add( site.system.url )
+		// Loop over the posts to add all category links
+		for (let i = parsedfiles.length - 1; i >= 0; i--) {
+			// Add all post links to sitemap
+			for (let j = parsedfiles[i].links.length - 1; j >= 0; j--) {
+				sitemap.add( parsedfiles[i].links[ j ] )
+			}
+			// Add all category links to sitemap
+			for (let k = parsedfiles[i].meta.categories.length - 1; k >= 0; k--) {
+				if( sitemap.links.indexOf( site.system.url + 'category/' + parsedfiles[i].meta.categories ) == -1 )
+					sitemap.add( site.system.url + 'category/' + parsedfiles[i].meta.categories )
+			}
+		}
+		sitemap.make( site ).then( links => {
+			resolve( { posts: parsedfiles, links: links } )
+		} )
+	} )
+}
+
+// ///////////////////////////////
+// RSS config
+// ///////////////////////////////
+
+// RSS Prototype
+
 
 // ///////////////////////////////
 // Reading and parsing
@@ -71,15 +98,24 @@ let parse = ( site, files ) => {
 				metadata.updated = (metadata.updated.length > 0) ? metadata.updated : metadata.published
 				// Get the content based on the position of the first ```\n
 				let content = data.slice( data.indexOf( '```\n' ) + 4, data.length )
-				// Push the file data to the array
-				parsedfiles.push( {
+
+				// Construct the post object
+				let filedata = {
 					file: files[ i ],
 					slug: slug( files[ i ].replace(/^.*[\\\/]/, '').split( '.' )[0] ),
 					path: site.system.content + files[i],
 					meta: metadata,
 					raw: content,
-					html: markdown( String( content ).replace( './assets', site.system.url + 'assets' ) )
-				} )
+					html: markdown( String( content ).replace( './assets', site.system.url + 'assets' ) ),
+					links: [ site.system.url + site.system.blogslug + '/' + slug( files[ i ].replace(/^.*[\\\/]/, '').split( '.' )[0] ) ]
+				}				
+				// Add category links
+				for (let i = filedata.meta.categories.length - 1; i >= 0; i--) {
+					filedata.links.push( site.system.url + filedata.meta.categories[i] + '/' + filedata.slug )
+				}
+
+				// Push the file data to the array
+				parsedfiles.push( filedata )
 				// Resolve if parsed files are equal to existing files
 				if ( parsedfiles.length == files.length ) resolve( parsedfiles )
 			} )
@@ -111,8 +147,6 @@ let publishpost = ( site, single ) => {
 				category: single.meta.categories[ 0 ],
 				url: site.system.url + single.meta.categories[ 0 ] + '/' + single.slug + '.html'
 			} )
-			// Add link to sitemap
-			sitemap.add( site.system.url + single.meta.categories[ 0 ] + '/' + single.slug )
 			// Write result to file
 			fs.writeFile( site.system.public + single.meta.categories[ 0 ] + '/' + single.slug + '.html', page, err => {
 				if ( err ) reject( err )
@@ -133,8 +167,6 @@ let publishpost = ( site, single ) => {
 		} )
 		// Make posts folder if it does not exist
 		if( !fs.existsSync( site.system.public + site.system.blogslug ) ) fs.mkdirSync( site.system.public + site.system.blogslug )
-		// Add link to sitemap
-		sitemap.add( site.system.url + site.system.blogslug + '/' + single.slug )
 		// Write result to file
 		fs.writeFile( site.system.public + site.system.blogslug + '/' + single.slug + '.html', page, err => {
 			if ( err ) reject( err )
@@ -184,8 +216,6 @@ let publishindex = ( site, allposts ) => {
 		// Write index to disk
 		fs.writeFile( site.system.public + 'index.html', page, err => {
 			if ( err ) reject( err )
-			// Add index to sitemap
-			sitemap.add( site.system.url )
 			// Resolve
 			resolve( page )
 		} )
@@ -230,14 +260,12 @@ let publishcats = ( site, posts ) => {
 							}
 						}
 					} )
-					// Write category to sitemap
-					sitemap.add( site.system.url + 'category/' + posts[i].meta.categories[j] )
 					// Write the category page to file
 					fs.writeFile( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', page, err => {
 						if ( err ) reject( err )
 						// track how many files were processed
 						processed++
-						if( processed == posts.length ) resolve( )
+						if( processed == posts.length ) resolve( posts )
 					} )
 				}
 			}
@@ -261,11 +289,11 @@ let publishall = site => {
 					// Publish the categories
 					publishcats( site, parsedfiles ),
 					// Publish the posts separately
-					publishposts( site, parsedfiles )
-					] ).then( f => {
-						sitemap.make( site ).then( links => {
-							resolve( { posts: parsedfiles, links: links } )
-						} )
+					publishposts( site, parsedfiles ),
+					// Publish the sitemap
+					publishsitemap( site, parsedfiles, new Sitemap( ) )
+					] ).then( ( result ) => {
+						console.log( '\nALL DONE\n' )
 					} )
 				} )
 		} )
