@@ -116,6 +116,30 @@ describe( 'Publishing module', f => {
 const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
+const fileman = require( __dirname + '/../system/modules/file-manager' )
+let linkchecker = done => {
+	let broken = []
+	return new blc.HtmlUrlChecker( { filterLevel: 0 }, {
+		link: ( result, customData ) => {
+			if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+		},
+		end: f => {
+			if ( broken.length > 0 ) console.log( broken )
+			expect( broken.length ).to.equal( 0 )
+			done( )
+		}
+	} )
+}
+let bsconfig = {
+	open: false,
+	server: {
+		baseDir: './public',
+		serveStaticOptions: {
+			extensions: ['html']
+		}
+	},
+	logLevel: "silent"
+}
 
 // Set the environment to production
 process.env.NODE_ENV = 'production'
@@ -125,37 +149,17 @@ describe( 'Links in the blog', f => {
 	// Clickable links
 	it( 'Clickable are working', done => {
 		// Set up the link checker
-		let broken = []
-		let checker = new blc.HtmlUrlChecker( { filterLevel: 0 }, {
-			link: (result, customData) => {
-				if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
-			},
-		end: function(){
-			if ( broken.length > 0 ) console.log( broken )
-			expect( broken.length ).to.equal( 0 )
-			done( )
-		}
-	} )
+		let checker = linkchecker( done )
 		// init the browsersync server
-		bs.init( {
-			open: false,
-			server: {
-				baseDir: './public',
-				serveStaticOptions: {
-					extensions: ['html']
-				}
-			},
-			logLevel: "silent"
-		}, f => {
+		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				// Copy assets and publish blog
-				blog.assets( site )
 				blog.publish( site ).then( blog => {
 					for (var i = blog.links.length - 1; i >= 0; i--) {
 						checker.enqueue( blog.links[i] )
 					}
-				} )
+				} )	
 			} )
 		} )
 	} )
@@ -164,37 +168,13 @@ describe( 'Links in the blog', f => {
 	// Clickable links
 	it( 'All resources & meta are working', done => {
 		// Increase the max timeout for this test to buffer for network speed differences
-		beforeEach( done => {
-    		this.timeout( 10000 )
-    		setTimeout( done, 2500 )
-  		} )
 		// Set up the link checker
-		let broken = []
-		let checker = new blc.HtmlUrlChecker( { filterLevel: 3 }, {
-			link: (result, customData) => {
-				if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
-			},
-			end: function(){
-				if ( broken.length > 0 ) console.log( broken )
-				expect( broken.length ).to.equal( 0 )
-				done( )
-			}
-		} )
+		let checker = linkchecker( done )
 		// init the browsersync server
-		bs.init( {
-			open: false,
-			server: {
-				baseDir: './public',
-				serveStaticOptions: {
-					extensions: ['html']
-				}
-			},
-			logLevel: "silent"
-		}, f => {
+		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				// Copy assets and publish blog
-				blog.assets( site )
 				blog.publish( site ).then( blog => {
 					for (var i = blog.links.length - 1; i >= 0; i--) {
 						checker.enqueue( blog.links[i] )

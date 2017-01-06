@@ -55,18 +55,18 @@ let makeugly = new webpack.optimize.UglifyJsPlugin( {
 })
 
 let buildblog = new WebpackPreBuildPlugin( stats => {
-  console.log( 'Before build: ' )
+  if ( process.env.debug ) console.log( 'Before build: ' )
   blog.clean( site ).then( f => {
     blog.publish( site ).then( posts => {
-      console.log( 'Posts published' )
+      if ( process.env.debug ) if ( process.env.debug ) console.log( 'Posts published' )
     } )
   } )
 } )
 
 let copyassets = new WebpackOnBuildPlugin( stats => {
-  console.log( 'After build:' )
+  if ( process.env.debug ) console.log( 'After build:' )
   blog.assets( site ).then( f => {
-    console.log( 'Assets copied' )
+    if ( process.env.debug ) console.log( 'Assets copied' )
   } )
 } )
 
@@ -107,8 +107,8 @@ const maps = env => {
   }
 }
 
-console.log( 'Environment is ' + process.env.NODE_ENV )
-console.log( 'Source maps are using ' + maps( process.env.NODE_ENV ) )
+if ( process.env.debug ) console.log( 'Environment is ' + process.env.NODE_ENV )
+if ( process.env.debug ) console.log( 'Source maps are using ' + maps( process.env.NODE_ENV ) )
 
 module.exports = {
   entry: __dirname + '/theme/main.js',
