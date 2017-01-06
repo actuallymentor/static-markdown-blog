@@ -1,26 +1,27 @@
 doctype html
 html
 	include _header.pug
-
-	main
-		div#header
-			h1 #{site.identity.title}
-		section#index.container
-			h2 All posts
-			each post in posts
-				a.postlist( href=site.system.url + site.system.blogslug + "/" + post.slug )
-					article
-						h3 #{post.meta.title}
-						span #{post.meta.desc}
-			h2 Categories
-			ul#categories
-				- let processed = []
+	body
+		include _menu.pug
+		main
+			div#header
+				h1 #{site.identity.title}
+			section#index.container
+				h2 All posts
 				each post in posts
-					each postcat in post.meta.categories
-						- if ( processed.indexOf( postcat ) == -1 )
-								li
-									a(href=site.system.url + 'category/' + postcat) #{postcat}
-						- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
+					a.postlist( href=site.system.url + site.system.blogslug + "/" + post.slug )
+						article
+							h3 #{post.meta.title}
+							span #{post.meta.desc}
+				h2 Categories
+				ul#categories
+					- let processed = []
+					each post in posts
+						each postcat in post.meta.categories
+							- if ( processed.indexOf( postcat ) == -1 )
+									li
+										a(href=site.system.url + 'category/' + postcat) #{postcat}
+							- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
 
 
-	include _footer.pug
+		include _footer.pug

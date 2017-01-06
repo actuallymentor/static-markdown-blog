@@ -1,5 +1,5 @@
 head
-	meta( charset='utf8' )
+	meta( charset='utf-8' )
 	meta( http-equiv="x-ua-compatible" content="ie=edge" )
 	meta( name="viewport" content="width=device-width, initial-scale=1" )
 	base( href=site.system.url )
@@ -46,11 +46,3 @@ head
 	//- if this is a blog page, add the canonical link
 	if file.html
 		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
-
-body
-	script( src=site.system.url + 'assets/js/app.js' )
-	nav#navbar
-		ul
-			li 
-				a( href='/' ) Home
-			li Contact

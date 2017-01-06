@@ -9,8 +9,9 @@ let config = {
 	identity: {
 		title: "Global title",
 		desc: "Website description",
-		logo: "assets/logo.svg", // Add dimensions in the ld+json schema
-		image: "assets/image.svg"// For sharing. Add dimensions in the ld+json schema
+		logo: "assets/logo.jpg", // Add dimensions in the ld+json schema
+		image: "assets/image.jpg", // For sharing. Add dimensions in the ld+json schema
+		language: 'en'
 	},
 	// System settings
 	system: {

@@ -1,13 +1,15 @@
 doctype html
 html
 	include _header.pug
+	body
+		include _menu.pug
 
-	main
-		div#header
-			h1 #{site.identity.title}
-		div#featuredimg
-			img( src=file.meta.featuredimg )
-		section#post.container
-			article !{file.html}
+		main
+			div#header
+				h1 #{site.identity.title}
+			div#featuredimg
+				img( src=file.meta.featuredimg )
+			section#post.container
+				article !{file.html}
 
-	include _footer.pug
+		include _footer.pug
