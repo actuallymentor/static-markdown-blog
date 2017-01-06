@@ -28,7 +28,7 @@ let proto = function( ) {
 	}
 }
 
-let make = ( site, parsedfiles, sitemap ) => {
+let make = ( site, parsedfiles, sitemap, dry = false ) => {
 	return new Promise( ( resolve, reject ) => {
 		// Add links to sitemap
 		// Add the index
@@ -45,6 +45,9 @@ let make = ( site, parsedfiles, sitemap ) => {
 					sitemap.add( site.system.url + 'category/' + parsedfiles[i].meta.categories )
 			}
 		}
+		// Return links only if this is a dry run ( for testing )
+		if ( dry ) resolve( sitemap.links )
+		// Return a full sitemap if we're not dry, which is the default
 		sitemap.make( site ).then( links => {
 			resolve( { posts: parsedfiles, links: links } )
 		} )

@@ -57,7 +57,7 @@ let makeugly = new webpack.optimize.UglifyJsPlugin( {
 let buildblog = new WebpackPreBuildPlugin( stats => {
   if ( process.env.debug ) console.log( 'Before build: ' )
   blog.clean( site ).then( f => {
-    blog.publish( site ).then( posts => {
+    blog.publish( site ).then( links => {
       if ( process.env.debug ) if ( process.env.debug ) console.log( 'Posts published' )
     } )
   } )

@@ -117,6 +117,7 @@ const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
 const fileman = require( __dirname + '/../system/modules/file-manager' )
+const sitemap = require( __dirname + '/../system/modules/publish-sitemap' )
 let linkchecker = done => {
 	let broken = []
 	return new blc.HtmlUrlChecker( { filterLevel: 0 }, {
@@ -154,12 +155,17 @@ describe( 'Links in the blog', f => {
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
-				// Copy assets and publish blog
-				blog.publish( site ).then( blog => {
-					for (var i = blog.links.length - 1; i >= 0; i--) {
-						checker.enqueue( blog.links[i] )
-					}
-				} )	
+				// Read all posts and construct a sitemap from them
+				fileman.read( site ).then( files => {
+					// Parse the files to objects
+					fileman.parse( site, files ).then( parsedfiles => {
+						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
+							for (var i = links.length - 1; i >= 0; i--) {
+								checker.enqueue( links[i] )
+							}
+						} )
+					} )
+				} )
 			} )
 		} )
 	} )
@@ -174,14 +180,19 @@ describe( 'Links in the blog', f => {
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
-				// Copy assets and publish blog
-				blog.publish( site ).then( blog => {
-					for (var i = blog.links.length - 1; i >= 0; i--) {
-						checker.enqueue( blog.links[i] )
-					}
+				// Read all posts and construct a sitemap from them
+				fileman.read( site ).then( files => {
+					// Parse the files to objects
+					fileman.parse( site, files ).then( parsedfiles => {
+						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
+							for (var i = links.length - 1; i >= 0; i--) {
+								checker.enqueue( links[i] )
+							}
+						} )
+					} )
 				} )
 			} )
 		} )
-	} )
+	})
 
 } )
