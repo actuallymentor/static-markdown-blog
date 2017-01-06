@@ -290,7 +290,8 @@ let publishcats = ( site, posts ) => {
 							meta: {
 								title: 'Category: ' + posts[i].meta.categories[j],
 								desc: site.identity.desc,
-								featuredimg: site.identity.image
+								featuredimg: site.identity.image,
+								published: site.system.today
 							}
 						}
 					} )
