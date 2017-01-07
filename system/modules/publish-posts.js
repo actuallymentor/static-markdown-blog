@@ -21,11 +21,12 @@ let publishpost = ( site, single ) => {
 			let page = pug.renderFile( site.system.templates + '/blog.pug', {
 				site: site,
 				file: single,
-				category: single.meta.categories[ 0 ],
-				url: site.system.url + single.meta.categories[ 0 ] + '/' + single.slug + '.html'
+				category: single.meta.categories[ i ],
+				url: site.system.url + single.meta.categories[ i ] + '/' + single.slug + '.html'
 			} )
 			// Write result to file
-			fs.writeFile( site.system.public + single.meta.categories[ 0 ] + '/' + single.slug + '.html', page, err => {
+			fs.writeFile( site.system.public + single.meta.categories[ i ] + '/' + single.slug + '.html', page, err => {
+				if ( err ) console.log( err )
 				if ( err ) reject( err )
 				// Count amount of categories processed
 				processed.cat ++

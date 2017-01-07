@@ -21,8 +21,10 @@ let publishall = site => {
 	return new Promise( ( resolve, reject ) => {
 		// Read all post files
 		fileman.read( site ).then( files => {
+			if( process.env.test ) console.log( 'Files were read' )
 			// Parse the files to objects
 			fileman.parse( site, files ).then( parsedfiles => {
+				if( process.env.test ) console.log( 'Files were parsed' )
 				Promise.all( [
 					// Publish the index page
 					publishindex( site, parsedfiles ),
@@ -34,7 +36,10 @@ let publishall = site => {
 					sitemap.make( site, parsedfiles, new sitemap.proto( ) ),
 					// Publish the RSS feed
 					publishrss( site, parsedfiles )
-					] ).then( result  => { resolve( result[ 3 ] ) } ).catch( err => { reject( err ) } )
+					] ).then( result  => { 
+						if( process.env.test ) console.log( '\n\nAll promised completed\n\n' )
+						resolve( result[ 3 ] ) 
+					} ).catch( err => { reject( err ) } )
 				} )
 		} )
 	} )

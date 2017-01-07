@@ -16,7 +16,8 @@ module.exports = ( site, posts ) => {
 		// Go through the posts
 		for (let i = posts.length - 1; i >= 0; i--) {
 			// Go through the categories of individual posts
-			for (let j = posts[i].meta.categories.length - 1; i >= 0; i--) {
+			for (let j = posts[i].meta.categories.length - 1; j >= 0; j--) {
+				if( process.env.test ) console.log( 'Evaluating category ' + posts[i].meta.categories[ j ] + ' of ' + posts[i].meta.categories.length )
 				// Check if this cat has been parsed yet
 				if ( catsdone.indexOf( posts[i].meta.categories[j] ) == -1 ) {
 					// Add cat to array of processed
@@ -47,6 +48,7 @@ module.exports = ( site, posts ) => {
 						if ( err ) reject( err )
 						// track how many files were processed
 						processed++
+						if( process.env.test ) console.log( 'Processed a category' )
 						if( processed == posts.length ) resolve( posts )
 					} )
 				}
