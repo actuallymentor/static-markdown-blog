@@ -39,4 +39,5 @@ jspm_packages
 # Project specific
 public/
 .DS_Store
-test/public/*
+content/assets/js/app.js
+content/assets/js/app.js.map
