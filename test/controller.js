@@ -145,7 +145,7 @@ let bsconfig = {
 // Set the environment to production
 process.env.NODE_ENV = 'production'
 
-describe( 'Links in the blog', f => {
+describe( 'Links in the blog', function( ) {
 
 	// Set the timeouts high so that all links can be checked without many or slow requests crashing the test
 	this.timeout( 60000 )
