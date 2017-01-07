@@ -67,7 +67,7 @@ module.exports = ( site, posts ) => {
 			publishpost( site, posts[i]).then( post => {
 				parsed ++
 				if ( parsed == posts.length ) resolve( posts )
-			} )
+			} ).catch( err => { throw err } )
 		}
 	} )
 }

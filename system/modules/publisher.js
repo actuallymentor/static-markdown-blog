@@ -40,8 +40,8 @@ let publishall = site => {
 						if( process.env.test ) console.log( '\n\nAll promised completed\n\n' )
 						resolve( result[ 3 ] ) 
 					} ).catch( err => { reject( err ) } )
-				} )
-		} )
+				} ).catch( err => { throw err } )
+		} ).catch( err => { throw err } )
 	} )
 }
 

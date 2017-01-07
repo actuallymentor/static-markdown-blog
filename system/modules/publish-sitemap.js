@@ -50,7 +50,7 @@ let make = ( site, parsedfiles, sitemap, dry = false ) => {
 		// Return a full sitemap if we're not dry, which is the default
 		sitemap.make( site ).then( links => {
 			resolve( { posts: parsedfiles, links: links } )
-		} )
+		} ).catch( err => { throw err } )
 	} )
 }
 
