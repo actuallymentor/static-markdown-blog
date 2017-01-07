@@ -147,6 +147,9 @@ process.env.NODE_ENV = 'production'
 
 describe( 'Links in the blog', f => {
 
+	// Set the timeouts high so that all links can be checked without many or slow requests crashing the test
+	this.timeout( 60000 )
+
 	// Clickable links
 	it( 'Clickable are working', done => {
 		// Set up the link checker
