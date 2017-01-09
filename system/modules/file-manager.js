@@ -30,6 +30,7 @@ let parse = ( site, files ) => {
 				let metadata = JSON.parse( data.substring( data.indexOf( '{' ), data.indexOf( '}' ) + 1 ) )
 				// Check ig updated if populated
 				metadata.updated = (metadata.updated.length > 0) ? metadata.updated : metadata.published
+				metadata.duration = metadata.duration || '10:00'
 				// Get the content based on the position of the first ```\n
 				let content = data.slice( data.indexOf( '```\n' ) + 4, data.length )
 

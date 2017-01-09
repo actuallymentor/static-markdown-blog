@@ -33,6 +33,10 @@ let config = {
 		facebook: "1299359953416544",
 		url: "https://www.skillcollector.com/"
 	},
+	// Podcast data
+	podcast: {
+		image: 'assets/image.svg'
+	},
 	// Tracking codes
 	track: {
 		ga: "UA-XXXXXXXX-XX"

@@ -5,7 +5,7 @@ const ncp = require( 'ncp' )
 // ///////////////////////////////
 // Publishers
 // ///////////////////////////////
-const publishrss = require( __dirname + '/publish-rss' )
+const feed = require( __dirname + '/publish-rss' )
 const publishposts = require( __dirname + '/publish-posts' )
 const publishcats = require( __dirname + '/publish-cats' )
 const publishsitemap = require( __dirname + '/publish-sitemap' )
@@ -35,7 +35,9 @@ let publishall = site => {
 					// Publish the sitemap
 					sitemap.make( site, parsedfiles, new sitemap.proto( ) ),
 					// Publish the RSS feed
-					publishrss( site, parsedfiles )
+					feed.rss( site, parsedfiles ),
+					// Publish the podcast feed
+					feed.podcast( site, parsedfiles )
 					] ).then( result  => { 
 						if( process.env.test ) console.log( '\n\nAll promised completed\n\n' )
 						resolve( result[ 3 ] ) 
