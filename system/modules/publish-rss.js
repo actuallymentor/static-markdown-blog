@@ -54,6 +54,7 @@ let podcast = ( site, parsedfiles ) => {
 			'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'
 		},
 		custom_elements: [
+			{ 'itunes:explicit': 'clean' },
 			{ 'itunes:subtitle': site.identity.desc },
 			{ 'itunes:author': site.author.firstname + ' ' + site.author.lastname },
 			{ 'itunes:summary': site.identity.desc },
