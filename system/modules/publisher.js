@@ -63,7 +63,7 @@ let handleassets = site => {
 		Promise.all( [
 			copyassets( site ),
 			optimizeimages( site )
-		] ).then( all => { resolve } )
+		] ).then( resolve )
 	} )
 }
 

@@ -1,5 +1,12 @@
+sudo: required
 language: node_js
 node_js:
   - "7"
 before_install:
   - npm install -g webpack
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5

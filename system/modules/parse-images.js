@@ -54,9 +54,7 @@ const optimizeall = site => {
 			return Promise.all[
 				files.map( file => { return optimize( site, file ) } )
 			]
-		} ).then( all => {
-			resolve( )
-		} )
+		} ).then( resolve )
 	} )
 }
 
