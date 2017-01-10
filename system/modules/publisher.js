@@ -9,9 +9,10 @@ const feed = require( __dirname + '/publish-rss' )
 const publishposts = require( __dirname + '/publish-posts' )
 const publishcats = require( __dirname + '/publish-cats' )
 const publishsitemap = require( __dirname + '/publish-sitemap' )
-const fileman = require( __dirname + '/file-manager' )
+const fileman = require( __dirname + '/parse-files' )
 const sitemap = require( __dirname + '/publish-sitemap' )
 const publishindex = require( __dirname + '/publish-index' )
+
 
 // ///////////////////////////////
 // Main controllers

@@ -22,7 +22,13 @@ let config = {
 		url: "http://localhost:3000/",
 		year: new Date().getFullYear(),
 		today: today,
-		gverification: undefined
+		gverification: undefined,
+		images: {
+			quality: 75,
+			thumb: { w: 200, h: 200 },
+			post: { w: 500 },
+			feat: { w: 600 }
+		}
 	},
 	// The blog author
 	author: {
