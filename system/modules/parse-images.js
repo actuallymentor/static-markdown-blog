@@ -2,12 +2,6 @@ const sharp = require( 'sharp' )
 const fs = require( 'fs' )
 const site = require( __dirname + '/config' )
 
-// Set up promise error handling GLOBALLY
-process.on( 'unhandledRejection', ( error, promise ) => {
-		console.log( 'UPR: ' + promise + ' with ' + error )
-		console.log( error.stack )
-	} )
-
 const findimages = site => {
 	return new Promise( ( resolve, reject ) => {
 		fs.readdir( site.system.content + '/assets', ( err, files ) => {
@@ -22,12 +16,6 @@ const findimages = site => {
 	} )
 }
 
-findimages( site ).then( files => {
-	for( file of files ) {
-		optimize( site, file )
-	}
-} )
-
 const optimize = ( site, file ) => {
 	// Get the file name from the full file
 	let filename = file.replace(/^.*[\\\/]/, '').split( '.' )[0]
@@ -40,12 +28,12 @@ const optimize = ( site, file ) => {
 	return new Promise( ( resolve, reject ) => {
 		let processed = 0
 		// Read this particular image
-		let image = fs.createReadStream( site.system.content + '/assets/' + file )
+		let image = fs.createReadStream( site.system.content + 'assets/' + file )
 
 		// Create write streams for the different sizes
-		let thumb = fs.createWriteStream( site.system.public + '/assets/' + filename + '.thumb.jpg' )
-		let post = fs.createWriteStream( site.system.public + '/assets/' + filename + '.post.jpg' )
-		let feat = fs.createWriteStream( site.system.public + '/assets/' + filename + '.feat.jpg' )
+		let thumb = fs.createWriteStream( site.system.public + 'assets/' + filename + '.thumb.jpg' )
+		let post = fs.createWriteStream( site.system.public + 'assets/' + filename + '.post.jpg' )
+		let feat = fs.createWriteStream( site.system.public + 'assets/' + filename + '.feat.jpg' )
 
 		// Write all of the images
 		image.pipe( config.thumb ).pipe( thumb )
@@ -59,5 +47,18 @@ const optimize = ( site, file ) => {
 	} )
 }
 
+const optimizeall = site => {
+	if( !fs.existsSync( site.system.public + 'assets' ) ) fs.mkdirSync( site.system.public + 'assets' )
+	return new Promise( ( resolve, reject ) => {
+		findimages( site ).then( files => {
+			return Promise.all[
+				files.map( file => { return optimize( site, file ) } )
+			]
+		} ).then( all => {
+			resolve( )
+		} )
+	} )
+}
 
-module.exports = optimize
+
+module.exports = optimizeall

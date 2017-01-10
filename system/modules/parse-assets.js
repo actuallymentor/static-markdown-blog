@@ -1,4 +1,13 @@
-Copy all files to public
-Read all image files and optimize them
-Write optimized imapes to public
-Copy temp dir to public
+const ncp = require( 'ncp' )
+
+let copyassets = site => {
+	return new Promise( ( resolve, reject ) => {
+		// Recursively copy all assets from the source to the public folder
+		ncp( site.system.content + 'assets', site.system.public + 'assets', err => {
+			if ( err ) reject(  err )
+			resolve( )
+		} )
+	} )
+}
+
+module.exports = copyassets

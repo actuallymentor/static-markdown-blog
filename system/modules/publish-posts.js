@@ -62,12 +62,10 @@ let publishpost = ( site, single ) => {
 // Publish all posts
 module.exports = ( site, posts ) => {
 	return new Promise( ( resolve, reject ) => {
-		let parsed = 0
-		for (let i = posts.length - 1; i >= 0; i--) {
-			publishpost( site, posts[i]).then( post => {
-				parsed ++
-				if ( parsed == posts.length ) resolve( posts )
-			} ).catch( err => { throw err } )
-		}
+		Promise.all( [
+			posts.map( post => { return publishpost( site, post ) } )
+		] ).then( all => {
+			resolve( posts )
+		} )
 	} )
 }

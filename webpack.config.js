@@ -8,7 +8,7 @@ let autoprefixer = require ( 'autoprefixer' )
 let webpack = require( 'webpack' )
 
 // Blog actions
-const blog = require( __dirname + '/system/modules/publisher.js' )
+const blog = require( __dirname + '/system/modules/publisher' )
 
 // Configs
 const site = require( __dirname + '/system/modules/config' )
@@ -58,7 +58,7 @@ let buildblog = new WebpackPreBuildPlugin( stats => {
   if ( process.env.debug ) console.log( 'Before build: ' )
   blog.clean( site ).then( f => {
     blog.publish( site ).then( links => {
-      if ( process.env.debug ) if ( process.env.debug ) console.log( 'Posts published' )
+      if ( process.env.debug ) console.log( 'Posts published' )
     } )
   } )
 } )

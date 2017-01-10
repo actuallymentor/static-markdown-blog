@@ -1,6 +1,5 @@
 const fs = require( 'fs' )
 const del = require( 'del' )
-const ncp = require( 'ncp' )
 
 // ///////////////////////////////
 // Publishers
@@ -12,6 +11,8 @@ const publishsitemap = require( __dirname + '/publish-sitemap' )
 const fileman = require( __dirname + '/parse-files' )
 const sitemap = require( __dirname + '/publish-sitemap' )
 const publishindex = require( __dirname + '/publish-index' )
+const optimizeimages = require( __dirname + '/parse-images' )
+const copyassets = require( __dirname + '/parse-assets' )
 
 
 // ///////////////////////////////
@@ -40,22 +41,10 @@ let publishall = site => {
 					// Publish the podcast feed
 					feed.podcast( site, parsedfiles )
 					] ).then( result  => { 
-						if( process.env.test ) console.log( '\n\nAll promised completed\n\n' )
 						resolve( result[ 3 ] ) 
 					} ).catch( err => { reject( err ) } )
 				} ).catch( err => { throw err } )
 		} ).catch( err => { throw err } )
-	} )
-}
-
-let copyassets = site => {
-	return new Promise( ( resolve, reject ) => {
-		// Recursively copy all assets from the source to the public folder
-		ncp( site.system.content + '/assets', site.system.public + '/assets', err => {
-			if ( err ) reject(  err )
-			// Resolve empty
-			resolve( )
-		} )
 	} )
 }
 
@@ -69,9 +58,18 @@ let clean = site => {
 	} )
 }
 
+let handleassets = site => {
+	return new Promise( ( resolve, reject ) => {
+		Promise.all( [
+			copyassets( site ),
+			optimizeimages( site )
+		] ).then( all => { resolve } )
+	} )
+}
+
 
 module.exports = {
 	publish: publishall,
 	clean: clean,
-	assets: copyassets
+	assets: handleassets
 }
