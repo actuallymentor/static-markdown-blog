@@ -21,9 +21,18 @@ const optimize = ( site, file ) => {
 	let filename = file.replace(/^.*[\\\/]/, '').split( '.' )[0]
 	// Construct the sharp module configs for the image sizes
 	let config = {
-		thumb: sharp( ).resize( site.system.images.thumb.w, site.system.images.thumb.h ).jpeg( { quality: site.system.images.quality } ),
-		post: sharp( ).resize( site.system.images.post.w ).jpeg( { quality: site.system.images.quality } ),
-		feat: sharp( ).resize( site.system.images.feat.w ).jpeg( { quality: site.system.images.quality } )
+		thumb: sharp( )
+		.resize( site.system.images.thumb.w, site.system.images.thumb.h )
+		.withoutEnlargement( )
+		.jpeg( { quality: site.system.images.quality } ),
+		post: sharp( )
+		.resize( site.system.images.post.w )
+		.withoutEnlargement( )
+		.jpeg( { quality: site.system.images.quality } ),
+		feat: sharp( )
+		.resize( site.system.images.feat.w )
+		.withoutEnlargement( )
+		.jpeg( { quality: site.system.images.quality } )
 	}
 	return new Promise( ( resolve, reject ) => {
 		let processed = 0
