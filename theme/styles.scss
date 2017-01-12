@@ -5,9 +5,14 @@
 // Color Palette
 $smooth-color: #f4f5f6;
 $accent-color: #2196F3;
+
 // Specific color declarations
 $header-background: $smooth-color;
 $menu-background: $accent-color;
+
+// Sizing
+$container-width: 600px;
+
 // Animations
 $menu-transition-speed: 0.5s;
 $hover-speed: 0.3s;
@@ -41,6 +46,15 @@ main {
 	flex: 1 0 auto;
 }
 
+img {
+	max-width: 100%;
+	@extend .depth-box;
+}
+
+.thumb {
+	border-radius: 50%;
+}
+
 // Helpers
 .depth-txt {
 	transition: $hover-speed;
@@ -70,17 +84,20 @@ $hd: 1080px;
 }
 
 .container {
+	margin-left: auto;
+	margin-right: auto;
+
 	@include min-size( $mobile ) {
-		padding: 15px 5%;
+		width: $container-width;
 	}
 	@include min-size( $tablet ) {
-		padding: 15px 15%;
+		width: $container-width;
 	}
 	@include min-size( $laptop ) {
-		padding: 15px 20%;
+		width: $container-width;
 	}
 	@include min-size( $hd ) {
-		padding: 20px 30%;	
+		width: $container-width;
 	}
 }
 
@@ -135,13 +152,21 @@ $hd: 1080px;
 	padding: 0 2%;
 	text-align: center;
 	img {
-		width: 500px;
+		width: $container-width;;
 		max-width: 100%;
 		margin-top: -50px;
 		background-color: white;
 		@extend .shadow;
 		@extend .depth-box;
 	}
+}
+
+// ///////////////////////////////
+// Post styling
+// ///////////////////////////////
+
+#post {
+
 }
 
 // ////////

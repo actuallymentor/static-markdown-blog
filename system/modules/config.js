@@ -27,7 +27,7 @@ let config = {
 			quality: 75,
 			thumb: { w: 200, h: 200 },
 			post: { w: 500 },
-			feat: { w: 600 }
+			feat: { w: 800 }
 		}
 	},
 	// The blog author

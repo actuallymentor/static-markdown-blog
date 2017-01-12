@@ -4,9 +4,13 @@
 const fs = require( 'fs' )
 const slug = require( __dirname + '/toslug' )
 const markdown = require( 'marked' )
+const optimizedimg = require( __dirname + '/parse-postimages' )
 
-// Set up promise error handling GLOBALLY
-global.handlePromiseRejections = require( __dirname + '/handle-promise-errors' )
+// Set up promise error handling
+process.on( 'unhandledRejection', ( error, promise ) => {
+	console.log( 'UPR: ' + promise + ' with ' + error )
+	console.log( error.stack )
+} )
 
 let read = site => {
 	return new Promise( ( resolve, reject ) => {
@@ -52,10 +56,14 @@ let parse = ( site, files ) => {
 					filedata.links.push( site.system.url + filedata.meta.categories[i] + '/' + filedata.slug )
 				}
 
-				// Push the file data to the array
-				parsedfiles.push( filedata )
-				// Resolve if parsed files are equal to existing files
-				if ( parsedfiles.length == files.length ) resolve( parsedfiles )
+				// Search and replace image strings
+				optimizedimg( filedata ).then( optimizedpost => {
+					// Push the file data to the array
+					return parsedfiles.push( optimizedpost )
+				} ).then( f => {
+					// Resolve if parsed files are equal to existing files
+					if ( parsedfiles.length == files.length ) resolve( parsedfiles )
+				} )
 			} )
 		}
 	} )

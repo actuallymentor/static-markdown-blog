@@ -8,7 +8,7 @@ const findimages = site => {
 			if ( err ) throw err
 			// Return only the image files
 			let images = files.filter( element => {
-				if ( element.match( /\.jpg|\.png|\.svg/ ) ) return true
+				if ( element.match( /\.jpg|\.png/ ) ) return true
 				return false
 			} )
 			resolve( images )

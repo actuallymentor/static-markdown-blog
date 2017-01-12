@@ -41,10 +41,11 @@ Understanding the file structure:
 
 Important things to know:
 
-1. In the content/ folder each post has an .md and a .md.json file
-    - The md file holds the post
-    - The .md.json file the meta data like categories and featured image
+1. In the content/ folder each post has a config section in the .md file
 2. In the .md files you can reference the assets folder locally as ./assets, this will be changed to /assets in the compiled blog version
+3. Images with id="feat" are compressed to featured image size (see config)
+4. Images in posts are resized to post image size (see config)
+5. Images with class="thumb" are compressed to thumbnail size
 
 ### Editing themes
 
