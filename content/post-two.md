@@ -5,7 +5,7 @@
     "categories": [ "news", "reviews", "interviews" ],
     "published": "2016-11-20",
     "updated": "",
-    "featuredimg": "/assets/image.svg"
+    "featuredimg": "assets/large-image.jpg"
 }
 ```
 # I am an article woo!

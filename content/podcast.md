@@ -5,7 +5,7 @@
     "categories": [ "podcasts", "reviews", "interviews" ],
     "published": "2016-12-29",
     "updated": "",
-    "featuredimg": "/assets/image.svg",
+    "featuredimg": "assets/large-image.jpg",
     "duration": "20:00",
     "audio": "/assets/podcast/episode.mp3"
 }
