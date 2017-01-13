@@ -59,6 +59,7 @@ const optimize = ( site, file ) => {
 const optimizeall = site => {
 	if( !fs.existsSync( site.system.public + 'assets' ) ) fs.mkdirSync( site.system.public + 'assets' )
 	return new Promise( ( resolve, reject ) => {
+		if ( process.env.debug ) console.log( 'Optimizing img' )
 		findimages( site ).then( files => {
 			return Promise.all[
 				files.map( file => { return optimize( site, file ) } )

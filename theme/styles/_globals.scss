@@ -1,0 +1,89 @@
+@mixin hover-txt ( $speed) {
+	transition: $speed;
+	text-shadow: 0 8px 5px rgba(0, 0, 0, 0.3);
+}
+@mixin hover-box ( $speed) {
+	transition: $speed;
+	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+}
+@mixin hover-element ( $speed) {
+	transition: $speed;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+img {
+	max-width: 100%;
+	@extend .depth-box;
+}
+
+.thumb {
+	border-radius: 50%;
+}
+
+// Helpers
+.depth-txt {
+	transition: $hover-speed;
+	&:hover {
+		@include hover-txt ( $hover-speed ) opacity: 0.8;
+	}
+}
+.depth-box {
+	transition: $hover-speed;
+	&:hover {
+		@include hover-box ( $hover-speed ) opacity: 0.8;
+	}
+}
+.shadow {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Sizing helpers */
+.undertablet {
+	display: none;
+	@media screen and (max-width: $tablet) {
+		display: block;
+	}
+}
+.abovetablet {
+	display: block;
+	@media screen and (max-width: $tablet) {
+		display: none;
+	}
+}
+
+
+.container {
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0 15px;
+	@media screen and (min-width: $mobile) {
+		width: $container-width;
+	}
+	@media screen and (min-width: $tablet) {
+		width: $container-width;
+	}
+	@media screen and (min-width: $laptop) {
+		width: $container-width;
+	}
+	@media screen and (min-width: $mobile) {
+		width: $container-width;
+	}
+}

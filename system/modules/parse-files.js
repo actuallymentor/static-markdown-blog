@@ -29,6 +29,7 @@ let read = site => {
 let parse = ( site, files ) => {
 	return new Promise( ( resolve, reject ) => {
 		let parsedfiles = []
+		let allcats = []
 		// Read all the files
 		for (let i = files.length - 1; i >= 0; i--) {
 			// Read files one by one
@@ -54,6 +55,8 @@ let parse = ( site, files ) => {
 				// Add category links
 				for (let i = filedata.meta.categories.length - 1; i >= 0; i--) {
 					filedata.links.push( site.system.url + filedata.meta.categories[i] + '/' + filedata.slug )
+					// Add category to the global array to pass it out of the promise later
+					if( allcats.indexOf( filedata.meta.categories[i] ) == -1 ) allcats.push( filedata.meta.categories[i] )
 				}
 
 				// Search and replace image strings
@@ -62,7 +65,7 @@ let parse = ( site, files ) => {
 					return parsedfiles.push( optimizedpost )
 				} ).then( f => {
 					// Resolve if parsed files are equal to existing files
-					if ( parsedfiles.length == files.length ) resolve( parsedfiles )
+					if ( parsedfiles.length == files.length ) resolve( { parsedfiles: parsedfiles, allcats: allcats } )
 				} )
 			} )
 		}

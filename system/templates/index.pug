@@ -15,13 +15,8 @@ html
 							span #{post.meta.desc}
 				h2 Categories
 				ul#categories
-					- let processed = []
-					each post in posts
-						each postcat in post.meta.categories
-							- if ( processed.indexOf( postcat ) == -1 )
-									li
-										a(href=site.system.url + 'category/' + postcat) #{postcat}
-							- if ( processed.indexOf( postcat ) == -1 ) processed.push( postcat )
-
-
+					each cat in site.cats
+						li
+							a(href=site.system.url + 'category/' + cat) #{cat}
+					
 		include _footer.pug

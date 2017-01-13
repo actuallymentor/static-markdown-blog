@@ -1,0 +1,31 @@
+#header {
+	height: 350px;
+	text-align: center;
+	background-color: $smooth-color;
+	color: $accent-color;
+
+	// Vertical align
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	h1 {
+		margin: 0;
+		padding: 20px 0;
+		@extend .depth-txt;
+	}
+}
+
+// Featured image
+#featuredimg {
+	width: 96%;
+	padding: 0 2%;
+	text-align: center;
+	img {
+		width: $container-width;;
+		max-width: 100%;
+		margin-top: -50px;
+		background-color: white;
+		@extend .shadow;
+		@extend .depth-box;
+	}
+}

@@ -53,8 +53,8 @@ let makeugly = new webpack.optimize.UglifyJsPlugin( {
     warnings: false
   }
 })
-
 let buildblog = new WebpackPreBuildPlugin( stats => {
+  if ( process.env.dev ) return
   if ( process.env.debug ) console.log( 'Before build: ' )
   blog.clean( site ).then( f => {
     blog.publish( site ).then( links => {
@@ -67,6 +67,7 @@ let copyassets = new WebpackOnBuildPlugin( stats => {
   if ( process.env.debug ) console.log( 'After build:' )
   blog.assets( site ).then( f => {
     if ( process.env.debug ) console.log( 'Assets copied' )
+    if ( process.env.skip ) process.env.dev = true
   } )
 } )
 

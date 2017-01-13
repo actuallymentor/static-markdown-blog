@@ -25,7 +25,9 @@ let publishall = site => {
 		fileman.read( site ).then( files => {
 			if( process.env.test ) console.log( 'Files were read' )
 			// Parse the files to objects
-			fileman.parse( site, files ).then( parsedfiles => {
+			fileman.parse( site, files ).then( ( { parsedfiles, allcats } ) => {
+				//Add categories to site variable ( this is local )
+				site.cats = allcats
 				if( process.env.test ) console.log( 'Files were parsed' )
 				Promise.all( [
 					// Publish the index page
@@ -60,7 +62,9 @@ let clean = site => {
 
 let handleassets = site => {
 	return new Promise( ( resolve, reject ) => {
-		Promise.all( [
+		console.log( 'Image skip is ' + process.env.dev )
+		if ( process.env.dev ) copyassets( site ).then( resolve )
+		if ( !process.env.dev ) Promise.all( [
 			copyassets( site ),
 			optimizeimages( site )
 		] ).then( resolve )

@@ -1,0 +1,26 @@
+#index {
+	a.postlist {
+		@extend .depth-txt;
+		color: $accent-color;
+		text-decoration: none;
+		article {
+			margin: 0 0 40px 0;
+			h3 { margin-bottom: 0; }
+			span { 
+				font-style: italic;
+			}
+		}
+	}
+	#categories {
+		list-style: none;
+		padding: 0;
+		a {
+			@extend .depth-txt;
+			font-size: 20px;
+			color: $accent-color;
+			text-decoration: none;
+			width: 100%;
+			text-transform: capitalize;
+		}
+	}
+}

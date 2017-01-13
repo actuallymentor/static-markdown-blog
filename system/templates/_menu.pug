@@ -1,6 +1,12 @@
 script( src=site.system.url + 'assets/js/app.js' )
 nav#navbar
-	ul
-		li 
-			a( href='/' ) Home
-		li Contact
+	div.menuwrap
+		ul#themenu.abovetablet
+			li.menuitem.depth-txt
+				a( href='/' ) Home
+			each cat in site.cats			
+				li.menuitem.depth-txt
+					a( href=site.system.url + 'category/' + cat ) #{cat}
+	button#menu-btn.undertablet
+		span.hamburger-box
+			span.hamburger-inner
