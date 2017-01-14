@@ -22,7 +22,9 @@ let config = {
 		url: "http://localhost:3000/",
 		year: new Date().getFullYear(),
 		today: today,
+		// Google verification code
 		gverification: undefined,
+		// Image dimensions for compression
 		images: {
 			quality: 75,
 			thumb: { w: 200, h: 200 },
@@ -36,6 +38,7 @@ let config = {
 		lastname: "Palokaj",
 		email: "mentor@palokaj.co",
 		twitter: "@actuallymentor",
+		// facebook profile id, used for retargeting ad permissions
 		facebook: "1299359953416544",
 		url: "https://www.skillcollector.com/"
 	},

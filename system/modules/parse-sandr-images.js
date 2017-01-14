@@ -2,6 +2,7 @@ const sandr = ( html, match, suffix ) => {
 	return new Promise( ( resolve, reject ) => {
 		// Regex match for img tags
 		let images = html.match( match )
+		// Array that tracks the replacable instances
 		let replace = []
 		// if none found, resolve
 		if ( !images ) resolve( html )
@@ -25,12 +26,14 @@ const sandr = ( html, match, suffix ) => {
 
 const postimages = html => {
 	return new Promise( ( resolve, reject ) => {
-		sandr( html, /(<\s*img[\w\s="':\-_\\\/\.]*>)/, '.post' ).then( resolve )
+		// Search for all images, replace all with .post.jpg. the class="thumb" ones are later overwritten. It does not match images with an ID
+		sandr( html, /(<\s*img[\w\s="':\-_\\\/\.]*>)/ig, '.post' ).then( resolve )
 	} )
 }
 
 const featimage = html => {
 	return new Promise( ( resolve, reject ) => {
+		// Match all images with id 'feat', so only the featured image from the theme
 		let feats = /(<\s*img[\s\w=\"\'\:\\\/\-\_\.]*id[\s\w=\"\'\:\\\/\-\_\.]*feat[\w\s="':\-_\\\/\.]*>)/ig
 		sandr( html, feats, '.feat' ).then( resolve )
 	} )
@@ -38,6 +41,7 @@ const featimage = html => {
 
 const thumbimages = html => {
 	return new Promise( ( resolve, reject ) => {
+		// Match all images with the class 'thumb', so only thumbnails
 		let thumbs = /(<\s*img[\s\w=\"\'\:\\\/\-\_\.]*class[\s\w=\"\'\:\\\/\-\_\.]*thumb[\w\s="':\-_\\\/\.]*>)/ig
 		sandr( html, thumbs, '.thumb' ).then( resolve )
 	} )
@@ -45,9 +49,12 @@ const thumbimages = html => {
 
 const replaceimages = html => {
 	return new Promise( ( resolve, reject ) => {
-		featimage( html ).then( html => {
-			return postimages( html )
+		// Set all images to .post, this is overwritten by those below, this is why it happens firts
+		postimages( html ).then( html => {
+			// Set the featured image path
+			return featimage( html )
 		} ).then( html => {
+			// The thumb processing undoes the .post processing for all with class="thumb"
 			return thumbimages( html )
 		} ).then( html => {
 			resolve( html )

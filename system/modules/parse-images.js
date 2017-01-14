@@ -2,6 +2,7 @@ const sharp = require( 'sharp' )
 const fs = require( 'fs' )
 const site = require( __dirname + '/config' )
 
+// Find all images in the /assets folder. NOT RECURSIVE.
 const findimages = site => {
 	return new Promise( ( resolve, reject ) => {
 		fs.readdir( site.system.content + '/assets', ( err, files ) => {
@@ -16,6 +17,7 @@ const findimages = site => {
 	} )
 }
 
+// Image optimization ( compression )
 const optimize = ( site, file ) => {
 	// Get the file name from the full file
 	let filename = file.replace(/^.*[\\\/]/, '').split( '.' )[0]
@@ -57,10 +59,13 @@ const optimize = ( site, file ) => {
 }
 
 const optimizeall = site => {
+	// Check if the asset folder exists
 	if( !fs.existsSync( site.system.public + 'assets' ) ) fs.mkdirSync( site.system.public + 'assets' )
 	return new Promise( ( resolve, reject ) => {
 		if ( process.env.debug ) console.log( 'Optimizing img' )
+		// Grab all images
 		findimages( site ).then( files => {
+			// Call the optimize module on all images separately
 			return Promise.all[
 				files.map( file => { return optimize( site, file ) } )
 			]

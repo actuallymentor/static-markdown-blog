@@ -1,3 +1,4 @@
+// Recursive copy library
 const ncp = require( 'ncp' )
 
 let copyassets = site => {
