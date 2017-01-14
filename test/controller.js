@@ -116,7 +116,7 @@ describe( 'Publishing module', f => {
 const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
-const fileman = require( __dirname + '/../system/modules/file-manager' )
+const fileman = require( __dirname + '/../system/modules/parse-files' )
 const sitemap = require( __dirname + '/../system/modules/publish-sitemap' )
 let linkchecker = done => {
 	let broken = []

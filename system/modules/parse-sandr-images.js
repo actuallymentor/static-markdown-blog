@@ -5,7 +5,7 @@ const sandr = ( html, match, suffix ) => {
 		let replace = []
 		// if none found, resolve
 		if ( !images ) resolve( html )
-		for ( image of images ) {
+		for ( let image of images ) {
 			// Convoluted regex match for the file name, because regex doesn't do "do not match" statements
 			let filename = image.match( /(src\w*=\w*["'][\.\w_\-:\\\/&@#\(\)]*[\\\/])([^"^']*)/ )[ 2 ]
 			// Only apply for specific file types
@@ -16,7 +16,7 @@ const sandr = ( html, match, suffix ) => {
 				replace.push( { source: image, instead: instead } )
 			}
 		}
-		for ( hit of replace ) {
+		for ( let hit of replace ) {
 			html = html.replace( hit.source, hit.instead )
 		}
 		resolve( html )
