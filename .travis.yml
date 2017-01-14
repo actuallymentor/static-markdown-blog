@@ -1,4 +1,6 @@
 sudo: required
+env:
+  - CXX=g++-5
 language: node_js
 node_js:
   - "7"
