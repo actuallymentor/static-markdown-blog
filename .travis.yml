@@ -3,7 +3,7 @@ language: node_js
 node_js:
   - "7"
 before_install:
-  - npm install -g webpack
+  - npm install -g webpack node-gyp
 addons:
   apt:
     sources:
