@@ -2,7 +2,8 @@
 // Publishing category pages
 // ///////////////////////////////
 const fs = require( 'fs' )
-const pug = require( 'pug' )
+const pug = require( __dirname + '/parse-pug' )
+const write = require( __dirname + '/publish-file' )
 
 module.exports = ( site, posts ) => {
 	// Track processed cats
@@ -28,7 +29,7 @@ module.exports = ( site, posts ) => {
 						return ( post.meta.categories.indexOf( posts[i].meta.categories[j] ) != -1 )
 					} )
 					// Generate pug for cat page
-					let page = pug.renderFile( site.system.templates + 'category.pug', {
+					pug( site.system.templates + 'category.pug', {
 						site: site,
 						posts: postswithcat,
 						category: posts[i].meta.categories[j],
@@ -42,10 +43,9 @@ module.exports = ( site, posts ) => {
 								published: site.system.today
 							}
 						}
-					} )
-					// Write the category page to file
-					fs.writeFile( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', page, err => {
-						if ( err ) reject( err )
+					} ).then( result => {
+						return write( site.system.public + 'category/' + posts[i].meta.categories[j] + '.html', result )
+					} ).then( f => {
 						// track how many files were processed
 						processed++
 						if( process.env.test ) console.log( 'Processed a category' )

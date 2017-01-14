@@ -1,16 +1,16 @@
 // ///////////////////////////////
 // Publishing the index
 // ///////////////////////////////
+const pug = require( __dirname + '/parse-pug' )
+const write = require( __dirname + '/publish-file' )
 const fs = require( 'fs' )
-const pug = require( 'pug' )
-const sandrimg = require( __dirname + '/parse-sandr-images' )
 
 module.exports = ( site, allposts ) => {
 	// Make public folder if it does not exist
 	if( !fs.existsSync( site.system.public ) ) fs.mkdirSync( site.system.public )
 	return new Promise( ( resolve, reject ) => {
 		// Generate page
-		let page = pug.renderFile( site.system.templates + 'index.pug', {
+		pug( site.system.templates + 'index.pug', {
 			site: site,
 			posts: allposts,
 			url: site.system.url,
@@ -23,15 +23,8 @@ module.exports = ( site, allposts ) => {
 					published: site.system.today
 				}
 			}
+		} ).then( page => {
+			write( site.system.public + 'index.html', page ).then( resolve )
 		} )
-		sandrimg( page ).then( page => {
-			// Write index to disk
-			fs.writeFile( site.system.public + 'index.html', page, err => {
-				if ( err ) reject( err )
-				// Resolve
-				resolve( page )
-			} )
-		} )
-		
 	} )
 }
