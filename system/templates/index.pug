@@ -7,7 +7,6 @@ html
 			div#header
 				h1 #{site.identity.title}
 			section#index.container
-				h2 All posts
 				each post in posts
 					a.postlist( href=site.system.url + site.system.blogslug + "/" + post.slug )
 						article
