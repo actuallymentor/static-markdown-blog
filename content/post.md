@@ -47,6 +47,8 @@ do( content )
 
 <img src='./assets/large-image.jpg' class='thumb' />
 
+![Another large image]( ./assets/large-image.jpg )
+
 Reasons to use markdiwn
 
 | Reason | Validity |

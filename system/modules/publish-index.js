@@ -3,6 +3,7 @@
 // ///////////////////////////////
 const fs = require( 'fs' )
 const pug = require( 'pug' )
+const sandrimg = require( __dirname + '/parse-sandr-images' )
 
 module.exports = ( site, allposts ) => {
 	// Make public folder if it does not exist
@@ -23,11 +24,14 @@ module.exports = ( site, allposts ) => {
 				}
 			}
 		} )
-		// Write index to disk
-		fs.writeFile( site.system.public + 'index.html', page, err => {
-			if ( err ) reject( err )
-			// Resolve
-			resolve( page )
+		sandrimg( page ).then( page => {
+			// Write index to disk
+			fs.writeFile( site.system.public + 'index.html', page, err => {
+				if ( err ) reject( err )
+				// Resolve
+				resolve( page )
+			} )
 		} )
+		
 	} )
 }

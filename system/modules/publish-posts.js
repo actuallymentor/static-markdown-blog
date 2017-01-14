@@ -3,6 +3,7 @@
 // ///////////////////////////////
 const fs = require( 'fs' )
 const pug = require( 'pug' )
+const sandrimg = require( __dirname + '/parse-sandr-images' )
 
 // Publishing posts
 let publishpost = ( site, single ) => {
@@ -43,19 +44,22 @@ let publishpost = ( site, single ) => {
 			file: single,
 			url: site.system.url + site.system.blogslug + '/' + single.slug + '.html'
 		} )
-		// Make posts folder if it does not exist
-		if( !fs.existsSync( site.system.public + site.system.blogslug ) ) fs.mkdirSync( site.system.public + site.system.blogslug )
-		// Write result to file
-		fs.writeFile( site.system.public + site.system.blogslug + '/' + single.slug + '.html', page, err => {
-			if ( err ) reject( err )
-			// Count amount of processed articles for main folder, and I just realised that is not very elegant...
-			processed.main ++
-			// Resolve if all have been processed
-			if ( processed.cat == single.meta.categories.length && processed.main == 1 ) {
-				if (process.env.debug) console.log( 'Promise for publishing completed for main' )
-				resolve( single )
-			}
+		sandrimg( page ).then( page => {
+			// Make posts folder if it does not exist
+			if( !fs.existsSync( site.system.public + site.system.blogslug ) ) fs.mkdirSync( site.system.public + site.system.blogslug )
+			// Write result to file
+			fs.writeFile( site.system.public + site.system.blogslug + '/' + single.slug + '.html', page, err => {
+				if ( err ) reject( err )
+				// Count amount of processed articles for main folder, and I just realised that is not very elegant...
+				processed.main ++
+				// Resolve if all have been processed
+				if ( processed.cat == single.meta.categories.length && processed.main == 1 ) {
+					if (process.env.debug) console.log( 'Promise for publishing completed for main' )
+					resolve( single )
+				}
+			} )
 		} )
+
 	} )
 }
 

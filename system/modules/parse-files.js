@@ -4,7 +4,6 @@
 const fs = require( 'fs' )
 const slug = require( __dirname + '/toslug' )
 const markdown = require( 'marked' )
-const optimizedimg = require( __dirname + '/parse-postimages' )
 
 // Set up promise error handling
 process.on( 'unhandledRejection', ( error, promise ) => {
@@ -12,7 +11,7 @@ process.on( 'unhandledRejection', ( error, promise ) => {
 	console.log( error.stack )
 } )
 
-let read = site => {
+const read = site => {
 	return new Promise( ( resolve, reject ) => {
 		fs.readdir( site.system.content, ( err, files ) => {
 			if ( err ) throw err
@@ -26,7 +25,7 @@ let read = site => {
 	} )
 }
 
-let parse = ( site, files ) => {
+const parse = ( site, files ) => {
 	return new Promise( ( resolve, reject ) => {
 		let parsedfiles = []
 		let allcats = []
@@ -49,9 +48,9 @@ let parse = ( site, files ) => {
 					path: site.system.content + files[i],
 					meta: metadata,
 					raw: content,
-					html: markdown( String( content ).replace( './assets', site.system.url + 'assets' ) ),
+					html: markdown( String( content ).replace( /\.\/assets/ig, site.system.url + 'assets' ) ),
 					links: [ site.system.url + site.system.blogslug + '/' + slug( files[ i ].replace(/^.*[\\\/]/, '').split( '.' )[0] ) ]
-				}				
+				}
 				// Add category links
 				for (let i = filedata.meta.categories.length - 1; i >= 0; i--) {
 					filedata.links.push( site.system.url + filedata.meta.categories[i] + '/' + filedata.slug )
@@ -59,14 +58,10 @@ let parse = ( site, files ) => {
 					if( allcats.indexOf( filedata.meta.categories[i] ) == -1 ) allcats.push( filedata.meta.categories[i] )
 				}
 
-				// Search and replace image strings
-				optimizedimg( filedata ).then( optimizedpost => {
-					// Push the file data to the array
-					return parsedfiles.push( optimizedpost )
-				} ).then( f => {
-					// Resolve if parsed files are equal to existing files
-					if ( parsedfiles.length == files.length ) resolve( { parsedfiles: parsedfiles, allcats: allcats } )
-				} )
+				// Push the file data to the array
+				parsedfiles.push( filedata )
+				// Resolve if parsed files are equal to existing files
+				if ( parsedfiles.length == files.length ) resolve( { parsedfiles: parsedfiles, allcats: allcats } )
 			} )
 		}
 	} )
