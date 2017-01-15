@@ -88,7 +88,7 @@ For podcasting simply in your .md file specify the category 'podcast' and add re
 The default theme includes social graph support.
 
 | Type | Support | Location |
-| ---- | ------- |
+| ---- | ------- | -------- |
 | Facebook Open Graph | Yes | ```html <head> ```
 | Twitter cards | Yes | ```html <head> ```
 | Google Rich Data Snippets | Yes | ```html <script> under <footer> ```
