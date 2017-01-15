@@ -6,7 +6,7 @@ html
 		main
 			div#header
 				h1 Category: #{category}
-			section#index.container
+			section#categories.container
 				h2 Posts:
 				each post in posts
 					- if ( post.meta.categories.indexOf( category ) != -1 )

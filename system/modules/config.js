@@ -17,7 +17,7 @@ let config = {
 	system: {
 		blogslug: "post",
 		content: path.normalize( __dirname + '/../../content/' ),
-		public:path.normalize( __dirname + '/../../public/' ),
+		public: path.normalize( __dirname + '/../../docs/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
 		url: process.env.local ? "http://localhost:3000/" : "https://www.yourliveblog.com",
 		year: new Date().getFullYear(),

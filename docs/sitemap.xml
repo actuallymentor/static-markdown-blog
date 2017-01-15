@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<url> <loc>https://www.yourliveblog.com</loc> </url>
+<url> <loc>https://www.yourliveblog.comnews/nested-post</loc> </url>
+<url> <loc>https://www.yourliveblog.comreviews/nested-post</loc> </url>
+<url> <loc>https://www.yourliveblog.cominterviews/nested-post</loc> </url>
+<url> <loc>https://www.yourliveblog.compost/nested-post</loc> </url>
+<url> <loc>https://www.yourliveblog.comcategory/news,reviews,interviews</loc> </url>
+<url> <loc>https://www.yourliveblog.comnews/post-two</loc> </url>
+<url> <loc>https://www.yourliveblog.comreviews/post-two</loc> </url>
+<url> <loc>https://www.yourliveblog.cominterviews/post-two</loc> </url>
+<url> <loc>https://www.yourliveblog.compost/post-two</loc> </url>
+<url> <loc>https://www.yourliveblog.comnews/post</loc> </url>
+<url> <loc>https://www.yourliveblog.comreviews/post</loc> </url>
+<url> <loc>https://www.yourliveblog.cominterviews/post</loc> </url>
+<url> <loc>https://www.yourliveblog.compost/post</loc> </url>
+<url> <loc>https://www.yourliveblog.compodcasts/podcast</loc> </url>
+<url> <loc>https://www.yourliveblog.comreviews/podcast</loc> </url>
+<url> <loc>https://www.yourliveblog.cominterviews/podcast</loc> </url>
+<url> <loc>https://www.yourliveblog.compost/podcast</loc> </url>
+<url> <loc>https://www.yourliveblog.comcategory/podcasts,reviews,interviews</loc> </url>
+</urlset>

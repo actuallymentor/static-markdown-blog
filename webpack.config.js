@@ -20,7 +20,7 @@ let bsync = new BrowserSyncPlugin( {
   host: 'localhost',
   port: 3000,
   server: { 
-    baseDir: ['public'],
+    baseDir: [ site.system.public ],
     serveStaticOptions: {
       extensions: ['html']
     }

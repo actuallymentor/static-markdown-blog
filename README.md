@@ -24,6 +24,7 @@ npm run build # Build the blog files for production
 npm run preview # Build your blog and preview in the browser ( localhost:3000 )
 npm start # Start dev server  which watches the css and js files
 skip=true npm start # As aboveut don't re-compress all images ( slow )
+npm test # DO basic system chacks and check all your links ( hrefs, external dependencies, etc )
 ```
 
 ## Basic usage
