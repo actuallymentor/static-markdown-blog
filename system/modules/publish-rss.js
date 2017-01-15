@@ -5,7 +5,7 @@ const fs = require( 'fs' )
 const RSS = require( 'rss' )
 const sha = require( 'sha1' )
 
-let rss = ( site, parsedfiles ) => {
+const rss = ( site, parsedfiles ) => {
 	let feed = new RSS( {
 		title: site.identity.title,
 		description: site.identity.desc,
@@ -38,7 +38,7 @@ let rss = ( site, parsedfiles ) => {
 	} )
 }
 
-let podcast = ( site, parsedfiles ) => {
+const podcast = ( site, parsedfiles ) => {
 	// Set podcast feed data
 	let feed = new RSS( {
 		title: site.identity.title,
