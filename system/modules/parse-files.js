@@ -7,11 +7,12 @@ const slug = require( __dirname + '/toslug' )
 const markdown = require( 'marked' )
 
 // Recursive directory reader
-const read = require( __dirname + '/parse-fs' )
+const pfs = require( __dirname + '/parse-fs' )
 
 // Set up promise error handling, makes .catch less needed
 process.on( 'unhandledRejection', ( error, promise ) => {
 	console.log( 'UPR: ' + promise + ' with ' + error )
+	console.log( promise )
 	console.log( error.stack )
 } )
 
@@ -25,7 +26,7 @@ const readmd = site => {
 	}
 	// Promise that returns only .md files in an array
 	return new Promise( ( resolve, reject ) => {
-		read.dir( site.system.content ).then( filter ).then( resolve )
+		pfs.readdir( site.system.content ).then( filter ).then( resolve )
 	} )
 }
 
@@ -88,7 +89,7 @@ const parse = ( site, files ) => {
 		let allcats = []
 		// Read all the files
 		Promise.all(
-			files.map( file => { return read.file( file ).then( parsefile ) } )
+			files.map( file => { return pfs.readfile( file ).then( parsefile ) } )
 		).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } )
 	} )
 }

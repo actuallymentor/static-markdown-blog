@@ -1,60 +1,69 @@
 const sharp = require( 'sharp' )
 const fs = require( 'fs' )
 const site = require( __dirname + '/config' )
+const pfs = require( __dirname + '/parse-fs' )
+const path = require( 'path' )
 
 // Find all images in the /assets folder. NOT RECURSIVE.
 const findimages = site => {
-	return new Promise( ( resolve, reject ) => {
-		fs.readdir( site.system.content + '/assets', ( err, files ) => {
-			if ( err ) throw err
-			// Return only the image files
-			let images = files.filter( element => {
-				if ( element.match( /\.jpg|\.png/ ) ) return true
-				return false
-			} )
-			resolve( images )
+
+	// Filter out compressable images
+	let filterimg = files => {
+		return files.filter( element => {
+			return element.match( /\.jpg|\.png/ ) ? true : false
 		} )
+	}
+
+	return new Promise( ( resolve, reject ) => {
+		pfs.readdir( site.system.content + '/assets' ).then( filterimg ).then( resolve ) 
 	} )
+
 }
 
 // Image optimization ( compression )
-const optimize = ( site, file ) => {
+const optimize = ( site, filepath ) => {
 	// Get the file name from the full file
-	let filename = file.replace(/^.*[\\\/]/, '').split( '.' )[0]
+	let filename = filepath.replace( /.*assets[\/\\]/ig, '').split( '.' )[0]
+	// Sharp config generator
+	let sharpie = ( site, size ) => { 
+		return sharp( )
+		.resize( site.system.images[size].w, site.system.images[size].h || undefined )
+		.withoutEnlargement( ).jpeg( { quality: site.system.images.quality } )
+	}
 	// Construct the sharp module configs for the image sizes
 	let config = {
-		thumb: sharp( )
-		.resize( site.system.images.thumb.w, site.system.images.thumb.h )
-		.withoutEnlargement( )
-		.jpeg( { quality: site.system.images.quality } ),
-		post: sharp( )
-		.resize( site.system.images.post.w )
-		.withoutEnlargement( )
-		.jpeg( { quality: site.system.images.quality } ),
-		feat: sharp( )
-		.resize( site.system.images.feat.w )
-		.withoutEnlargement( )
-		.jpeg( { quality: site.system.images.quality } )
+		thumb: sharpie( site, 'thumb' ),
+		post: sharpie( site, 'post' ),
+		feat: sharpie( site, 'feat' )
+	}
+	// Promisify streams
+	const stream = ( readstream, writepath, transform ) => {
+		return new Promise( ( resolve, reject ) => {
+
+			// Make the write stream
+			let write = fs.createWriteStream( writepath )
+
+			// Enable the writing pipe
+			readstream.pipe( transform ).pipe( write )
+			write.on( 'close', resolve )
+			write.on( 'error', reject )
+
+		} )
 	}
 	return new Promise( ( resolve, reject ) => {
-		let processed = 0
+
 		// Read this particular image
-		let image = fs.createReadStream( site.system.content + 'assets/' + file )
-
-		// Create write streams for the different sizes
-		let thumb = fs.createWriteStream( site.system.public + 'assets/' + filename + '.thumb.jpg' )
-		let post = fs.createWriteStream( site.system.public + 'assets/' + filename + '.post.jpg' )
-		let feat = fs.createWriteStream( site.system.public + 'assets/' + filename + '.feat.jpg' )
-
-		// Write all of the images
-		image.pipe( config.thumb ).pipe( thumb )
-		image.pipe( config.post ).pipe( post )
-		image.pipe( config.feat ).pipe( feat )
-
-		// Resolve when the read stream is done
-		thumb.on( 'close', f => { if ( processed++ && processed == 3 ) resolve( ) } )
-		post.on( 'close', f => { if ( processed++ && processed == 3 ) resolve( ) } )
-		feat.on( 'close', f => { if ( processed++ && processed == 3 ) resolve( ) } )
+		let image = fs.createReadStream( filepath )
+		
+		// Check if folder exists
+		pfs.mkdir( filepath.match( /[\\\/\w\-\d]*\//i )[ 0 ].replace( /.*assets[\/\\]/ig, '') ).then( f => {
+			// Write all of the images
+			return Promise.all( [
+				stream( image, site.system.public + 'assets/' + filename + '.thumb.jpg', config.thumb ),
+				stream( image, site.system.public + 'assets/' + filename + '.post.jpg', config.post ),
+				stream( image, site.system.public + 'assets/' + filename + '.feat.jpg', config.feat )
+			] )
+		} ).then( resolve ).catch( reject )
 	} )
 }
 

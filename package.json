@@ -32,6 +32,7 @@
     "del": "^2.2.2",
     "express": "^4.14.0",
     "marked": "^0.3.6",
+    "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "node-sass": "^4.1.1",
     "on-build-webpack": "^0.1.0",
