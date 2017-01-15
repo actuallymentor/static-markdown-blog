@@ -18,9 +18,9 @@ let proto = function( ) {
 				urls: this.links
 			} )
 			themap.toXML( ( err, xml ) => {
-				if ( err ) reject( err )
+				if ( err ) return reject( err )
 					fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
-						if ( err ) reject( err )
+						if ( err ) return reject( err )
 						resolve( unique( this.links ) )
 					} )
 			} )

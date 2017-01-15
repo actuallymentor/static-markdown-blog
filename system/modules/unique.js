@@ -1,3 +1,5 @@
+// Check for uniqueness in an array
+
 module.exports = array => {
 
     let prims = { "boolean":{} , "number": {}, "string": {} }, objs = [ ]

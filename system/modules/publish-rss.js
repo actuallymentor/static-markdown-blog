@@ -33,7 +33,7 @@ let rss = ( site, parsedfiles ) => {
 		// Parse feed to xml
 		let feedxml = feed.xml( )
 		// Write feed
-		fs.writeFile( site.system.public + 'rss.xml', feedxml, err => { if ( err ) reject( err ) } )
+		fs.writeFile( site.system.public + 'rss.xml', feedxml, err => { if ( err ) return reject( err ) } )
 		resolve( feedxml )
 	} )
 }
@@ -114,7 +114,7 @@ let podcast = ( site, parsedfiles ) => {
 		// Parse feed to xml
 		let feedxml = feed.xml( )
 		// Write feed
-		fs.writeFile( site.system.public + 'podcast.xml', feedxml, err => { if ( err ) reject( err ) } )
+		fs.writeFile( site.system.public + 'podcast.xml', feedxml, err => { if ( err ) return reject( err ) } )
 		resolve( feedxml )
 	} )
 

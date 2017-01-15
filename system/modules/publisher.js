@@ -63,6 +63,7 @@ let clean = site => {
 let handleassets = site => {
 	return new Promise( ( resolve, reject ) => {
 		console.log( 'Image skip is ' + process.env.dev )
+		// The process.env.dev determines whether the images are re-processed or not. Webpack controls this throuh the env variable skip=true
 		if ( process.env.dev ) copyassets( site ).then( resolve )
 		if ( !process.env.dev ) Promise.all( [
 			copyassets( site ),
