@@ -6,25 +6,26 @@ const fs = require( 'fs' )
 const slug = require( __dirname + '/toslug' )
 const markdown = require( 'marked' )
 
+// Recursive directory reader
+const readdir = require( __dirname + '/parse-directory' )
+
 // Set up promise error handling, makes .catch less needed
 process.on( 'unhandledRejection', ( error, promise ) => {
 	console.log( 'UPR: ' + promise + ' with ' + error )
 	console.log( error.stack )
 } )
 
-// Read all files from disk
+// Read all posts from disk
 const read = site => {
-	return new Promise( ( resolve, reject ) => {
-		fs.readdir( site.system.content, ( err, files ) => {
-			if ( err ) throw err
-			// Return only the .md files
-			let posts = files.filter( element => {
-				// Check if the current file is a markdown file
-				if ( element.indexOf( '.md' ) != -1 ) return true
-				return false
-			} )
-			resolve( posts )
+	// Filter function checks for .md files
+	let filter = files => {
+		return files.filter( thing => {
+			return thing.indexOf( '.md' ) != -1 ? true : false
 		} )
+	}
+	// Promise that returns only .md files in an array
+	return new Promise( ( resolve, reject ) => {
+		readdir( site.system.content ).then( filter ).then( resolve )
 	} )
 }
 
@@ -37,7 +38,8 @@ const parse = ( site, files ) => {
 		// Read all the files
 		for (let i = files.length - 1; i >= 0; i--) {
 			// Read files one by one
-			fs.readFile( site.system.content + files[i], 'utf8', ( err, data ) => {
+			fs.readFile( files[i], 'utf8', ( err, data ) => {
+				if ( err ) return reject( err )
 				// Get metadata based on the first ocurrence of { and }
 				let metadata = JSON.parse( data.substring( data.indexOf( '{' ), data.indexOf( '}' ) + 1 ) )
 				// Check ig updated if populated
@@ -54,7 +56,7 @@ const parse = ( site, files ) => {
 					meta: metadata,
 					raw: content,
 					// Generate html after replacing local references to ./assets to blogurl/assets
-					html: markdown( String( content ).replace( /\.\/assets/ig, site.system.url + 'assets' ) ),
+					html: markdown( String( content ).replace( /[\.\/]*assets/ig, site.system.url + 'assets' ) ),
 					// Links array to which category links will be added below
 					links: [ site.system.url + site.system.blogslug + '/' + slug( files[ i ].replace(/^.*[\\\/]/, '').split( '.' )[0] ) ]
 				}
