@@ -19,7 +19,7 @@ let config = {
 		content: path.normalize( __dirname + '/../../content/' ),
 		public:path.normalize( __dirname + '/../../public/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
-		url: "http://localhost:3000/",
+		url: process.env.local ? "http://localhost:3000/" : "https://www.yourliveblog.com",
 		year: new Date().getFullYear(),
 		today: today,
 		// Google verification code

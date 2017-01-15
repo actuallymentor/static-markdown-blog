@@ -56,7 +56,7 @@ const optimize = ( site, filepath ) => {
 		let image = fs.createReadStream( filepath )
 		
 		// Check if folder exists
-		pfs.mkdir( filepath.match( /[\\\/\w\-\d]*\//i )[ 0 ].replace( /.*assets[\/\\]/ig, '') ).then( f => {
+		pfs.mkdir( site.system.public + 'assets/' + filepath.match( /[\\\/\w\-\d]*\//i )[ 0 ].replace( /.*assets[\/\\]/ig, '') ).then( f => {
 			// Write all of the images
 			return Promise.all( [
 				stream( image, site.system.public + 'assets/' + filename + '.thumb.jpg', config.thumb ),

@@ -4,11 +4,11 @@
   "description": "A simple system for generating a static blog based on markdown",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=development webpack -d --progress --watch",
+    "start": "local=true NODE_ENV=development webpack -d --progress --watch",
     "build": "NODE_ENV=production webpack -p --progress",
-    "preview": "NODE_ENV=production server=true webpack -p --progress --watch",
-    "new": "node ./system/modules/newpost.js new",
-    "test": "mocha --compilers js:babel-core/register --trace-warnings"
+    "preview": "local=true NODE_ENV=production webpack -p --progress --watch",
+    "new": "node ./system/modules/publish-newpost.js new",
+    "test": "local=true mocha --compilers js:babel-core/register --trace-warnings"
   },
   "repository": {
     "type": "git",
