@@ -66,9 +66,9 @@ const optimizeall = site => {
 		// Grab all images
 		findimages( site ).then( files => {
 			// Call the optimize module on all images separately
-			return Promise.all[
+			return Promise.all(
 				files.map( file => { return optimize( site, file ) } )
-			]
+			 )
 		} ).then( resolve )
 	} )
 }

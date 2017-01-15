@@ -17,9 +17,6 @@ const walk = require( 'recursive-readdir' )
 // Cleaning functionality
 // ///////////////////////////////
 
-const readdir = require( __dirname + '/../system/modules/parse-directory' )
-readdir( site.system.content ).then( console.log.bind( console ) )
-
 describe( 'Cleaner module', f => {
 	it( 'Deletes the old build', done => {
 		// Publish the blog so we have some content
