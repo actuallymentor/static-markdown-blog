@@ -7,7 +7,7 @@ const path = require( 'path' )
 let config = {
 	// All related to the site
 	identity: {
-		title: "Global title",
+		title: "Amazing Blog",
 		desc: "Website description",
 		logo: "assets/logo.jpg", // Add dimensions in the ld+json schema
 		image: "assets/image.jpg", // For sharing. Add dimensions in the ld+json schema

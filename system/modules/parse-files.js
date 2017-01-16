@@ -83,6 +83,11 @@ const parse = ( site, files ) => {
 		return cats
 	}
 
+	// Sort the posts by date
+	const sortposts = parsedfiles => {
+		return parsedfiles.sort( ( one, two ) => { return new Date( two.meta.published ) - new Date( one.meta.published ) } )
+	}
+
 	// Return the controlling promise
 	return new Promise( ( resolve, reject ) => {
 		// Trackers for the number of files and categories processed, I intend to properly promisify these
@@ -90,7 +95,7 @@ const parse = ( site, files ) => {
 		// Read all the files
 		Promise.all(
 			files.map( file => { return pfs.readfile( file ).then( parsefile ) } )
-		).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } )
+		).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } )
 	} )
 }
 

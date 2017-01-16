@@ -3,7 +3,7 @@ nav#navbar
 	div.menuwrap
 		ul#themenu.abovetablet
 			li.menuitem.depth-txt
-				a( href='/' ) Home
+				a( href=site.system.url ) Home
 			each cat in site.cats			
 				li.menuitem.depth-txt
 					a( href=site.system.url + 'category/' + cat ) #{cat}
