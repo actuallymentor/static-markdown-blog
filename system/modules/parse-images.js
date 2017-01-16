@@ -70,11 +70,12 @@ const optimize = ( site, filepath ) => {
 
 const optimizeall = site => {
 	// Check if the asset folder exists
-	if( !fs.existsSync( site.system.public + 'assets' ) ) fs.mkdirSync( site.system.public + 'assets' )
 	return new Promise( ( resolve, reject ) => {
 		if ( process.env.debug ) console.log( 'Optimizing img' )
-		// Grab all images
-		findimages( site ).then( files => {
+		// Check for folder and grab all images
+		pfs.mkdir( site.system.public + 'assets' ).then( f => {
+			return findimages( site )
+		} ).then( files => {
 			// Call the optimize module on all images separately
 			return Promise.all(
 				files.map( file => { return optimize( site, file ) } )
