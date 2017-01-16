@@ -13,11 +13,16 @@ const fs = require( 'fs' )
 const del = require( 'del' )
 const walk = require( 'recursive-readdir' )
 
+const maxtimeout = 60000
+
 // ///////////////////////////////
 // Cleaning functionality
 // ///////////////////////////////
 
-describe( 'Cleaner module', f => {
+describe( 'Cleaner module', function( ) {
+	// Increase the allowed timeout drastically
+	this.timeout( maxtimeout )
+
 	it( 'Deletes the old build', done => {
 		// Publish the blog so we have some content
 		blog.publish( site ).then( f => {
@@ -35,7 +40,10 @@ describe( 'Cleaner module', f => {
 // Assets
 // ///////////////////////////////
 
-describe( 'Assets module', f => {
+describe( 'Assets module', function( ) {
+	// Increase the allowed timeout drastically
+	this.timeout( maxtimeout )
+	
 	it( 'Copies all assets', done => {
 		blog.clean( site ).then( f => {
 			blog.publish( site ).then( f => {
@@ -57,7 +65,10 @@ describe( 'Assets module', f => {
 // Publisher
 // ///////////////////////////////
 
-describe( 'Publishing module', f => {
+describe( 'Publishing module', function( ) {
+	// Increase the allowed timeout drastically
+	this.timeout( maxtimeout )
+	
 
 	it( 'Publishes single posts correctly', done => {
 		blog.clean( site ).then(  f => {
@@ -148,7 +159,7 @@ process.env.NODE_ENV = 'production'
 describe( 'Links in the blog', function( ) {
 
 	// Set the timeouts high so that all links can be checked without many or slow requests crashing the test
-	this.timeout( 60000 )
+	this.timeout( maxtimeout )
 
 	// Clickable links
 	it( 'Clickable are working', done => {
