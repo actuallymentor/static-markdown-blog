@@ -18,7 +18,6 @@ const makerss = site => {
 		feed_url: site.system.url + 'rss.xml',
 		site_url: site.system.url,
 		image_url: site.system.url + site.identity.image,
-		author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
 		managingEditor: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
 		webMaster: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
 		copyright: site.system.year + ' ' + site.author.firstname + ' ' + site.author.lastname,

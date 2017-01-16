@@ -7,7 +7,6 @@ const del = require( 'del' )
 const feed = require( __dirname + '/publish-rss' )
 const publishposts = require( __dirname + '/publish-posts' )
 const publishcats = require( __dirname + '/publish-cats' )
-const publishsitemap = require( __dirname + '/publish-sitemap' )
 const fileman = require( __dirname + '/parse-files' )
 const sitemap = require( __dirname + '/publish-sitemap' )
 const publishindex = require( __dirname + '/publish-index' )
@@ -37,7 +36,7 @@ let publishall = site => {
 					// Publish the posts separately
 					publishposts( site, parsedfiles ),
 					// Publish the sitemap
-					sitemap.make( site, parsedfiles, new sitemap.proto( ) ),
+					sitemap.make( site, parsedfiles, allcats ),
 					// Publish the RSS feed
 					feed.rss( site, parsedfiles ),
 					// Publish the podcast feed

@@ -87,7 +87,6 @@ const parsefile = ( site, file ) => {
 
 // Parse files into approachable data
 const parse = ( site, files ) => {
-
 	// Return the controlling promise
 	return new Promise( ( resolve, reject ) => {
 		// Read all the files
