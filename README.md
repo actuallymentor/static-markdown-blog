@@ -12,7 +12,7 @@ I considered systems like hexa.io but find them too complex for my needs.
 
 [Live link on Github Pages]( https://actuallymentor.github.io/static-markdown-blog/ )
 
-![Screenshot of live demo]( ./content/assets/screenshot-blog.png )
+![Screenshot of live demo]( ./content/readme/screenshot-blog.png )
 
 ## Getting started
 
@@ -106,7 +106,7 @@ The ```yourblog.url/category/post.html``` links are ```html rel="calonical"``` t
 
 The setup is very advantageous for page speed. Note how the only impediment to a 100% score is the fact that Github Pages does not leverage browser caching.
 
-![Page speed screenshot]( ./content/assets/page-speed.png )
+![Page speed screenshot]( ./content/readme/page-speed.png )
 
 ### Understanding structure
 

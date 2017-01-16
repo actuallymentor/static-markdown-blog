@@ -158,6 +158,9 @@ process.env.NODE_ENV = 'production'
 
 describe( 'Links in the blog', function( ) {
 
+	// Don't reprocess all images for this test
+	process.env.dev = true
+
 	// Set the timeouts high so that all links can be checked without many or slow requests crashing the test
 	this.timeout( maxtimeout )
 
@@ -169,6 +172,7 @@ describe( 'Links in the blog', function( ) {
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
+				if ( err ) console.log( err )
 				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
 					// Parse the files to objects
@@ -194,6 +198,7 @@ describe( 'Links in the blog', function( ) {
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
+				if ( err ) console.log( err )
 				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
 					// Parse the files to objects
