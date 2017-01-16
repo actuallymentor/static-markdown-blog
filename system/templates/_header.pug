@@ -43,6 +43,10 @@ head
 	link( rel="dns-prefetch" href="//www.google-analytics.com" )
 	link( rel="dns-prefetch" href="//fonts.googleapis.com.com" )
 
+	//- Temporarily hide body, this is undone by the app stylesheet
+	style.
+		body { display: none; }
+
 	//- if this is a blog page, add the canonical link
 	if file.html
 		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
