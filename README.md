@@ -12,7 +12,7 @@ I considered systems like hexa.io but find them too complex for my needs.
 
 [Live link on Github Pages]( https://actuallymentor.github.io/static-markdown-blog/ )
 
-![Screenshot of live demo]( ./content/assets/screenshot-blog.jpg )
+![Screenshot of live demo]( ./content/assets/screenshot-blog.png )
 
 ## Getting started
 
