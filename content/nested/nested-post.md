@@ -3,6 +3,7 @@
     "title": "Nested Blog Post to Rule Them All",
     "desc": "Nested description to find them",
     "categories": [ "news", "reviews", "interviews" ],
+    "type": "post",
     "published": "2016-12-20",
     "updated": "",
     "featuredimg": "assets/london.jpg"

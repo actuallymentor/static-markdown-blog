@@ -3,6 +3,7 @@
     "title": "One Blog Post to Rule Them All",
     "desc": "One description to find them",
     "categories": [ "news", "reviews", "interviews" ],
+    "type": "post",
     "published": "2017-01-05",
     "updated": "",
     "featuredimg": "assets/large-image.jpg"
