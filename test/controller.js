@@ -13,7 +13,7 @@ const fs = require( 'fs' )
 const del = require( 'del' )
 const walk = require( 'recursive-readdir' )
 
-const maxtimeout = 60000
+const maxtimeout = 120000
 
 // ///////////////////////////////
 // Cleaning functionality
