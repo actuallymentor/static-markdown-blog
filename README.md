@@ -102,11 +102,13 @@ The default theme includes social graph support.
 
 The ```yourblog.url/category/post.html``` links are ```html rel="calonical"``` to the ```yourblog.url/posts/post.html``` to prevent duplicate content.
 
+### Page Speed Score
+
 The setup is very advantageous for page speed. Note how the only impediment to a 100% score is the fact that Github Pages does not leverage browser caching.
 
 ![Page speed screenshot]( ./content/assets/page-speed.png )
 
-### Understanding atructure
+### Understanding structure
 
 | Path | Function |
 | ------ | -------- |
