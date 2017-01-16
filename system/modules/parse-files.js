@@ -26,7 +26,7 @@ const readmd = site => {
 	}
 	// Promise that returns only .md files in an array
 	return new Promise( ( resolve, reject ) => {
-		pfs.readdir( site.system.content ).then( filter ).then( resolve )
+		pfs.readdir( site.system.content ).then( filter ).then( resolve ).catch( reject )
 	} )
 }
 
@@ -92,7 +92,7 @@ const parse = ( site, files ) => {
 		// Read all the files
 		Promise.all(
 			files.map( file => { return pfs.readfile( file ).then( file => { return parsefile( site, file ) } ) } )
-		).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } )
+		).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } ).catch( reject )
 	} )
 }
 
