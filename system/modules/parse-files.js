@@ -9,13 +9,6 @@ const markdown = require( 'marked' )
 // Recursive directory reader
 const pfs = require( __dirname + '/parse-fs' )
 
-// Set up promise error handling, makes .catch less needed
-process.on( 'unhandledRejection', ( error, promise ) => {
-	console.log( 'UPR: ' + promise + ' with ' + error )
-	console.log( promise )
-	console.log( error.stack )
-} )
-
 // Read all posts from disk
 const readmd = site => {
 	// Filter function checks for .md files
