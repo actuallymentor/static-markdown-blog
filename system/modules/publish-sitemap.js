@@ -4,6 +4,7 @@
 const sm = require( 'sitemap' )
 const fs = require( 'fs' )
 const unique = require( __dirname + '/unique' )
+const pfs = require( __dirname + '/parse-fs' )
 
 // Sitemap prototype
 let proto = function( ) {
@@ -19,10 +20,12 @@ let proto = function( ) {
 			} )
 			themap.toXML( ( err, xml ) => {
 				if ( err ) return reject( err )
+				pfs.mkdir( site.system.public ).then( f => {
 					fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
 						if ( err ) return reject( err )
 						resolve( unique( this.links ) )
 					} )
+				} )
 			} )
 		} )
 	}

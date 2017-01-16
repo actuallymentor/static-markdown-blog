@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/news/nested-post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/reviews/nested-post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/interviews/nested-post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/post/nested-post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/category/news,reviews,interviews</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/podcasts/podcast</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/reviews/podcast</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/interviews/podcast</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/post/podcast</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/category/podcasts,reviews,interviews</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/news/post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/reviews/post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/interviews/post</loc> </url>
-<url> <loc>https://actuallymentor.github.io/static-markdown-blog/post/post</loc> </url>
+<url> <loc>http://localhost:3000/</loc> </url>
+<url> <loc>http://localhost:3000/news/nested-post</loc> </url>
+<url> <loc>http://localhost:3000/reviews/nested-post</loc> </url>
+<url> <loc>http://localhost:3000/interviews/nested-post</loc> </url>
+<url> <loc>http://localhost:3000/post/nested-post</loc> </url>
+<url> <loc>http://localhost:3000/category/news,reviews,interviews</loc> </url>
+<url> <loc>http://localhost:3000/podcasts/podcast</loc> </url>
+<url> <loc>http://localhost:3000/reviews/podcast</loc> </url>
+<url> <loc>http://localhost:3000/interviews/podcast</loc> </url>
+<url> <loc>http://localhost:3000/post/podcast</loc> </url>
+<url> <loc>http://localhost:3000/category/podcasts,reviews,interviews</loc> </url>
+<url> <loc>http://localhost:3000/news/post</loc> </url>
+<url> <loc>http://localhost:3000/reviews/post</loc> </url>
+<url> <loc>http://localhost:3000/interviews/post</loc> </url>
+<url> <loc>http://localhost:3000/post/post</loc> </url>
 </urlset>

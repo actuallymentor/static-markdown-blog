@@ -4,6 +4,7 @@
 const fs = require( 'fs' )
 const RSS = require( 'rss' )
 const sha = require( 'sha1' )
+const pfs = require( __dirname + '/parse-fs' )
 
 const rss = ( site, parsedfiles ) => {
 	let feed = new RSS( {
@@ -33,8 +34,10 @@ const rss = ( site, parsedfiles ) => {
 		// Parse feed to xml
 		let feedxml = feed.xml( )
 		// Write feed
-		fs.writeFile( site.system.public + 'rss.xml', feedxml, err => { if ( err ) return reject( err ) } )
-		resolve( feedxml )
+		pfs.mkdir( site.system.public ).then( f => {
+			fs.writeFile( site.system.public + 'rss.xml', feedxml, err => { if ( err ) return reject( err ) } )
+			resolve( feedxml )
+		} )
 	} )
 }
 
@@ -114,8 +117,10 @@ const podcast = ( site, parsedfiles ) => {
 		// Parse feed to xml
 		let feedxml = feed.xml( )
 		// Write feed
-		fs.writeFile( site.system.public + 'podcast.xml', feedxml, err => { if ( err ) return reject( err ) } )
-		resolve( feedxml )
+		pfs.mkdir( site.system.public ).then( f => {
+			fs.writeFile( site.system.public + 'podcast.xml', feedxml, err => { if ( err ) return reject( err ) } )
+			resolve( feedxml )
+		} )
 	} )
 
 }
