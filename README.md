@@ -8,6 +8,12 @@ To replace my old WordPress blog I'm making a system to compile markdown files t
 
 I considered systems like hexa.io but find them too complex for my needs.
 
+## Live demo
+
+[Live link on Github Pages]( https://actuallymentor.github.io/static-markdown-blog/ )
+
+![Screenshot of live demo]( ./content/assets/screenshot-blog.jpg )
+
 ## Getting started
 
 Clone this repository:
