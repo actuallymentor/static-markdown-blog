@@ -10,6 +10,7 @@ const publishcats = require( __dirname + '/publish-cats' )
 const fileman = require( __dirname + '/parse-files' )
 const sitemap = require( __dirname + '/publish-sitemap' )
 const publishindex = require( __dirname + '/publish-index' )
+const publishsearch = require( __dirname + '/publish-search' )
 const optimizeimages = require( __dirname + '/parse-images' )
 const copyassets = require( __dirname + '/parse-assets' )
 
@@ -32,6 +33,8 @@ let publishall = site => {
 			return Promise.all( [
 				// Publish the index page
 				publishindex( site, content[ 0 ].parsedfiles ),
+				// Publish the search page
+				publishsearch( site, content[ 2 ].parsedfiles ),
 				// Publish the categories
 				publishcats( site, content[ 0 ].parsedfiles ),
 				// Publish the posts separately

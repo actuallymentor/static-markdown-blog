@@ -1,0 +1,16 @@
+#search {
+	text-align: center;
+	#searchbar {
+		margin-bottom: 50px;
+		margin-top: 50px;
+	}
+	#searchinput {
+		width: 100%;
+		padding: 10px;
+		font-size: 20px;
+		border: none;
+		text-align: center;
+		color: $accent-color;
+		background: $smooth-color;
+	}
+}
