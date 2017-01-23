@@ -36,6 +36,14 @@ const categories = parsedfiles => {
 	return cats
 }
 
+// Filter out pages ( as opposed to posts and podcasts )
+const nopages = parsedfiles => {
+	return files.filter( item => {
+		// Return things that are not pages
+		return item.meta.type.indexOf( 'page' ) == -1 ? true : false
+	} )
+}
+
 // Sort the posts by date
 const sortposts = parsedfiles => {
 	return parsedfiles.sort( ( one, two ) => { return new Date( two.meta.published ) - new Date( one.meta.published ) } )
@@ -85,7 +93,7 @@ const parse = ( site, files ) => {
 		// Read all the files
 		Promise.all(
 			files.map( file => { return pfs.readfile( file ).then( file => { return parsefile( site, file ) } ) } )
-		).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } ).catch( reject )
+		).then( nopages ).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } ).catch( reject )
 	} )
 }
 
