@@ -4,6 +4,7 @@
     "desc": "One description to find them",
     "categories": [ "news", "reviews", "interviews" ],
     "type": "post",
+    "template": "blog",
     "published": "2017-01-05",
     "updated": "",
     "featuredimg": "assets/large-image.jpg"

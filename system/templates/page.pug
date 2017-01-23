@@ -1,0 +1,13 @@
+doctype html
+html
+	include _header.pug
+	body
+		include _menu.pug
+
+		main
+			div#header
+				h1 #{site.identity.title} - #{file.meta.title}
+			section#post.container
+				article !{file.html}
+
+		include _footer.pug

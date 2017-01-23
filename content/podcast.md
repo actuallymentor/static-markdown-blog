@@ -5,6 +5,7 @@
     "categories": [ "podcasts", "reviews", "interviews" ],
     "published": "2016-12-29",
     "type": "podcast",
+    "template": "blog",
     "updated": "",
     "featuredimg": "assets/cactus.jpg",
     "duration": "20:00",

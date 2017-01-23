@@ -50,3 +50,5 @@ head
 	//- if this is a blog page, add the canonical link
 	if file.html
 		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
+	//- Get the webpack script
+	script( src=site.system.url + 'assets/js/app.js' async)
