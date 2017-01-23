@@ -1,9 +1,9 @@
 ```json
 {
-    "title": "One Blog Post to Rule Them All",
+    "title": "One Page to Rule Them All",
     "desc": "One description to find them",
     "categories": [ "news", "reviews", "interviews" ],
-    "type": "post",
+    "type": "page",
     "template": "blog",
     "published": "2017-01-05",
     "updated": "",

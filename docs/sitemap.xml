@@ -12,8 +12,8 @@
 <url> <loc>http://localhost:3000/reviews/post</loc> </url>
 <url> <loc>http://localhost:3000/interviews/post</loc> </url>
 <url> <loc>http://localhost:3000/post/post</loc> </url>
-<url> <loc>http://localhost:3000/category/podcasts</loc> </url>
 <url> <loc>http://localhost:3000/category/news</loc> </url>
 <url> <loc>http://localhost:3000/category/reviews</loc> </url>
 <url> <loc>http://localhost:3000/category/interviews</loc> </url>
+<url> <loc>http://localhost:3000/page/page</loc> </url>
 </urlset>

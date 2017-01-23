@@ -15,7 +15,7 @@ const makesitemap = ( site, links ) => {
 	} ) )
 }
 
-const generatelinks = ( site, parsedfiles, allcats ) => {
+const generatelinks = ( site, parsedfiles, allcats, pages ) => {
 	let alllinks = []
 	for (let i = parsedfiles.length - 1; i >= 0; i--) {
 		for (let j = parsedfiles[i].links.length - 1; j >= 0; j--) {
@@ -25,13 +25,16 @@ const generatelinks = ( site, parsedfiles, allcats ) => {
 	for (let i = allcats.length - 1; i >= 0; i--) {
 		alllinks.push( site.system.url + 'category/' + allcats[ i ] )
 	}
+	for (let i = pages.length - 1; i >= 0; i--) {
+		alllinks.push( site.system.url + site.system.pageslug + '/' + pages[i].slug )
+	}
 	return Promise.resolve( alllinks )
 }
 
-const make = ( site, parsedfiles, allcats ) => {
+const make = ( site, parsedfiles, allcats, pages ) => {
 	return new Promise( ( resolve, reject ) => {
 		pfs.mkdir( site.system.public ).then( f => {
-			return generatelinks( site, parsedfiles, allcats )
+			return generatelinks( site, parsedfiles, allcats, pages )
 		} ).then( links => {
 			return makesitemap( site, links )
 		} ).then( sitemap => {

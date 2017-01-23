@@ -21,23 +21,27 @@ const copyassets = require( __dirname + '/parse-assets' )
 let publishall = site => {
 	return new Promise( ( resolve, reject ) => {
 		fileman.read( site ).then( files => {
-			return fileman.parse( site, files )
-		} ).then( ( { parsedfiles, allcats } ) => {
+			return Promise.all( [
+				fileman.parseposts( site, files ),
+				fileman.parsepages( site, files ),
+				fileman.parseall( site, files )
+			] )
+		} ).then( content => {
 			//Add categories to site variable ( this is local )
-			site.cats = allcats
+			site.cats = content[ 0 ].allcats
 			return Promise.all( [
 				// Publish the index page
-				publishindex( site, parsedfiles ),
+				publishindex( site, content[ 0 ].parsedfiles ),
 				// Publish the categories
-				publishcats( site, parsedfiles ),
+				publishcats( site, content[ 0 ].parsedfiles ),
 				// Publish the posts separately
-				publishposts( site, parsedfiles ),
+				publishposts( site, content[ 0 ].parsedfiles, content[ 1 ].parsedfiles ),
 				// Publish the sitemap
-				sitemap.make( site, parsedfiles, allcats ),
+				sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles ),
 				// Publish the RSS feed
-				feed.rss( site, parsedfiles ),
+				feed.rss( site, content[ 2 ].parsedfiles ),
 				// Publish the podcast feed
-				feed.podcast( site, parsedfiles )
+				feed.podcast( site, content[ 2 ].parsedfiles )
 			] )
 		} ).then( resolve ).catch( reject )
 	} )

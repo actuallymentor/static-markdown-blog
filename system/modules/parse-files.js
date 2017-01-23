@@ -38,9 +38,17 @@ const categories = parsedfiles => {
 
 // Filter out pages ( as opposed to posts and podcasts )
 const nopages = parsedfiles => {
-	return files.filter( item => {
+	return parsedfiles.filter( item => {
 		// Return things that are not pages
 		return item.meta.type.indexOf( 'page' ) == -1 ? true : false
+	} )
+}
+
+// Return only pages
+const onlypages = parsedfiles => {
+	return parsedfiles.filter( item => {
+		// Return things that are not pages
+		return item.meta.type.indexOf( 'page' ) != -1 ? true : false
 	} )
 }
 
@@ -86,7 +94,7 @@ const parsefile = ( site, file ) => {
 
 }
 
-// Parse files into approachable data
+// Parse files into approachable data ( ignoring pages )
 const parse = ( site, files ) => {
 	// Return the controlling promise
 	return new Promise( ( resolve, reject ) => {
@@ -97,7 +105,31 @@ const parse = ( site, files ) => {
 	} )
 }
 
+// Parse files into approachable data ( only page type )
+const parsepages = ( site, files ) => {
+	// Return the controlling promise
+	return new Promise( ( resolve, reject ) => {
+		// Read all the files
+		Promise.all(
+			files.map( file => { return pfs.readfile( file ).then( file => { return parsefile( site, file ) } ) } )
+		).then( onlypages ).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } ).catch( reject )
+	} )
+}
+
+// Parse files into approachable data ( ignoring pages )
+const parseall = ( site, files ) => {
+	// Return the controlling promise
+	return new Promise( ( resolve, reject ) => {
+		// Read all the files
+		Promise.all(
+			files.map( file => { return pfs.readfile( file ).then( file => { return parsefile( site, file ) } ) } )
+		).then( sortposts ).then( parsedfiles => { resolve( { parsedfiles: parsedfiles, allcats: categories( parsedfiles ) } ) } ).catch( reject )
+	} )
+}
+
 module.exports = {
 	read: readmd,
-	parse: parse
+	parseposts: parse,
+	parsepages: parsepages,
+	parseall: parseall
 }

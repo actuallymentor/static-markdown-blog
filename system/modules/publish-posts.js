@@ -23,17 +23,17 @@ const publishtocat = ( site, single, category ) => {
 }
 
 // Post to /post/ publishing workflow promise
-const publishtoposts = ( site, single ) => {
+const publishtoslug = ( site, single, slug ) => {
 	return new Promise( ( resolve, reject ) => {
 		// Publish to default posts folder
-		pfs.mkdir( site.system.public + site.system.blogslug ).then( f => {
+		pfs.mkdir( site.system.public + slug ).then( f => {
 			return pug( site.system.templates + single.meta.template + '.pug', {
 				site: site,
 				file: single,
-				url: site.system.url + site.system.blogslug + '/' + single.slug + '.html'
+				url: site.system.url + slug + '/' + single.slug + '.html'
 			} )
 		} ).then( result => {
-			return write( site.system.public + site.system.blogslug + '/' + single.slug + '.html', result )
+			return write( site.system.public + slug + '/' + single.slug + '.html', result )
 		} ).then( resolve ).catch( reject )
 	} )
 }
@@ -45,19 +45,30 @@ const publishpost = ( site, single ) => {
 		Promise.all(
 			single.meta.categories.map( category => { return publishtocat( site, single, category ) } )
 		).then( f => {
-			return publishtoposts( site, single )
+			return publishtoslug( site, single, site.system.blogslug )
 		} ).then( resolve ).catch( reject )
 	} )
 	
 }
 
+// Publishing pages
+const publishpage = ( site, single ) => {
+	return new Promise( ( resolve, reject ) => {
+		publishtoslug( site, single, site.system.pageslug ).then( resolve ).catch( reject )
+	} )
+}
+
 // Publish all posts
-module.exports = ( site, posts ) => {
+module.exports = ( site, posts, pages ) => {
 	return new Promise( ( resolve, reject ) => {
 		pfs.mkdir( site.system.public ).then( f => {
-			return Promise.all( [
+			return Promise.all(
 				posts.map( post => { return publishpost( site, post ) } )
-			] )
-		} ).then( resolve )
+			)
+		} ).then( f => {
+			return Promise.all( 
+				pages.map( page => { return publishpage( site, page ) } )
+			)
+		} ) .then( resolve ).catch( reject )
 	} )
 }

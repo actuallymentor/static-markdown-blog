@@ -16,6 +16,7 @@ let config = {
 	// System settings
 	system: {
 		blogslug: "post",
+		pageslug: "page",
 		content: path.normalize( __dirname + '/../../content/' ),
 		public: path.normalize( __dirname + '/../../docs/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
