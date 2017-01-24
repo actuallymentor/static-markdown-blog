@@ -63,11 +63,11 @@ module.exports = ( site, posts, pages ) => {
 	return new Promise( ( resolve, reject ) => {
 		pfs.mkdir( site.system.public ).then( f => {
 			return Promise.all(
-				posts.map( post => { return publishpost( site, post ) } )
+				pages.map( page => { return publishpage( site, page ) } )
 			)
 		} ).then( f => {
 			return Promise.all( 
-				pages.map( page => { return publishpage( site, page ) } )
+				posts.map( post => { return publishpost( site, post ) } )
 			)
 		} ) .then( resolve ).catch( reject )
 	} )
