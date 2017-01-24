@@ -68,7 +68,7 @@ let handleassets = site => {
 			if( process.env.debug ) console.log( 'NOT Optimizing images' )
 			// return optimizeimages( site )
 		} ).then( resolve ).catch( reject )
-		if ( process.env.dev == 'false' ) copyassets( site ).then( f => {
+		if ( process.env.dev == 'false' || !process.env.dev ) copyassets( site ).then( f => {
 			if( process.env.debug ) console.log( 'Optimizing images' )
 			return optimizeimages( site )
 		} ).then( resolve ).catch( reject )
