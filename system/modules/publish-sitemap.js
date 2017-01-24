@@ -31,9 +31,12 @@ const generatelinks = ( site, parsedfiles, allcats, pages ) => {
 	return Promise.resolve( alllinks )
 }
 
-const make = ( site, parsedfiles, allcats, pages ) => {
+const make = ( site, parsedfiles, allcats, pages, dry = false ) => {
 	return new Promise( ( resolve, reject ) => {
-		pfs.mkdir( site.system.public ).then( f => {
+
+		if( dry ) generatelinks( site, parsedfiles, allcats, pages ).then( resolve )
+
+		if (!dry) pfs.mkdir( site.system.public ).then( f => {
 			return generatelinks( site, parsedfiles, allcats, pages )
 		} ).then( links => {
 			return makesitemap( site, links )

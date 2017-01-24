@@ -8,7 +8,7 @@
     "build": "NODE_ENV=production webpack -p --progress",
     "preview": "local=true NODE_ENV=production webpack -p --progress --watch",
     "new": "node ./system/modules/publish-newpost.js new",
-    "test": "local=true mocha --compilers js:babel-core/register --trace-warnings"
+    "test": "local=true NODE_ENV=production server=true mocha --compilers js:babel-core/register --trace-warnings"
   },
   "repository": {
     "type": "git",

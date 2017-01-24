@@ -148,11 +148,14 @@ describe( 'Publishing module', function( ) {
 const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
-let linkchecker = done => {
+let linkchecker = ( done, level = 0 ) => {
 	let broken = []
-	return new blc.HtmlUrlChecker( { filterLevel: 0 }, {
+	return new blc.HtmlUrlChecker( { filterLevel: level }, {
 		link: ( result, customData ) => {
 			if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+		},
+		page: (error, pageUrl, customData) => {
+			if ( error ) console.log( error )
 		},
 		end: f => {
 			if ( broken.length > 0 ) console.log( broken )
@@ -164,7 +167,7 @@ let linkchecker = done => {
 let bsconfig = {
 	open: false,
 	server: {
-		baseDir: './public',
+		baseDir: site.system.public,
 		serveStaticOptions: {
 			extensions: ['html']
 		}
@@ -173,8 +176,6 @@ let bsconfig = {
 }
 
 // Set the environment to production
-process.env.NODE_ENV = 'production'
-
 describe( 'Links in the blog', function( ) {
 
 	// Don't reprocess all images for this test
@@ -185,52 +186,63 @@ describe( 'Links in the blog', function( ) {
 
 	// Clickable links
 	it( 'Clickable are working', done => {
-		// Set up the link checker
-		let checker = linkchecker( done )
 		// init the browsersync server
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				if ( err ) console.log( err )
-				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
-					// Parse the files to objects
-					fileman.parse( site, files ).then( parsedfiles => {
-						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
-							for (var i = links.length - 1; i >= 0; i--) {
-								checker.enqueue( links[i] )
-							}
-						} )
-					} )
+					return Promise.all( [
+						fileman.parseposts( site, files ),
+						fileman.parsepages( site, files ),
+						fileman.parseall( site, files )
+					] )
+				} ).then( content => {
+					//Add categories to site variable ( this is local )
+					site.cats = content[ 0 ].allcats
+					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
+				} ).then( links => {
+					// Set up the link checker
+					let checker = linkchecker( done, 0 )
+					for (let i = links.urls.length - 1; i >= 0; i--) {
+						checker.enqueue( links.urls[i] )
+					}
+					return checker
 				} )
 			} )
 		} )
 	} )
 
 
-	// Clickable links
+	// All links links
 	it( 'All resources & meta are working', done => {
-		// Increase the max timeout for this test to buffer for network speed differences
-		// Set up the link checker
-		let checker = linkchecker( done )
+		// Make sure to process images as well
+		process.env.dev = false
 		// init the browsersync server
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				if ( err ) console.log( err )
-				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
-					// Parse the files to objects
-					fileman.parse( site, files ).then( parsedfiles => {
-						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
-							for (var i = links.length - 1; i >= 0; i--) {
-								checker.enqueue( links[i] )
-							}
-						} )
-					} )
+					return Promise.all( [
+						fileman.parseposts( site, files ),
+						fileman.parsepages( site, files ),
+						fileman.parseall( site, files )
+					] )
+				} ).then( content => {
+					//Add categories to site variable ( this is local )
+					site.cats = content[ 0 ].allcats
+					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
+				} ).then( links => {
+					// Set up the link checker
+					let checker = linkchecker( done, 3 )
+					for (let i = links.urls.length - 1; i >= 0; i--) {
+						checker.enqueue( links.urls[i] )
+					}
+					return checker
 				} )
 			} )
 		} )
-	})
+	} )
 
 } )
