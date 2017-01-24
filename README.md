@@ -67,8 +67,8 @@ Would result in:
 - yourblog.url/reviews/i-am-am-post.html
 - yourblog.url/interviews/i-am-am-post.html
 
-`json "type": "post"` This can be post, podcast or page
-`json "template": "blog"` This refers to the pug template
+`"type": "post"` This can be post, podcast or page
+`"template": "blog"` This refers to the pug template
 
 ### Posts vs pages
 
@@ -76,7 +76,7 @@ Content with the type 'page' will not appear in the RSS feed (it will in the sit
 
 ### Search page
 
-The ```shell search.html``` page allows a browser-side search of the blog content. Note that this search loads a stripped .json file containing titles and descriptions of your posts, pages and podcasts.
+The `search.html` page allows a browser-side search of the blog content. Note that this search loads a stripped .json file containing titles and descriptions of your posts, pages and podcasts.
 
 This shifts the computational load of searching to the client browser rather than a backend server. It does however mean the search page depends on more bandwidth (for the search json file). I don't think this will be an issue as every post takes about 200 bytes of data. This means that even 10,000 posts will result in a file of ~2MB, which is less than a medium sized image.
 
@@ -111,11 +111,11 @@ The default theme includes social graph support.
 
 | Type | Support | Location |
 | ---- | ------- | -------- |
-| Facebook Open Graph | Yes | ```html <head> ```
-| Twitter cards | Yes | ```html <head> ```
-| Google Rich Data Snippets | Yes | ```html <script> under <footer> ```
+| Facebook Open Graph | Yes | ` <head> `
+| Twitter cards | Yes | ` <head> `
+| Google Rich Data Snippets | Yes | ` <script> under <footer> `
 
-The ```yourblog.url/category/post.html``` links are ```html rel="calonical"``` to the ```yourblog.url/posts/post.html``` to prevent duplicate content.
+The yourblog.url/category/post.html links are `rel="calonical" to the yourblog.url/posts/post.html` to prevent duplicate content.
 
 ### Page Speed Score
 
