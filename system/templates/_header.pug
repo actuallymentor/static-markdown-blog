@@ -22,7 +22,10 @@ head
 	meta( property="article:published_time" content=file.meta.published)
 	meta( property="og:type" content="article" )
 	if file.html
-		meta( property="og:url" content=site.system.url + site.system.blogslug + '/' + file.slug )
+		if file.type == 'page'
+			meta( property="og:url" content=site.system.url + site.system.pageslug + '/' + file.slug )
+		else
+			meta( property="og:url" content=site.system.url + site.system.blogslug + '/' + file.slug )
 	else
 		meta( property="og:url" content=url )
 	meta( property="og:image" content=file.meta.featuredimg)
@@ -49,4 +52,9 @@ head
 
 	//- if this is a blog page, add the canonical link
 	if file.html
-		link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
+		if file.meta.type == 'page'
+			link( rel="canonical" href=site.system.url + site.system.pageslug + '/' + file.slug )
+		else
+			link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
+	//- Get the webpack script
+	script( src=site.system.url + 'assets/js/app.js' async)

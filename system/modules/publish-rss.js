@@ -4,9 +4,15 @@
 const fs = require( 'fs' )
 const RSS = require( 'rss' )
 const sha = require( 'sha1' )
+const pfs = require( __dirname + '/parse-fs' )
+const write = require( __dirname + '/publish-file' )
 
-const rss = ( site, parsedfiles ) => {
-	let feed = new RSS( {
+// ///////////////////////////////
+// RSS Feed
+// ///////////////////////////////
+
+const makerss = site => {
+	return Promise.resolve( new RSS( {
 		title: site.identity.title,
 		description: site.identity.desc,
 		feed_url: site.system.url + 'rss.xml',
@@ -16,31 +22,43 @@ const rss = ( site, parsedfiles ) => {
 		webMaster: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
 		copyright: site.system.year + ' ' + site.author.firstname + ' ' + site.author.lastname,
 		language: site.identity.language
-	} )
+	} ) )
+}
+
+const makefeeditem = ( feed, site, file ) => {
+	return Promise.resolve( feed.item( {
+		title: file.meta.title,
+		description: file.meta.desc,
+		url: site.system.url + site.system.blogslug + '/' + file.slug,
+		guid: sha( file.title + file.meta.published ),
+		categories: file.meta.categories,
+		author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
+		date: site.system.today
+	} ) )
+}
+
+const rss = ( site, parsedfiles ) => {
+
 	return new Promise( ( resolve, reject ) => {
-		// Loop over all posts
-		for (let i = parsedfiles.length - 1; i >= 0; i--) {
-			feed.item( {
-				title: parsedfiles[ i ].meta.title,
-				description: parsedfiles[ i ].meta.desc,
-				url: site.system.url + site.system.blogslug + '/' + parsedfiles[ i ].slug,
-				guid: sha( parsedfiles[ i ].title + parsedfiles[ i ].meta.published ),
-				categories: parsedfiles[ i ].meta.categories,
-				author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
-				date: site.system.today
+		makerss( site ).then( feed => {
+			return Promise.all( parsedfiles.map( file => { return makefeeditem( feed, site, file ) } ) )
+		} ).then( feedarray => {
+			return feedarray[ feedarray.length - 1 ].xml( )
+		} ).then( feedxml => {
+			return pfs.mkdir( site.system.public ).then( f => {
+				return write( site.system.public + 'rss.xml', feedxml )
 			} )
-		}
-		// Parse feed to xml
-		let feedxml = feed.xml( )
-		// Write feed
-		fs.writeFile( site.system.public + 'rss.xml', feedxml, err => { if ( err ) return reject( err ) } )
-		resolve( feedxml )
+		} ).then( resolve ).catch( reject )
+
 	} )
 }
 
-const podcast = ( site, parsedfiles ) => {
-	// Set podcast feed data
-	let feed = new RSS( {
+// ///////////////////////////////
+// Podcast feed
+// ///////////////////////////////
+
+const makepodcastfeed = site => {
+	return Promise.resolve( new RSS( {
 		title: site.identity.title,
 		description: site.identity.desc,
 		feed_url: site.system.url + 'rss.xml',
@@ -68,54 +86,65 @@ const podcast = ( site, parsedfiles ) => {
 				}
 			} },
 			{ 'itunes:category': [
-			{_attr: {
-				text: 'Education'
-			} },
-			{ 'itunes:category': {
-				_attr: {
-					text: 'Technology'
-				}
-			} },
-			{ 'itunes:category': {
-				_attr: {
-					text: 'Business'
-				}
-			} }
+				{_attr: {
+					text: 'Education'
+				} },
+				{ 'itunes:category': {
+					_attr: {
+						text: 'Technology'
+					}
+				} },
+				{ 'itunes:category': {
+					_attr: {
+						text: 'Business'
+					}
+				} }
 			] }
 		]
-	} )
-	// Return generation promise
+	} ) )
+}
+
+const makepodcastitem = ( feed, site, file ) => {
+	return Promise.resolve( feed.item( {
+		title: file.meta.title,
+		description: file.meta.desc,
+		url: site.system.url + site.system.blogslug + '/' + file.slug,
+		guid: sha( file.title + file.meta.published ),
+		categories: file.meta.categories,
+		author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
+		date: site.system.today,
+		enclosure: { url: site.system.url + file.meta.audio },
+		custom_elements: [
+	      { 'itunes:author': site.author.firstname + ' ' + site.author.lastname },
+	      { 'itunes:subtitle': file.meta.title },
+	      { 'itunes:image': {
+	        _attr: {
+	          href: file.meta.featuredimg
+	        }
+	      } },
+	      { 'itunes:duration': file.meta.duration }
+	    ]
+	} ) )
+}
+
+const findpodcasts = posts => {
+	return posts.filter( post => { return ( post.meta.type == 'podcast' ) } )
+}
+
+const podcast = ( site, parsedfiles ) => {
+
 	return new Promise( ( resolve, reject ) => {
-		// Loop over all posts
-		for (let i = parsedfiles.length - 1; i >= 0; i--) {
-			if ( parsedfiles[ i ].meta.categories.indexOf( 'podcasts' ) != -1 ) { 
-				feed.item( {
-					title: parsedfiles[ i ].meta.title,
-					description: parsedfiles[ i ].meta.desc,
-					url: site.system.url + site.system.blogslug + '/' + parsedfiles[ i ].slug,
-					guid: sha( parsedfiles[ i ].title + parsedfiles[ i ].meta.published ),
-					categories: parsedfiles[ i ].meta.categories,
-					author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
-					date: site.system.today,
-					enclosure: { url: site.system.url + parsedfiles[ i ].meta.audio },
-					custom_elements: [
-				      { 'itunes:author': site.author.firstname + ' ' + site.author.lastname },
-				      { 'itunes:subtitle': parsedfiles[ i ].meta.title },
-				      { 'itunes:image': {
-				        _attr: {
-				          href: parsedfiles[ i ].meta.featuredimg
-				        }
-				      } },
-				      { 'itunes:duration': parsedfiles[ i ].meta.duration }
-				    ]
-				} )
-			 }
-		}
-		// Parse feed to xml
-		let feedxml = feed.xml( )
-		// Write feed
-		fs.writeFile( site.system.public + 'podcast.xml', feedxml, err => { if ( err ) return reject( err ) } )
-		resolve( feedxml )
+		makepodcastfeed( site ).then( feed => {
+			let podcasts = findpodcasts( parsedfiles )
+			return Promise.all( podcasts.map( file => { return makepodcastitem( feed, site, file ) } ) )
+		} )
+		.then( feedarray => {
+			return feedarray[ feedarray.length - 1 ].xml( )
+		} ).then( feedxml => {
+			return pfs.mkdir( site.system.public ).then( f => {
+				return write( site.system.public + 'podcast.xml', feedxml )
+			} )
+		} ).then( resolve ).catch( reject )
 	} )
 
 }

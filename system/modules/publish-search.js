@@ -6,12 +6,21 @@ const write = require( __dirname + '/publish-file' )
 const fs = require( 'fs' )
 const pfs = require( __dirname + '/parse-fs' )
 
+const onlymeta = ( site, allposts ) => {
+	return allposts.map( post => {
+		post.meta.slug = post.slug
+		post.meta.url = site.system.url + site.system.blogslug + '/' + post.slug
+		post.meta.featuredimg = site.system.url + post.meta.featuredimg
+		return post.meta
+	} )
+}
+
 module.exports = ( site, allposts ) => {
 	// Make public folder if it does not exist
 	pfs.mkdir( site.system.public ).then( f => {
 		return new Promise( ( resolve, reject ) => {
 			// Generate page
-			pug( site.system.templates + 'index.pug', {
+			pug( site.system.templates + 'search.pug', {
 				site: site,
 				posts: allposts,
 				url: site.system.url,
@@ -25,7 +34,9 @@ module.exports = ( site, allposts ) => {
 					}
 				}
 			} ).then( page => {
-				return write( site.system.public + 'index.html', page )
+				return write( site.system.public + 'search.html', page )
+			} ).then( f => {
+				return write( site.system.public + 'posts.json', JSON.stringify( onlymeta( site, allposts ) ) )
 			} ).then( resolve ).catch( reject )
 		} )
 	} )

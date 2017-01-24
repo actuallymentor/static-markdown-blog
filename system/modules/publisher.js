@@ -7,10 +7,10 @@ const del = require( 'del' )
 const feed = require( __dirname + '/publish-rss' )
 const publishposts = require( __dirname + '/publish-posts' )
 const publishcats = require( __dirname + '/publish-cats' )
-const publishsitemap = require( __dirname + '/publish-sitemap' )
 const fileman = require( __dirname + '/parse-files' )
 const sitemap = require( __dirname + '/publish-sitemap' )
 const publishindex = require( __dirname + '/publish-index' )
+const publishsearch = require( __dirname + '/publish-search' )
 const optimizeimages = require( __dirname + '/parse-images' )
 const copyassets = require( __dirname + '/parse-assets' )
 
@@ -21,39 +21,39 @@ const copyassets = require( __dirname + '/parse-assets' )
 
 let publishall = site => {
 	return new Promise( ( resolve, reject ) => {
-		// Read all post files
 		fileman.read( site ).then( files => {
-			if( process.env.test ) console.log( 'Files were read' )
-			// Parse the files to objects
-			fileman.parse( site, files ).then( ( { parsedfiles, allcats } ) => {
-				//Add categories to site variable ( this is local )
-				site.cats = allcats
-				if( process.env.test ) console.log( 'Files were parsed' )
-				Promise.all( [
-					// Publish the index page
-					publishindex( site, parsedfiles ),
-					// Publish the categories
-					publishcats( site, parsedfiles ),
-					// Publish the posts separately
-					publishposts( site, parsedfiles ),
-					// Publish the sitemap
-					sitemap.make( site, parsedfiles, new sitemap.proto( ) ),
-					// Publish the RSS feed
-					feed.rss( site, parsedfiles ),
-					// Publish the podcast feed
-					feed.podcast( site, parsedfiles )
-					] ).then( result  => { 
-						resolve( result[ 3 ] ) 
-					} ).catch( err => { reject( err ) } )
-				} ).catch( err => { throw err } )
-		} ).catch( err => { throw err } )
+			return Promise.all( [
+				fileman.parseposts( site, files ),
+				fileman.parsepages( site, files ),
+				fileman.parseall( site, files )
+			] )
+		} ).then( content => {
+			//Add categories to site variable ( this is local )
+			site.cats = content[ 0 ].allcats
+			return Promise.all( [
+				// Publish the index page
+				publishindex( site, content[ 0 ].parsedfiles ),
+				// Publish the search page
+				publishsearch( site, content[ 2 ].parsedfiles ),
+				// Publish the categories
+				publishcats( site, content[ 0 ].parsedfiles ),
+				// Publish the posts separately
+				publishposts( site, content[ 0 ].parsedfiles, content[ 1 ].parsedfiles ),
+				// Publish the sitemap
+				sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles ),
+				// Publish the RSS feed
+				feed.rss( site, content[ 2 ].parsedfiles ),
+				// Publish the podcast feed
+				feed.podcast( site, content[ 2 ].parsedfiles )
+			] )
+		} ).then( resolve ).catch( reject )
 	} )
 }
 
 let clean = site => {
 	return new Promise( ( resolve, reject ) => {
 		// Delete old files
-		if (process.env.debug) console.log( 'Deleting all previous build files synchronously' )
+		if (process.env.debug) console.log( 'Deleting all previous build files' )
 		// Synchronously delete the old files
 		if( fs.existsSync( site.system.public ) ) del.sync( [ site.system.public ] )
 		resolve( )
@@ -62,13 +62,16 @@ let clean = site => {
 
 let handleassets = site => {
 	return new Promise( ( resolve, reject ) => {
-		if( process.env.debug || process.env.skip ) console.log( 'Image skip is ' + process.env.dev )
+		if( process.env.debug || process.env.skip ) console.log( 'Image skip is ' + process.env.dev + ' dev and ' + process.env.skip + ' skip ' )
 		// The process.env.dev determines whether the images are re-processed or not. Webpack controls this throuh the env variable skip=true
-		if ( process.env.dev ) copyassets( site ).then( resolve )
-		if ( !process.env.dev ) Promise.all( [
-			copyassets( site ),
-			optimizeimages( site )
-		] ).then( resolve )
+		if ( process.env.dev == 'true' ) copyassets( site ).then( f => {
+			if( process.env.debug ) console.log( 'NOT Optimizing images' )
+			// return optimizeimages( site )
+		} ).then( resolve ).catch( reject )
+		if ( process.env.dev == 'false' ) copyassets( site ).then( f => {
+			if( process.env.debug ) console.log( 'Optimizing images' )
+			return optimizeimages( site )
+		} ).then( resolve ).catch( reject )
 	} )
 }
 
