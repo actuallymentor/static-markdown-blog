@@ -1,5 +1,6 @@
 import get from './ajax'
 import site from '../../system/modules/config'
+import getparams from './get-params'
 
 class Search {
 
@@ -8,8 +9,8 @@ class Search {
 		this.input = props
 		// Search speed limit
 		this.speedlimit = 300
-	}
 
+	}
 
 	// Search function
 	search( ) {
@@ -44,9 +45,13 @@ class Search {
 	// Initialisation
 	init( ) {
 		let searchbar = document.getElementById( this.input )
+		let getparameter = getparams( 'search' )
+		if( getparameter ) searchbar.value = getparameter
 		// Get posts db
+	console.log( window.location.href.match( /.*[\:\/\/][\w-_\d]*\// )[0] )
 		get( site.system.url + 'posts.json' ).then( posts => {
 			this.posts = JSON.parse( posts )
+			if( getparameter ) this.search( )
 		} )
 		// Set the handler for the user input
 		searchbar.oninput = this.timesearch.bind( this )
