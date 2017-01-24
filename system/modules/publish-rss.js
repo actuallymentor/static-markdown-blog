@@ -30,7 +30,7 @@ const makefeeditem = ( feed, site, file ) => {
 		title: file.meta.title,
 		description: file.meta.desc,
 		url: site.system.url + site.system.blogslug + '/' + file.slug,
-		guid: sha( file.title + file.meta.published ),
+		guid: sha( file.title + file.meta.published + file.raw ),
 		categories: file.meta.categories,
 		author: site.author.email + ' (' + site.author.firstname + ' ' + site.author.lastname + ')',
 		date: site.system.today
