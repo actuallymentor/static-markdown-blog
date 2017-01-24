@@ -67,8 +67,9 @@ Would result in:
 - yourblog.url/reviews/i-am-am-post.html
 - yourblog.url/interviews/i-am-am-post.html
 
-`"type": "post"` This can be post, podcast or page
-`"template": "blog"` This refers to the pug template
+`"type": "post"` can be post, podcast or page
+
+`"template": "blog"` refers to the pug template
 
 ### Posts vs pages
 
