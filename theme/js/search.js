@@ -7,10 +7,6 @@ class Search {
 		console.log( 'This is the search page' )
 		// Set the input field ID
 		this.input = props
-		// Get posts db
-		get( site.system.url + 'posts.json' ).then( posts => {
-			this.posts = JSON.parse( posts )
-		} )
 		// Search speed limit
 		this.speedlimit = 300
 	}
@@ -49,6 +45,10 @@ class Search {
 	// Initialisation
 	init( ) {
 		let searchbar = document.getElementById( this.input )
+		// Get posts db
+		get( site.system.url + 'posts.json' ).then( posts => {
+			this.posts = JSON.parse( posts )
+		} )
 		// Set the handler for the user input
 		searchbar.oninput = this.timesearch.bind( this )
 		// Reset the search limiter
