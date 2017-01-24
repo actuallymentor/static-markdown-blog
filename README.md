@@ -52,8 +52,8 @@ With config:
     "title": "One Blog Post to Rule Them All",
     "desc": "One description to find them",
     "categories": [ "news", "reviews", "interviews" ],
-    "type": "post", // This can be post, podcast or page
-    "template": "blog", // This refers to the pug template
+    "type": "post",
+    "template": "blog",
     "published": "2016-12-20",
     "updated": "",
     "featuredimg": "assets/large-image.jpg"
@@ -66,6 +66,9 @@ Would result in:
 - yourblog.url/news/i-am-am-post.html
 - yourblog.url/reviews/i-am-am-post.html
 - yourblog.url/interviews/i-am-am-post.html
+
+`json "type": "post"` This can be post, podcast or page
+`json "template": "blog"` This refers to the pug template
 
 ### Posts vs pages
 
