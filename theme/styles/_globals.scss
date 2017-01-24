@@ -24,14 +24,14 @@ body {
 	flex-direction: column;
 }
 
-main {
-	flex: 1 0 auto;
-}
+main { flex: 1 0 auto; }
 
 img {
 	max-width: 100%;
 	@extend .depth-box;
 }
+
+.hidden { display: none; }
 
 .circle {
 	border-radius: 50%;
@@ -40,13 +40,13 @@ img {
 // Helpers
 .depth-txt {
 	transition: $hover-speed;
-	&:hover {
+	&:hover, &:active, &:focus {
 		@include hover-txt ( $hover-speed ) opacity: 0.8;
 	}
 }
 .depth-box {
 	transition: $hover-speed;
-	&:hover {
+	&:hover, &:active, &:focus {
 		@include hover-box ( $hover-speed ) opacity: 0.8;
 	}
 }

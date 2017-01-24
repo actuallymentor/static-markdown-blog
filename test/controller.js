@@ -65,6 +65,16 @@ describe( 'Assets module', function( ) {
 // Publisher
 // ///////////////////////////////
 
+const feed = require( __dirname + '/../system/modules/publish-rss' )
+const publishposts = require( __dirname + '/../system/modules/publish-posts' )
+const publishcats = require( __dirname + '/../system/modules/publish-cats' )
+const sitemap = require( __dirname + '/../system/modules/publish-sitemap' )
+const fileman = require( __dirname + '/../system/modules/parse-files' )
+const publishindex = require( __dirname + '/../system/modules/publish-index' )
+const publishsearch = require( __dirname + '/../system/modules/publish-search' )
+const optimizeimages = require( __dirname + '/../system/modules/parse-images' )
+const copyassets = require( __dirname + '/../system/modules/parse-assets' )
+
 describe( 'Publishing module', function( ) {
 	// Increase the allowed timeout drastically
 	this.timeout( maxtimeout )
@@ -72,12 +82,23 @@ describe( 'Publishing module', function( ) {
 
 	it( 'Publishes single posts correctly', done => {
 		blog.clean( site ).then(  f => {
-			blog.publish( site ).then( blog => {
-				// Check if number of public files equals parsed files
-				fs.readdir( site.system.public + site.system.blogslug, ( err, files ) => {
-					expect( files.length ).to.equal( blog.posts.length )
-					done( )
-				} )
+			return fileman.read( site )
+		} ).then( files => {
+			return Promise.all( [
+				fileman.parseposts( site, files ),
+				fileman.parsepages( site, files ),
+				fileman.parseall( site, files )
+			] )
+		} ).then( content => {
+			//Add categories to site variable ( this is local )
+			site.cats = content[ 0 ].allcats
+			// Publish the posts
+			return publishposts( site, content[ 0 ].parsedfiles, content[ 1 ].parsedfiles )
+		} ).then( result => {
+			// Check if number of public files equals parsed files
+			fs.readdir( site.system.public + site.system.blogslug, ( err, files ) => {
+				expect( files.length ).to.equal( result.length )
+				done( )
 			} )
 		} )
 	} )
@@ -127,13 +148,14 @@ describe( 'Publishing module', function( ) {
 const bs = require( 'browser-sync' ).create( )
 const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
-const fileman = require( __dirname + '/../system/modules/parse-files' )
-const sitemap = require( __dirname + '/../system/modules/publish-sitemap' )
-let linkchecker = done => {
+let linkchecker = ( done, level = 0 ) => {
 	let broken = []
-	return new blc.HtmlUrlChecker( { filterLevel: 0 }, {
+	return new blc.HtmlUrlChecker( { filterLevel: level }, {
 		link: ( result, customData ) => {
 			if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+		},
+		page: (error, pageUrl, customData) => {
+			if ( error ) console.log( error )
 		},
 		end: f => {
 			if ( broken.length > 0 ) console.log( broken )
@@ -145,7 +167,7 @@ let linkchecker = done => {
 let bsconfig = {
 	open: false,
 	server: {
-		baseDir: './public',
+		baseDir: site.system.public,
 		serveStaticOptions: {
 			extensions: ['html']
 		}
@@ -154,8 +176,6 @@ let bsconfig = {
 }
 
 // Set the environment to production
-process.env.NODE_ENV = 'production'
-
 describe( 'Links in the blog', function( ) {
 
 	// Don't reprocess all images for this test
@@ -166,52 +186,63 @@ describe( 'Links in the blog', function( ) {
 
 	// Clickable links
 	it( 'Clickable are working', done => {
-		// Set up the link checker
-		let checker = linkchecker( done )
 		// init the browsersync server
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				if ( err ) console.log( err )
-				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
-					// Parse the files to objects
-					fileman.parse( site, files ).then( parsedfiles => {
-						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
-							for (var i = links.length - 1; i >= 0; i--) {
-								checker.enqueue( links[i] )
-							}
-						} )
-					} )
+					return Promise.all( [
+						fileman.parseposts( site, files ),
+						fileman.parsepages( site, files ),
+						fileman.parseall( site, files )
+					] )
+				} ).then( content => {
+					//Add categories to site variable ( this is local )
+					site.cats = content[ 0 ].allcats
+					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
+				} ).then( links => {
+					// Set up the link checker
+					let checker = linkchecker( done, 0 )
+					for (let i = links.urls.length - 1; i >= 0; i--) {
+						checker.enqueue( links.urls[i] )
+					}
+					return checker
 				} )
 			} )
 		} )
 	} )
 
 
-	// Clickable links
+	// All links links
 	it( 'All resources & meta are working', done => {
-		// Increase the max timeout for this test to buffer for network speed differences
-		// Set up the link checker
-		let checker = linkchecker( done )
+		// Make sure to process images as well
+		process.env.dev = false
 		// init the browsersync server
 		bs.init( bsconfig, f => {
 			// Build frontend app file
 			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
 				if ( err ) console.log( err )
-				// Read all posts and construct a sitemap from them
 				fileman.read( site ).then( files => {
-					// Parse the files to objects
-					fileman.parse( site, files ).then( parsedfiles => {
-						sitemap.make( site, parsedfiles, new sitemap.proto( ), true ).then( links => {
-							for (var i = links.length - 1; i >= 0; i--) {
-								checker.enqueue( links[i] )
-							}
-						} )
-					} )
+					return Promise.all( [
+						fileman.parseposts( site, files ),
+						fileman.parsepages( site, files ),
+						fileman.parseall( site, files )
+					] )
+				} ).then( content => {
+					//Add categories to site variable ( this is local )
+					site.cats = content[ 0 ].allcats
+					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
+				} ).then( links => {
+					// Set up the link checker
+					let checker = linkchecker( done, 3 )
+					for (let i = links.urls.length - 1; i >= 0; i--) {
+						checker.enqueue( links.urls[i] )
+					}
+					return checker
 				} )
 			} )
 		} )
-	})
+	} )
 
 } )

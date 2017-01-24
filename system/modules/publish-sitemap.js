@@ -1,60 +1,51 @@
 // ///////////////////////////////
 // Sitemap generator
 // ///////////////////////////////
+
 const sm = require( 'sitemap' )
 const fs = require( 'fs' )
 const unique = require( __dirname + '/unique' )
+const pfs = require( __dirname + '/parse-fs' )
+const write = require( __dirname + '/publish-file' )
 
-// Sitemap prototype
-let proto = function( ) {
-	this.links = []
-	this.add = newlink => {
-		this.links.push( newlink )
-	}
-	this.make = ( site ) => {
-		return new Promise( ( resolve, reject ) => {
-			let themap = sm.createSitemap( {
-				hostname: site.system.url,
-				urls: this.links
-			} )
-			themap.toXML( ( err, xml ) => {
-				if ( err ) return reject( err )
-					fs.writeFile( site.system.public + 'sitemap.xml', xml, err => {
-						if ( err ) return reject( err )
-						resolve( unique( this.links ) )
-					} )
-			} )
-		} )
-	}
+const makesitemap = ( site, links ) => {
+	return Promise.resolve( sm.createSitemap( {
+		hostname: site.system.url,
+		urls: links
+	} ) )
 }
 
-let make = ( site, parsedfiles, sitemap, dry = false ) => {
-	return new Promise( ( resolve, reject ) => {
-		// Add links to sitemap
-		// Add the index
-		sitemap.add( site.system.url )
-		// Loop over the posts to add all category links
-		for (let i = parsedfiles.length - 1; i >= 0; i--) {
-			// Add all post links to sitemap
-			for (let j = parsedfiles[i].links.length - 1; j >= 0; j--) {
-				sitemap.add( parsedfiles[i].links[ j ] )
-			}
-			// Add all category links to sitemap
-			for (let k = parsedfiles[i].meta.categories.length - 1; k >= 0; k--) {
-				if( sitemap.links.indexOf( site.system.url + 'category/' + parsedfiles[i].meta.categories ) == -1 )
-					sitemap.add( site.system.url + 'category/' + parsedfiles[i].meta.categories )
-			}
+const generatelinks = ( site, parsedfiles, allcats, pages ) => {
+	let alllinks = []
+	for (let i = parsedfiles.length - 1; i >= 0; i--) {
+		for (let j = parsedfiles[i].links.length - 1; j >= 0; j--) {
+			alllinks.push( parsedfiles[i].links[j] )
 		}
-		// Return links only if this is a dry run ( for testing )
-		if ( dry ) resolve( sitemap.links )
-		// Return a full sitemap if we're not dry, which is the default
-		sitemap.make( site ).then( links => {
-			resolve( { posts: parsedfiles, links: links } )
-		} ).catch( err => { throw err } )
+	}
+	for (let i = allcats.length - 1; i >= 0; i--) {
+		alllinks.push( site.system.url + 'category/' + allcats[ i ] )
+	}
+	for (let i = pages.length - 1; i >= 0; i--) {
+		alllinks.push( site.system.url + site.system.pageslug + '/' + pages[i].slug )
+	}
+	return Promise.resolve( alllinks )
+}
+
+const make = ( site, parsedfiles, allcats, pages, dry = false ) => {
+	return new Promise( ( resolve, reject ) => {
+
+		if( dry ) generatelinks( site, parsedfiles, allcats, pages ).then( resolve )
+
+		if (!dry) pfs.mkdir( site.system.public ).then( f => {
+			return generatelinks( site, parsedfiles, allcats, pages )
+		} ).then( links => {
+			return makesitemap( site, links )
+		} ).then( sitemap => {
+			return write( site.system.public + 'sitemap.xml', sitemap )
+		} ).then( resolve ).catch( reject )
 	} )
 }
 
 module.exports = {
-	proto: proto,
 	make: make
 }

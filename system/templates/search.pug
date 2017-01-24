@@ -1,0 +1,19 @@
+doctype html
+html
+	include _header.pug
+	body
+		include _menu.pug
+		main#search
+			div#header
+				h1 #{site.identity.title} - Search
+			section.container#searchbar
+				input.depth-box#searchinput( type="text", placeholder="Search for ..." )
+			section.container#searchresults
+				each post in posts
+					a.postlist.hidden( href=site.system.url + site.system.blogslug + "/" + post.slug )
+						article
+							img.circle.thumb( src=site.system.url + post.meta.featuredimg )
+							h3 #{post.meta.title}
+							span #{post.meta.desc}
+					
+		include _footer.pug

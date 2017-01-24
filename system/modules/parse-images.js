@@ -15,7 +15,7 @@ const findimages = site => {
 	}
 
 	return new Promise( ( resolve, reject ) => {
-		pfs.readdir( site.system.content + '/assets' ).then( filterimg ).then( resolve ) 
+		pfs.readdir( site.system.content + '/assets' ).then( filterimg ).then( resolve ).catch( reject )
 	} )
 
 }

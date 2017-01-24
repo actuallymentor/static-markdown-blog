@@ -7,6 +7,8 @@ let post = '```json\n\
     "title": "One Blog Post to Rule Them All",\n\
     "desc": "One description to find them",\n\
     "categories": [ "cat" ],\n\
+    "template":, "blog",\n\
+    "type": "post",\n\
     "published": "2016-12-20",\n\
     "updated": "",\n\
     "featuredimg": "/assets/image.svg"\n\
