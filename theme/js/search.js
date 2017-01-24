@@ -10,20 +10,29 @@ class Search {
 		get( '/posts.json' ).then( posts => {
 			this.posts = JSON.parse( posts )
 		} )
+		// Search speed limit
+		this.speedlimit = 300
 	}
 
 
 	// Search function
 	search( ) {
+		if ( this.searchlimit ) return
 		let value = document.getElementById( this.input ).value.toLowerCase()
 		this.results = this.posts.filter( post => {
 			return ( 
 				post.title.toLowerCase().indexOf( value ) != -1 ? true : false ||
 				post.desc.toLowerCase().indexOf( value ) != -1 ? true : false
 			)
-
 		} )
+		// Set limit tracker
+		this.searchlimit = true
 		this.display( )
+	}
+
+	// Search timer
+	timesearch( ) {
+		setTimeout( this.search.bind( this ), this.speedlimit + 100 )
 	}
 
 	// Display search results
@@ -40,7 +49,9 @@ class Search {
 	init( ) {
 		let searchbar = document.getElementById( this.input )
 		// Set the handler for the user input
-		searchbar.oninput = this.search.bind( this )
+		searchbar.oninput = this.timesearch.bind( this )
+		// Reset the search limiter
+		setInterval( (  ) => { this.searchlimit = false }, this.speedlimit )
 	}
 
 }
