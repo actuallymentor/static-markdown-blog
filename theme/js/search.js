@@ -1,4 +1,5 @@
 import get from './ajax'
+import site from '../../system/modules/config'
 
 class Search {
 
@@ -7,7 +8,7 @@ class Search {
 		// Set the input field ID
 		this.input = props
 		// Get posts db
-		get( '/posts.json' ).then( posts => {
+		get( site.system.url + 'posts.json' ).then( posts => {
 			this.posts = JSON.parse( posts )
 		} )
 		// Search speed limit

@@ -1,5 +1,4 @@
 // import modules
-const fs = require( 'fs' )
 const today = require( __dirname + '/today' )
 const path = require( 'path' )
 
