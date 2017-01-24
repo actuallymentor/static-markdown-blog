@@ -30,7 +30,7 @@ npm run build # Build the blog files for production
 npm run preview # Build your blog and preview in the browser ( localhost:3000 )
 npm start # Start dev server  which watches the css and js files
 skip=true npm start # As aboveut don't re-compress all images ( slow )
-npm test # DO basic system chacks and check all your links ( hrefs, external dependencies, etc )
+npm test # Do basic system chacks and check all your links ( hrefs, external dependencies, etc )
 ```
 
 ## Basic usage
@@ -52,6 +52,8 @@ With config:
     "title": "One Blog Post to Rule Them All",
     "desc": "One description to find them",
     "categories": [ "news", "reviews", "interviews" ],
+    "type": "post", // This can be post, podcast or page
+    "template": "blog", // This refers to the pug template
     "published": "2016-12-20",
     "updated": "",
     "featuredimg": "assets/large-image.jpg"
@@ -64,6 +66,16 @@ Would result in:
 - yourblog.url/news/i-am-am-post.html
 - yourblog.url/reviews/i-am-am-post.html
 - yourblog.url/interviews/i-am-am-post.html
+
+### Posts vs pages
+
+Content with the type 'page' will not appear in the RSS feed (it will in the sitemap). Posts will be published to categories and the index page. Both types appear in the search page.
+
+### Search page
+
+The ```shell search.html``` page allows a browser-side search of the blog content. Note that this search loads a stripped .json file containing titles and descriptions of your posts, pages and podcasts.
+
+This shifts the computational load of searching to the client browser rather than a backend server. It does however mean the search page depends on more bandwidth (for the search json file). I don't think this will be an issue as every post takes about 200 bytes of data. This means that even 10,000 posts will result in a file of ~2MB, which is less than a medium sized image.
 
 ## About the system
 
