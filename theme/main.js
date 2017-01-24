@@ -1,5 +1,3 @@
-console.log( 'Yay' )
-
 // Import the styles
 import './styles/styles.scss'
 
@@ -11,7 +9,6 @@ import Search from './js/search'
 
 window.onload = f => {
 	const search = new Search( 'searchinput' )
-	console.log( 'Loaded' )
 	menu( document )
 
 	// Activate searc is this is the search page

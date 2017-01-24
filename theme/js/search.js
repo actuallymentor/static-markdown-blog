@@ -4,7 +4,6 @@ import site from '../../system/modules/config'
 class Search {
 
 	constructor( props ) {
-		console.log( 'This is the search page' )
 		// Set the input field ID
 		this.input = props
 		// Search speed limit
