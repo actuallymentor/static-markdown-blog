@@ -46,7 +46,7 @@ class Search {
 	init( ) {
 		let searchbar = document.getElementById( this.input )
 		let getparameter = getparams( 'search' )
-		if( getparameter ) searchbar.value = getparameter
+		if( getparameter ) searchbar.value = getparameter; searchbar.placeholder = ''
 		// Get posts db
 		get( site.system.url + 'posts.json' ).then( posts => {
 			this.posts = JSON.parse( posts )

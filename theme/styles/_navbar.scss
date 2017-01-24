@@ -52,6 +52,17 @@ $hamburger-layer-spacing: 6px;
 			}
 		}
 	}
+	#headsearch {
+		position: absolute;
+		right:10px;
+		top:10px;
+		input {
+			border: none;
+			padding: 10px 20px;
+			box-shadow: 2px 3px 5px rgba(90, 90, 90, 0.1);
+			@extend .depth-box;
+		}
+	}
 }
 
 

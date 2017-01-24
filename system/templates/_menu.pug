@@ -6,6 +6,8 @@ nav#navbar
 			each cat in site.cats			
 				li.menuitem.depth-txt
 					a( href=site.system.url + 'category/' + cat ) #{cat}
+		form#headsearch( method="GET", action=site.system.url + 'search' )
+			input( type="text", placeholder='Search...', name="search" )
 	button#menu-btn.undertablet
 		span.hamburger-box
 			span.hamburger-inner
