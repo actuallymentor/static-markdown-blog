@@ -48,7 +48,6 @@ class Search {
 		let getparameter = getparams( 'search' )
 		if( getparameter ) searchbar.value = getparameter
 		// Get posts db
-	console.log( window.location.href.match( /.*[\:\/\/][\w-_\d]*\// )[0] )
 		get( site.system.url + 'posts.json' ).then( posts => {
 			this.posts = JSON.parse( posts )
 			if( getparameter ) this.search( )

@@ -19,7 +19,7 @@ let config = {
 		content: path.normalize( __dirname + '/../../content/' ),
 		public: path.normalize( __dirname + '/../../docs/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
-		url: window.location.href.indexOf( 'localhost' ) != -1 ? "http://localhost:3000/" : "https://actuallymentor.github.io/static-markdown-blog/",
+		url: process.env.NODE_END == 'production' ? "https://actuallymentor.github.io/static-markdown-blog/" : "http://localhost:3000/",
 		year: new Date().getFullYear(),
 		today: today,
 		// Google verification code

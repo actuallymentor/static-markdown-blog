@@ -548,7 +548,6 @@
 				var getparameter = (0, _getParams2.default)('search');
 				if (getparameter) searchbar.value = getparameter;
 				// Get posts db
-				console.log(window.location.href.match(/.*[\:\/\/][\w-_\d]*\//)[0]);
 				(0, _ajax2.default)(_config2.default.system.url + 'posts.json').then(function (posts) {
 					_this.posts = JSON.parse(posts);
 					if (getparameter) _this.search();
@@ -600,7 +599,7 @@
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
+	/* WEBPACK VAR INJECTION */(function(__dirname, process) {'use strict';
 	
 	// import modules
 	var today = __webpack_require__(/*! ./system/modules/today */ 10);
@@ -623,7 +622,7 @@
 			content: path.normalize(__dirname + '/../../content/'),
 			public: path.normalize(__dirname + '/../../docs/'),
 			templates: path.normalize(__dirname + '/../templates/'),
-			url: window.location.href.indexOf('localhost') != -1 ? "http://localhost:3000/" : "https://actuallymentor.github.io/static-markdown-blog/",
+			url: process.env.NODE_END == 'production' ? "https://actuallymentor.github.io/static-markdown-blog/" : "http://localhost:3000/",
 			year: new Date().getFullYear(),
 			today: today,
 			// Google verification code
@@ -658,7 +657,7 @@
 	
 	// grab, parse and export the config file
 	module.exports = config;
-	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
+	/* WEBPACK VAR INJECTION */}.call(exports, "/", __webpack_require__(/*! ./../../~/process/browser.js */ 9)))
 
 /***/ },
 /* 9 */
