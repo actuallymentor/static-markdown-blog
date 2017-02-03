@@ -1,7 +1,8 @@
 // Browser sync stuff
 let BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' )
-let WebpackOnBuildPlugin = require( 'on-build-webpack' )
-let WebpackPreBuildPlugin = require( 'pre-build-webpack' )
+
+// File system management
+const fs = require( 'fs' )
 
 // Webpack and css
 let autoprefixer = require ( 'autoprefixer' )
@@ -14,10 +15,36 @@ const blog = require( __dirname + '/system/modules/publisher' )
 const site = require( __dirname + '/system/modules/config' )
 
 // ///////////////////////////////
+// Building & watching
+// ///////////////////////////////
+
+// Initial build
+blog.clean( site ).then( f => {
+  return blog.publish( site )
+} ).then( links => {
+  if ( process.env.debug ) console.log( '\nInitial build, posts published' )
+  return blog.assets( site )
+} ).then( f => {
+  if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
+} )
+
+// Watch for pug file changes
+const towatch = [ 'pug' ]
+
+if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.templates, ( eventType, filename ) => {
+  console.log( eventType, filename )
+  if ( eventType != 'change' || filename.indexOf( towatch ) == -1 ) return
+  if ( process.env.debug ) console.log( 'Pug template changed' )
+  // Delete old build and generate pug files
+  return blog.publish( site ).then( f => { if ( process.env.debug ) console.log( 'Repeat build done' ) } ).catch( console.log.bind( console ) )
+} )
+
+// ///////////////////////////////
 // Plugins
 // ///////////////////////////////
-let bsync = new BrowserSyncPlugin( {
+const bsconfig = {
   host: 'localhost',
+  open: true,
   port: 3000,
   server: { 
     baseDir: [ site.system.public ],
@@ -42,62 +69,40 @@ let bsync = new BrowserSyncPlugin( {
     "text-align: center"
     ]
   }
-} )
-let setenv = new webpack.DefinePlugin( {
-  'process.env': {
-    NODE_ENV: JSON.stringify( 'production' )
-  }
-} )
-let makeugly = new webpack.optimize.UglifyJsPlugin( {
+}
+
+const uglifyconfig = {
   compress: {
     warnings: false
   }
-})
-let buildblog = new WebpackPreBuildPlugin( stats => {
-  if ( process.env.dev ) return
-  if ( process.env.debug ) console.log( 'Before build: ' )
-  blog.clean( site ).then( f => {
-    blog.publish( site ).then( links => {
-      if ( process.env.debug ) console.log( 'Posts published' )
-    } )
-  } )
-} )
+}
 
-let copyassets = new WebpackOnBuildPlugin( stats => {
-  if ( process.env.debug ) console.log( 'After build:' )
-  blog.assets( site ).then( f => {
-    if ( process.env.debug ) console.log( 'Assets copied' )
-    if ( process.env.skip ) process.env.dev = true
-  } )
-} )
+const envconfig = {
+  'process.env': {
+    NODE_ENV: JSON.stringify( 'production' )
+  }
+}
+
 
 const pluginarray = ( env, server ) => {
+  let plugins = []
+
   if ( env == 'production' ) {
-    if ( server ) {
-      return [
-      setenv,
-      makeugly,
-      bsync,
-      buildblog,
-      copyassets
-      ]
-    } else {
-      return [
-      setenv,
-      makeugly,
-      buildblog,
-      copyassets
-      ]
-    }
-  } else if ( env == 'development' ) {
-    return [
-    bsync,
-    buildblog,
-    copyassets
-    ]
+    if ( server ) plugins.push( 
+        new BrowserSyncPlugin( bsconfig )
+    )
+    plugins.push(
+      new webpack.optimize.UglifyJsPlugin( uglifyconfig )
+    )
+    plugins.push(
+      new webpack.DefinePlugin( envconfig )
+    )
   } else {
-    return []
+    plugins.push(
+      new BrowserSyncPlugin( bsconfig )
+    )
   }
+  return plugins
 }
 
 const maps = env => {
