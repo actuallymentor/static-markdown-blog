@@ -7,11 +7,11 @@ html
 			div#header
 				h1 Category: #{category}
 			section#categories.container
-				h2 Posts:
 				each post in posts
 					- if ( post.meta.categories.indexOf( category ) != -1 )
 						a.postlist( href=site.system.url + category + "/" + post.slug )
 							article
+								img.circle.thumb( src=site.system.url + post.meta.featuredimg )
 								h3 #{post.meta.title}
 								span #{post.meta.desc}
 

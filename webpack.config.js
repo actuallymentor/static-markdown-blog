@@ -32,7 +32,6 @@ blog.clean( site ).then( f => {
 const towatch = [ 'pug' ]
 
 if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.templates, ( eventType, filename ) => {
-  console.log( eventType, filename )
   if ( eventType != 'change' || filename.indexOf( towatch ) == -1 ) return
   if ( process.env.debug ) console.log( 'Pug template changed' )
   // Delete old build and generate pug files
