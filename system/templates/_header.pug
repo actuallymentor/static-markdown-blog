@@ -57,4 +57,4 @@ head
 		else
 			link( rel="canonical" href=site.system.url + site.system.blogslug + '/' + file.slug )
 	//- Get the webpack script
-	script( src=site.system.url + 'assets/js/app.js' async)
+	script( src=site.system.url + 'assets/js/app.js?' + site.system.timestamp, async)

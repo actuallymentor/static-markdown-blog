@@ -19,9 +19,10 @@ let config = {
 		content: path.normalize( __dirname + '/../../content/' ),
 		public: path.normalize( __dirname + '/../../docs/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
-		url: process.env.NODE_END == 'production' ? "https://actuallymentor.github.io/static-markdown-blog/" : "http://localhost:3000/",
+		url: process.env.local ? "http://localhost:3000/" : "https://actuallymentor.github.io/static-markdown-blog/",
 		year: new Date().getFullYear(),
 		today: today,
+		timestamp: new Date().getTime(),
 		// Google verification code
 		gverification: undefined,
 		// Image dimensions for compression
