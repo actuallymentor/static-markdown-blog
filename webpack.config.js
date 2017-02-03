@@ -87,19 +87,11 @@ const pluginarray = ( env, server ) => {
   let plugins = []
 
   if ( env == 'production' ) {
-    if ( server ) plugins.push( 
-        new BrowserSyncPlugin( bsconfig )
-    )
-    plugins.push(
-      new webpack.optimize.UglifyJsPlugin( uglifyconfig )
-    )
-    plugins.push(
-      new webpack.DefinePlugin( envconfig )
-    )
+    if ( server ) plugins.push( new BrowserSyncPlugin( bsconfig ) )
+    plugins.push( new webpack.optimize.UglifyJsPlugin( uglifyconfig ) )
+    plugins.push( new webpack.DefinePlugin( envconfig ) )
   } else {
-    plugins.push(
-      new BrowserSyncPlugin( bsconfig )
-    )
+    plugins.push( new BrowserSyncPlugin( bsconfig ) )
   }
   return plugins
 }
