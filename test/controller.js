@@ -166,15 +166,41 @@ let linkchecker = ( done, level = 0 ) => {
 		}
 	} )
 }
-let bsconfig = {
-	open: false,
-	server: {
-		baseDir: site.system.public,
-		serveStaticOptions: {
-			extensions: ['html']
-		}
-	},
-	logLevel: "silent"
+let checklinks = ( loglevel, done ) => {
+	bs.init(
+		{ open: false,
+			server: {
+				baseDir: site.system.public,
+				serveStaticOptions: {
+					extensions: ['html']
+				}
+			},
+			logLevel: "silent"
+		}, f => {
+			// Build frontend app file
+			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
+				if ( err ) console.log( err )
+				fileman.read( site ).then( files => {
+					return Promise.all( [
+						fileman.parseposts( site, files ),
+						fileman.parsepages( site, files ),
+						fileman.parseall( site, files )
+						] )
+				} ).then( content => {
+					//Add categories to site variable ( this is local )
+					site.cats = content[ 0 ].allcats
+					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
+				} ).then( links => {
+					if( process.env.debug ) console.log( links.urls )
+					// Set up the link checker
+				let checker = linkchecker( done, loglevel )
+				for (let i = links.urls.length - 1; i >= 0; i--) {
+					checker.enqueue( links.urls[i] )
+				}
+				return checker
+			} )
+		} )
+	} )
 }
 
 // Set the environment to production
@@ -186,63 +212,14 @@ describe( 'Links in the blog', function( ) {
 
 	// Clickable links
 	it( 'Clickable are working', done => {
-		// init the browsersync server
-		bs.init( bsconfig, f => {
-			// Build frontend app file
-			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
-				if ( err ) console.log( err )
-				fileman.read( site ).then( files => {
-					return Promise.all( [
-						fileman.parseposts( site, files ),
-						fileman.parsepages( site, files ),
-						fileman.parseall( site, files )
-					] )
-				} ).then( content => {
-					//Add categories to site variable ( this is local )
-					site.cats = content[ 0 ].allcats
-					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
-				} ).then( links => {
-					if( process.env.debug ) console.log( links.urls )
-					// Set up the link checker
-					let checker = linkchecker( done, 0 )
-					for (let i = links.urls.length - 1; i >= 0; i--) {
-						checker.enqueue( links.urls[i] )
-					}
-					return checker
-				} )
-			} )
-		} )
+		checklinks( 0, done )
 	} )
 
 
 	// All links links
 	it( 'All resources & meta are working', done => {
 		// init the browsersync server
-		bs.init( bsconfig, f => {
-			// Build frontend app file
-			webpack( require( __dirname + '/../webpack.config.js' ), ( err, stats ) => {
-				if ( err ) console.log( err )
-				fileman.read( site ).then( files => {
-					return Promise.all( [
-						fileman.parseposts( site, files ),
-						fileman.parsepages( site, files ),
-						fileman.parseall( site, files )
-					] )
-				} ).then( content => {
-					//Add categories to site variable ( this is local )
-					site.cats = content[ 0 ].allcats
-					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
-				} ).then( links => {
-					if( process.env.debug ) console.log( links.urls )
-					// Set up the link checker
-					let checker = linkchecker( done, 3 )
-					for (let i = links.urls.length - 1; i >= 0; i--) {
-						checker.enqueue( links.urls[i] )
-					}
-					return checker
-				} )
-			} )
-		} )
+		checklinks( 3, done )
 	} )
 
 } )
