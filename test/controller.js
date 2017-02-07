@@ -178,8 +178,6 @@ let bsconfig = {
 // Set the environment to production
 describe( 'Links in the blog', function( ) {
 
-	// Don't reprocess all images for this test
-	process.env.skip = true
 
 	// Set the timeouts high so that all links can be checked without many or slow requests crashing the test
 	this.timeout( maxtimeout )
@@ -216,8 +214,6 @@ describe( 'Links in the blog', function( ) {
 
 	// All links links
 	it( 'All resources & meta are working', done => {
-		// Make sure to process images as well
-		process.env.skip = false
 		// init the browsersync server
 		bs.init( bsconfig, f => {
 			// Build frontend app file
