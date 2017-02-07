@@ -62,7 +62,7 @@ let clean = site => {
 
 let handleassets = site => {
 	return new Promise( ( resolve, reject ) => {
-		if( process.env.debug || process.env.skip ) console.log( 'Image skip is ' + process.env.dev + ' dev and ' + process.env.skip + ' skip ' )
+		if( process.env.debug ) console.log( 'Image skip is ' + process.env.dev + ' dev and ' + process.env.skip + ' skip ' )
 		// The process.env.dev determines whether the images are re-processed or not. Webpack controls this throuh the env variable skip=true
 		if ( process.env.skip == 'true' ) copyassets( site ).then( f => {
 			if( process.env.debug ) console.log( 'NOT Optimizing images' )

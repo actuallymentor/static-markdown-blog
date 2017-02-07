@@ -13,7 +13,7 @@ const fs = require( 'fs' )
 const del = require( 'del' )
 const walk = require( 'recursive-readdir' )
 
-const maxtimeout = 120000
+const maxtimeout = 100000
 
 // ///////////////////////////////
 // Cleaning functionality
@@ -150,12 +150,14 @@ const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
 let linkchecker = ( done, level = 0 ) => {
 	let broken = []
-	return new blc.HtmlUrlChecker( { filterLevel: level }, {
+	return new blc.HtmlUrlChecker( { filterLevel: level, excludedKeywords: 'fonts.googleapis.com' }, {
 		link: ( result, customData ) => {
 			if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
+			if ( process.env.debug ) console.log( 'Checked link ' + result.url.original )
 		},
 		page: (error, pageUrl, customData) => {
 			if ( error ) console.log( error )
+			if ( process.env.debug ) console.log( 'Checked page ' + pageUrl )
 		},
 		end: f => {
 			if ( broken.length > 0 ) console.log( broken )
@@ -200,6 +202,7 @@ describe( 'Links in the blog', function( ) {
 					site.cats = content[ 0 ].allcats
 					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
 				} ).then( links => {
+					if( process.env.debug ) console.log( links.urls )
 					// Set up the link checker
 					let checker = linkchecker( done, 0 )
 					for (let i = links.urls.length - 1; i >= 0; i--) {
@@ -230,6 +233,7 @@ describe( 'Links in the blog', function( ) {
 					site.cats = content[ 0 ].allcats
 					return sitemap.make( site, content[ 0 ].parsedfiles, content[ 1 ].allcats, content[ 1 ].parsedfiles )
 				} ).then( links => {
+					if( process.env.debug ) console.log( links.urls )
 					// Set up the link checker
 					let checker = linkchecker( done, 3 )
 					for (let i = links.urls.length - 1; i >= 0; i--) {
