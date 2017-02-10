@@ -9,7 +9,7 @@ import Search from './js/search'
 
 window.onload = f => {
 	const search = new Search( 'searchinput' )
-	menu( document )
+	const mobilenemu = new menu( document ).init( )
 
 	// Activate searc is this is the search page
 	if( document.getElementById( 'search' ) ) search.init( )
