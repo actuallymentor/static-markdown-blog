@@ -50,7 +50,7 @@ const bsconfig = {
 }
 const bsyncplugconfig = {
   name: servername,
-  callback: f => { thebs = bs.get( servername ) }
+  callback: f => { if ( process.env.NODE_ENV == 'development' ) thebs = bs.get( servername ) }
 }
 
 const uglifyconfig = {
@@ -108,7 +108,7 @@ blog.clean( site ).then( f => {
   return blog.assets( site )
 } ).then( f => {
   if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
-  thebs.reload( )
+  if ( process.env.NODE_ENV == 'development' ) thebs.reload( )
 } )
 
 // Watch for pug file changes
