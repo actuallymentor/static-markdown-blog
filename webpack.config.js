@@ -1,5 +1,6 @@
 // Browser sync stuff
 let BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' )
+const bs = require( 'browser-sync' )
 
 // File system management
 const fs = require( 'fs' )
@@ -15,32 +16,10 @@ const blog = require( __dirname + '/system/modules/publisher' )
 const site = require( __dirname + '/system/modules/config' )
 
 // ///////////////////////////////
-// Building & watching
-// ///////////////////////////////
-
-// Initial build
-blog.clean( site ).then( f => {
-  return blog.publish( site )
-} ).then( links => {
-  if ( process.env.debug ) console.log( '\nInitial build, posts published' )
-  return blog.assets( site )
-} ).then( f => {
-  if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
-} )
-
-// Watch for pug file changes
-const towatch = [ 'pug' ]
-
-if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.templates, ( eventType, filename ) => {
-  if ( eventType != 'change' || filename.indexOf( towatch ) == -1 ) return
-  if ( process.env.debug ) console.log( 'Pug template changed' )
-  // Delete old build and generate pug files
-  return blog.publish( site ).then( f => { if ( process.env.debug ) console.log( 'Repeat build done' ) } ).catch( console.log.bind( console ) )
-} )
-
-// ///////////////////////////////
 // Plugins
 // ///////////////////////////////
+let thebs
+const servername = 'bsserver'
 const bsconfig = {
   host: 'localhost',
   open: true,
@@ -69,6 +48,10 @@ const bsconfig = {
     ]
   }
 }
+const bsyncplugconfig = {
+  name: servername,
+  callback: f => { thebs = bs.get( servername ) }
+}
 
 const uglifyconfig = {
   compress: {
@@ -87,12 +70,21 @@ const pluginarray = ( env, server ) => {
   let plugins = []
 
   if ( env == 'production' ) {
-    if ( server ) plugins.push( new BrowserSyncPlugin( bsconfig ) )
-    plugins.push( new webpack.optimize.UglifyJsPlugin( uglifyconfig ) )
-    plugins.push( new webpack.DefinePlugin( envconfig ) )
+    if ( server ) plugins.push( 
+        new BrowserSyncPlugin( bsconfig, bsyncplugconfig )
+    )
+    plugins.push(
+      new webpack.optimize.UglifyJsPlugin( uglifyconfig )
+    )
+    plugins.push(
+      new webpack.DefinePlugin( envconfig )
+    )
   } else {
-    plugins.push( new BrowserSyncPlugin( bsconfig ) )
+    plugins.push(
+      new BrowserSyncPlugin( bsconfig, bsyncplugconfig )
+    )
   }
+
   return plugins
 }
 
@@ -104,13 +96,38 @@ const maps = env => {
   }
 }
 
+// ///////////////////////////////
+// Building & watching
+// ///////////////////////////////
+
+// Initial build
+blog.clean( site ).then( f => {
+  return blog.publish( site )
+} ).then( links => {
+  if ( process.env.debug ) console.log( '\nInitial build, posts published' )
+  return blog.assets( site )
+} ).then( f => {
+  if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
+  thebs.reload( )
+} )
+
+// Watch for pug file changes
+const towatch = [ 'pug' ]
+
+if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.templates, ( eventType, filename ) => {
+  if ( eventType != 'change' || filename.indexOf( towatch ) == -1 ) return
+  if ( process.env.debug ) console.log( 'Pug template changed' )
+  // Delete old build and generate pug files
+  return blog.publish( site ).then( f => { if ( process.env.debug ) console.log( 'Repeat build done' ); thebs.reload( ) } ).catch( console.log.bind( console ) )
+} )
+
 if ( process.env.debug ) console.log( 'Environment is ' + process.env.NODE_ENV )
 if ( process.env.debug ) console.log( 'Source maps are using ' + maps( process.env.NODE_ENV ) )
 
 module.exports = {
-  entry: __dirname + '/theme/main.js',
+  entry: site.system.theme + 'main.js',
   output: {
-    filename: __dirname + '/content/assets/js/app.js'
+    filename: site.system.public + 'assets/js/app.js'
   },
   module: {
     loaders: [

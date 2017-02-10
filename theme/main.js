@@ -1,5 +1,5 @@
 // Import the styles
-import './styles/styles.scss'
+import styles from './styles/styles.scss'
 
 // Import dynamic navbar
 import menu from './js/menu'

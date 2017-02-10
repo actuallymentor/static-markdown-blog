@@ -18,6 +18,7 @@ let config = {
 		pageslug: "page",
 		content: path.normalize( __dirname + '/../../content/' ),
 		public: path.normalize( __dirname + '/../../docs/' ),
+		theme: path.normalize( __dirname + '/../../theme/' ),
 		templates: path.normalize( __dirname + '/../templates/' ),
 		url: process.env.local ? "http://localhost:3000/" : "https://actuallymentor.github.io/static-markdown-blog/",
 		year: new Date().getFullYear(),
@@ -31,7 +32,8 @@ let config = {
 			thumb: { w: 200, h: 200 },
 			post: { w: 500 },
 			feat: { w: 800 }
-		}
+		},
+		local: process.env.local
 	},
 	// The blog author
 	author: {
