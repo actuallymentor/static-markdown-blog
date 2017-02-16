@@ -136,6 +136,7 @@ const podcast = ( site, parsedfiles ) => {
 	return new Promise( ( resolve, reject ) => {
 		makepodcastfeed( site ).then( feed => {
 			let podcasts = findpodcasts( parsedfiles )
+			if( !podcasts ) return
 			return Promise.all( podcasts.map( file => { return makepodcastitem( feed, site, file ) } ) )
 		} )
 		.then( feedarray => {
