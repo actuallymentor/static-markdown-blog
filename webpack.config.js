@@ -121,6 +121,20 @@ if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.templates, ( 
   return blog.publish( site ).then( f => { if ( process.env.debug ) console.log( 'Repeat build done' ); thebs.reload( ) } ).catch( console.log.bind( console ) )
 } )
 
+// Watch for content file changes
+if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.content, ( eventType, filename ) => {
+  if ( eventType != 'change' || filename.indexOf( 'md' ) == -1 ) return
+  if ( process.env.debug ) console.log( 'Content template changed' )
+  // Delete old build and generate new
+  blog.publish( site ).then( links => {
+    if ( process.env.debug ) console.log( '\nInitial build, posts published' )
+    return blog.assets( site )
+  } ).then( f => {
+    if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
+    if ( process.env.NODE_ENV == 'development' ) thebs.reload( )
+  } ).catch( console.log.bind( console ) )
+} )
+
 if ( process.env.debug ) console.log( 'Environment is ' + process.env.NODE_ENV )
 if ( process.env.debug ) console.log( 'Source maps are using ' + maps( process.env.NODE_ENV ) )
 
