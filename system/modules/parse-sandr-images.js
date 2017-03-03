@@ -45,6 +45,14 @@ const thumbimages = html => {
 	} )
 }
 
+const miniimages = html => {
+	return new Promise( ( resolve, reject ) => {
+		// Match all images with the class 'thumb', so only thumbnails
+		let minis = /(<\s*img[\s\w=\"\'\:\\\/\-\_\.]*class[\s\w=\"\'\:\\\/\-\_\.]*mini[\w\s="':\-_\\\/\.]*>)/ig
+		sandr( html, minis, '.mini' ).then( resolve ).catch( reject )
+	} )
+}
+
 const replaceimages = html => {
 	return new Promise( ( resolve, reject ) => {
 		// Set all images to .post, this is overwritten by those below, this is why it happens firts
@@ -54,6 +62,8 @@ const replaceimages = html => {
 		} ).then( html => {
 			// The thumb processing undoes the .post processing for all with class="thumb"
 			return thumbimages( html )
+		} ).then( html => {
+			return miniimages( html )
 		} ).then( html => {
 			resolve( html )
 		} )

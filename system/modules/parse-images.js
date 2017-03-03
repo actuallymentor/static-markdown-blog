@@ -29,10 +29,12 @@ const optimize = ( site, filepath ) => {
 		return sharp( )
 		.resize( site.system.images[size].w, site.system.images[size].h || undefined )
 		.withoutEnlargement( )
+		.background( { r: 255, g: 255, b: 255, alpha: 1 } )
 		.jpeg( { quality: site.system.images.quality } )
 	}
 	// Construct the sharp module configs for the image sizes
 	let config = {
+		mini: sharpie( site, 'mini' ),
 		thumb: sharpie( site, 'thumb' ),
 		post: sharpie( site, 'post' ),
 		feat: sharpie( site, 'feat' )
@@ -60,6 +62,7 @@ const optimize = ( site, filepath ) => {
 		pfs.mkdir( site.system.public + 'assets/' + filepath.match( /[\\\/\w\-\d]*\//i )[ 0 ].replace( /.*assets[\/\\]/ig, '') ).then( f => {
 			// Write all of the images
 			return Promise.all( [
+				stream( image, site.system.public + 'assets/' + filename + '.mini.jpg', config.mini ).catch( console.log.bind( console ) ),
 				stream( image, site.system.public + 'assets/' + filename + '.thumb.jpg', config.thumb ).catch( console.log.bind( console ) ),
 				stream( image, site.system.public + 'assets/' + filename + '.post.jpg', config.post ).catch( console.log.bind( console ) ),
 				stream( image, site.system.public + 'assets/' + filename + '.feat.jpg', config.feat ).catch( console.log.bind( console ) )

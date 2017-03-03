@@ -29,6 +29,7 @@ let config = {
 		// Image dimensions for compression
 		images: {
 			quality: 75,
+			mini: { w: 100, h: 100 },
 			thumb: { w: 200, h: 200 },
 			post: { w: 500 },
 			feat: { w: 800 }
