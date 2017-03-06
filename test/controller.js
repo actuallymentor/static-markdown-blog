@@ -150,7 +150,7 @@ const blc = require( 'broken-link-checker' )
 const webpack = require( 'webpack' )
 let linkchecker = ( done, level = 0 ) => {
 	let broken = []
-	return new blc.HtmlUrlChecker( { filterLevel: level, excludedKeywords: 'fonts.googleapis.com' }, {
+	return new blc.HtmlUrlChecker( { filterLevel: level, excludedKeywords: [ 'fonts.googleapis.com' ] }, {
 		link: ( result, customData ) => {
 			if ( result.broken ) broken.push( { link: result.url.original, source: result.base.original } )
 			if ( process.env.debug ) console.log( 'Checked link ' + result.url.original )
