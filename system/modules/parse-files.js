@@ -78,7 +78,7 @@ const parsefile = ( site, file ) => {
 		meta: metadata,
 		raw: content,
 		// Generate html after replacing local references to ./assets to blogurl/assets
-		html: markdown( String( content ).replace( /[\.\/]*assets/ig, site.system.url + 'assets' ) ),
+		html: markdown( String( content ).replace( /[\.\/]*assets\//ig, site.system.url + 'assets/' ) ),
 		// Links array to which category links will be added below
 		links: [ site.system.url + site.system.blogslug + '/' + slug( file.name.replace(/^.*[\\\/]/, '').split( '.' )[0] ) ]
 	}
