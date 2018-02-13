@@ -1,8 +1,6 @@
 # Static Markdown Blog [![Build Status](https://travis-ci.org/actuallymentor/static-markdown-blog.svg?branch=master)](https://travis-ci.org/actuallymentor/static-markdown-blog)
 
-<img height="50px" alt="webpack" src="http://i.imgur.com/ZtANAeL.png" />
-<img height="50px" alt="browsersync" src="http://i.imgur.com/L5peje9.png" />
-<img height="50px" alt="mocha" src="http://i.imgur.com/yo9d9Qe.png" />
+<img height="50px" alt="webpack" src="http://i.imgur.com/ZtANAeL.png" /><img height="50px" alt="browsersync" src="http://i.imgur.com/L5peje9.png" /><img height="50px" alt="mocha" src="http://i.imgur.com/yo9d9Qe.png" />
 
 To replace my old WordPress blog I'm making a system to compile markdown files to static blog files.
 
