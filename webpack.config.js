@@ -74,9 +74,6 @@ const pluginarray = ( env, server ) => {
         new BrowserSyncPlugin( bsconfig, bsyncplugconfig )
     )
     plugins.push(
-      new webpack.optimize.UglifyJsPlugin( uglifyconfig )
-    )
-    plugins.push(
       new webpack.DefinePlugin( envconfig )
     )
   } else {
@@ -141,26 +138,33 @@ if ( process.env.debug ) console.log( 'Source maps are using ' + maps( process.e
 module.exports = {
   entry: site.system.theme + 'main.js',
   output: {
-    filename: site.system.public + 'assets/js/app.js'
+    filename:  'app.js',
+    path: site.system.public + 'assets/js/'
   },
   module: {
-    loaders: [
-    {
-      test: /\.js$/,
-      loader: 'babel-loader',
-      query: {
-        presets: ['es2015']
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: f => { return [ autoprefixer( { browsers: ['last 2 versions'] } ) ] }
+            }
+          },
+          "sass-loader" ]
       }
-    },
-    {
-      test: /\.scss$/,
-      loaders: ["style", "css", "sass", "postcss"]
-    }
     ]
   },
-  devtool: maps( process.env.NODE_ENV ),
-  postcss: [
-  autoprefixer( { browsers: ['last 2 versions'] } )
-  ],
+  devtool: process.env.NODE_ENV == 'production' ?  'cheap-module-source-map' : 'eval',
   plugins: pluginarray( process.env.NODE_ENV, process.env.server )
 }
