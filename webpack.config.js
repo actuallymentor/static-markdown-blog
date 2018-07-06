@@ -53,12 +53,6 @@ const bsyncplugconfig = {
   callback: f => { if ( process.env.NODE_ENV == 'development' ) thebs = bs.get( servername ) }
 }
 
-const uglifyconfig = {
-  compress: {
-    warnings: false
-  }
-}
-
 const envconfig = {
   'process.env': {
     NODE_ENV: JSON.stringify( 'production' )
@@ -85,14 +79,6 @@ const pluginarray = ( env, server ) => {
   return plugins
 }
 
-const maps = env => {
-  if( env == 'production' ) {
-    return 'cheap-module-source-map'
-  } else {
-    return 'eval'
-  }
-}
-
 // ///////////////////////////////
 // Building & watching
 // ///////////////////////////////
@@ -106,7 +92,7 @@ blog.clean( site ).then( f => {
 } ).then( f => {
   if ( process.env.debug ) console.log( '\nInitial asset publihing done' )
   if ( process.env.NODE_ENV == 'development' ) thebs.reload( )
-} )
+} ).catch( console.log.bind( console ) )
 
 // Watch for pug file changes
 const towatch = [ 'pug' ]
@@ -133,7 +119,7 @@ if ( process.env.NODE_ENV == 'development' ) fs.watch( site.system.content, ( ev
 } )
 
 if ( process.env.debug ) console.log( 'Environment is ' + process.env.NODE_ENV )
-if ( process.env.debug ) console.log( 'Source maps are using ' + maps( process.env.NODE_ENV ) )
+if ( process.env.debug ) console.log( 'Source maps are using ' + process.env.NODE_ENV == 'production' ?  'cheap-module-source-map' : 'eval' )
 
 module.exports = {
   entry: site.system.theme + 'main.js',

@@ -9,7 +9,7 @@ head
 		meta( name="google-site-verification" content=site.system.gverification )
 
 	//- Regular meta tags
-	if file.meta.file
+	if file.meta.title
 		title !{site.identity.title} - !{file.meta.title}
 	else
 		title !{site.identity.title}
