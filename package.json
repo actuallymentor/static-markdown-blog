@@ -35,7 +35,7 @@
     "marked": "^0.4.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "on-build-webpack": "^0.1.0",
     "postcss-loader": "^2.1.5",
     "pre-build-webpack": "^0.1.0",
