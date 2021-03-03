@@ -39,7 +39,7 @@
     "on-build-webpack": "^0.1.0",
     "postcss-loader": "^2.1.5",
     "pre-build-webpack": "^0.1.0",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "recursive-readdir": "^2.2.2",
     "rss": "^1.2.2",
     "sass-loader": "^7.0.2",
